@@ -5,7 +5,7 @@ import org.springframework.boot.runApplication
 
 @SpringBootApplication
 class GungjeonjegwaApplication
-
 fun main(args: Array<String>) {
+
     runApplication<GungjeonjegwaApplication>(*args)
 }
