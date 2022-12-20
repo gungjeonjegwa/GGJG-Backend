@@ -32,4 +32,8 @@ class BreadDetail(
 
     @OneToMany(fetch = FetchType.LAZY)
     val breadSize: MutableList<BreadSize> = mutableListOf(),
+
+    @OneToMany(fetch = FetchType.LAZY)
+    val breadImage: MutableList<BreadImage> = mutableListOf()
+) {
 }
