@@ -15,5 +15,10 @@ class Bread(
 
     @Enumerated(EnumType.STRING)
     val category: Category
+    val category: Category,
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "bread")
+    val breadDetail: BreadDetail,
+
 ) {
 }
