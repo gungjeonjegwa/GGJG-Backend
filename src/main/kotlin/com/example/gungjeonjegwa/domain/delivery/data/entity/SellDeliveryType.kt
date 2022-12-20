@@ -2,12 +2,8 @@ package com.example.gungjeonjegwa.domain.delivery.data.entity
 
 import com.example.gungjeonjegwa.domain.bread.data.entity.Bread
 import com.example.gungjeonjegwa.domain.delivery.data.enum.SellType
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
+import com.fasterxml.jackson.annotation.JsonIgnore
+import javax.persistence.*
 
 @Entity
 class SellDeliveryType(
@@ -15,10 +11,12 @@ class SellDeliveryType(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
+    @Enumerated(EnumType.STRING)
     val sellType: SellType,
 
     @ManyToOne
     @JoinColumn(name = "bread_id")
+    @JsonIgnore
     val bread: Bread
 ) {
 }
