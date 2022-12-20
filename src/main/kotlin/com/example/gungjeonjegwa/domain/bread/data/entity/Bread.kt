@@ -17,6 +17,12 @@ class Bread(
     @Enumerated(EnumType.STRING)
     val category: Category,
 
+    val count: Long,
+
+    val isSoldOut: Boolean,
+
+    val previewUrl: String,
+
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "bread")
     val breadDetail: BreadDetail,
 
