@@ -1,3 +1,5 @@
+package com.example.gungjeonjegwa.domain.bread.controller
+
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDto
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadQueryDto
 import com.example.gungjeonjegwa.domain.bread.data.enum.Category
@@ -23,3 +25,13 @@ class BreadController(
         breadService.findAllPost(PageRequest.of(page, size))
             .let { ResponseEntity.ok(it) }
 
+    @GetMapping("/kind")
+    fun findAllBreadByCategory(
+        @RequestParam("page") page: Int,
+        @RequestParam("size") size: Int,
+        @RequestParam("category") category: Category
+    ): ResponseEntity<BreadQueryDto> =
+        breadService.findAllPostByCategory(PageRequest.of(page,size), category)
+            .let { ResponseEntity.ok(it) }
+
+}
