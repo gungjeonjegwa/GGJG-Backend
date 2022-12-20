@@ -20,3 +20,11 @@ class BreadServiceImpl(
             .map { breadConverter.toDto(it) }
         return breadQueryConverter.toQueryDto(findBy.get(), findBy.isLast)
     }
+
+    override fun findAllPostByCategory(pagination: PageRequest, category: Category): BreadQueryDto {
+        val findByCategory = breadRepository.findByCategory(category, pagination)
+            .map { breadConverter.toDto(it) }
+        return breadQueryConverter.toQueryDto(findByCategory.get(), findByCategory.isLast)
+    }
+
+
