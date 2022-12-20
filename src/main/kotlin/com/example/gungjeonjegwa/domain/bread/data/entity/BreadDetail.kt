@@ -29,4 +29,7 @@ class BreadDetail(
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bread_id")
     val bread: Bread,
+
+    @OneToMany(fetch = FetchType.LAZY)
+    val breadSize: MutableList<BreadSize> = mutableListOf(),
 }
