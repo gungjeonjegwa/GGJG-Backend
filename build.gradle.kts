@@ -25,6 +25,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     // JPA
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    // DB
+    implementation("mysql:mysql-connector-java")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
