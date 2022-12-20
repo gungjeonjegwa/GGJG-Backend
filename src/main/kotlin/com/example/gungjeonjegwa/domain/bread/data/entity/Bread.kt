@@ -20,7 +20,7 @@ class Bread(
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "bread")
     val breadDetail: BreadDetail,
 
-    @OneToMany(fetch = FetchType.LAZY)
-    val sellDeliveryType: MutableList<SellDeliveryType> = mutableListOf()
+    @OneToMany(mappedBy = "bread",fetch = FetchType.LAZY)
+    val sellDeliveryType: MutableList<SellDeliveryType> = ArrayList()
 ) {
 }
