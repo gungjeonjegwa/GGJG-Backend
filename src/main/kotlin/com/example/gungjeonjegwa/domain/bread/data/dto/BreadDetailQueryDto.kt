@@ -1,5 +1,7 @@
 package com.example.gungjeonjegwa.domain.bread.data.dto
 
+import java.time.LocalDateTime
+
 class BreadDetailQueryDto(
     val id: Long,
 
@@ -22,5 +24,7 @@ class BreadDetailQueryDto(
     val ingredient: String, // 성분표시
 
     val breadSize: MutableList<BreadSizeDto>,
+
+    val breadImage: MutableList<BreadImageDto>
 ) {
 }
