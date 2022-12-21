@@ -1,7 +1,7 @@
 package com.example.gungjeonjegwa.domain.bread.util.impl
 
-import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDto
-import com.example.gungjeonjegwa.domain.bread.data.dto.BreadQueryDto
+import com.example.gungjeonjegwa.domain.bread.data.dto.*
+import com.example.gungjeonjegwa.domain.bread.data.entity.BreadSize
 import com.example.gungjeonjegwa.domain.bread.util.BreadQueryConverter
 import org.springframework.stereotype.Component
 import java.util.stream.Stream
@@ -20,5 +20,20 @@ class BreadQueryConverterImpl : BreadQueryConverter {
         }
         return list
     }
+
+    override fun toQueryDto(breadSizeDto: MutableList<BreadSizeDto>, breadDetailDto: BreadDetailDto): BreadDetailQueryDto = BreadDetailQueryDto(
+        id = breadDetailDto.id,
+        content = breadDetailDto.content,
+        size = breadDetailDto.size,
+        stroage = breadDetailDto.stroage,
+        expirationDate = breadDetailDto.expirationDate,
+        previewUrl = breadDetailDto.previewUrl,
+        precaution = breadDetailDto.precaution,
+        deliveryNotice = breadDetailDto.deliveryNotice,
+        allergy = breadDetailDto.allergy,
+        ingredient = breadDetailDto.ingredient,
+        breadSize = breadSizeDto
+    )
+
 
 }
