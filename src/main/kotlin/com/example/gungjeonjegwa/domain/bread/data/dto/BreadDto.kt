@@ -12,8 +12,6 @@ class BreadDto(
 
     val category: Category,
 
-    val count: Long,
-
     val isSoldOut: Boolean,
 
     val previewUrl: String,

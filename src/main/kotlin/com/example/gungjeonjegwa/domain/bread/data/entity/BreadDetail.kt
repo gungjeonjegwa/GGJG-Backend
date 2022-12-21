@@ -1,5 +1,6 @@
 package com.example.gungjeonjegwa.domain.bread.data.entity
 
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
