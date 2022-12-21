@@ -11,7 +11,7 @@ class BreadImage(
 
    val imageUrl: String,
 
-   val imageInfoUrl: String,
+   val isImageInfo: Boolean,
 
    @ManyToOne
    @JoinColumn(name = "breaddetail_id")
