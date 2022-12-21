@@ -13,9 +13,10 @@ class BreadSize(
 
     val extramoney: Long,
 
+    val unit: String,
+
     @ManyToOne
     @JoinColumn(name = "detailbread_id")
-    @JsonIgnore
     val detailBread: BreadDetail
 ) {
 }
