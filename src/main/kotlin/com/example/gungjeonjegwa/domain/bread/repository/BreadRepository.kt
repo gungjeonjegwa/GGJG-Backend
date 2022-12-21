@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface BreadRepository : JpaRepository<Bread, Long> {
     fun findBy(pagination: PageRequest): Page<Bread>
 
-    fun findByCategory(category: Category, pagination: PageRequest): Page<Bread>
+    fun findAllByCategory(category: Category, pagination: PageRequest): Page<Bread>
 }
