@@ -1,6 +1,7 @@
 package com.example.gungjeonjegwa.domain.bread.util.impl
 
 import com.example.gungjeonjegwa.domain.bread.data.dto.*
+import com.example.gungjeonjegwa.domain.bread.data.entity.BreadImage
 import com.example.gungjeonjegwa.domain.bread.data.entity.BreadSize
 import com.example.gungjeonjegwa.domain.bread.util.BreadQueryConverter
 import org.springframework.stereotype.Component
@@ -21,7 +22,11 @@ class BreadQueryConverterImpl : BreadQueryConverter {
         return list
     }
 
-    override fun toQueryDto(breadSizeDto: MutableList<BreadSizeDto>, breadDetailDto: BreadDetailDto): BreadDetailQueryDto = BreadDetailQueryDto(
+    override fun toQueryDto(
+        breadSizeDto: MutableList<BreadSizeDto>,
+        breadDetailDto: BreadDetailDto,
+        breadImageDto: MutableList<BreadImageDto>
+    ): BreadDetailQueryDto = BreadDetailQueryDto(
         id = breadDetailDto.id,
         content = breadDetailDto.content,
         size = breadDetailDto.size,
@@ -32,7 +37,8 @@ class BreadQueryConverterImpl : BreadQueryConverter {
         deliveryNotice = breadDetailDto.deliveryNotice,
         allergy = breadDetailDto.allergy,
         ingredient = breadDetailDto.ingredient,
-        breadSize = breadSizeDto
+        breadSize = breadSizeDto,
+        breadImage = breadImageDto
     )
 
     override fun toBreadImageDto(entity: MutableList<BreadImage>): MutableList<BreadImageDto> {
