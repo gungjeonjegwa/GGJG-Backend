@@ -30,10 +30,10 @@ class BreadDetail(
     @JoinColumn(name = "bread_id")
     val bread: Bread,
 
-    @OneToMany(fetch = FetchType.LAZY)
-    val breadSize: MutableList<BreadSize> = mutableListOf(),
+    @OneToMany(mappedBy = "detailBread", fetch = FetchType.LAZY)
+    val breadSize: MutableList<BreadSize> = ArrayList(),
 
-    @OneToMany(fetch = FetchType.LAZY)
-    val breadImage: MutableList<BreadImage> = mutableListOf()
+    @OneToMany(mappedBy = "breadDetail", fetch = FetchType.LAZY)
+    val breadImage: MutableList<BreadImage> = ArrayList()
 ) {
 }
