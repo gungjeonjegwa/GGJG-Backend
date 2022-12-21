@@ -26,7 +26,7 @@ class BreadController(
         breadService.findAllPost(PageRequest.of(page, size))
             .let { ResponseEntity.ok(it) }
 
-    @GetMapping("/")
+    @GetMapping("/kind")
     fun findAllBreadByCategory(
         @RequestParam("page") page: Int,
         @RequestParam("size") size: Int,
