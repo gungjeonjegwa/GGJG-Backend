@@ -35,5 +35,11 @@ class BreadQueryConverterImpl : BreadQueryConverter {
         breadSize = breadSizeDto
     )
 
-
+    override fun toBreadImageDto(entity: MutableList<BreadImage>): MutableList<BreadImageDto> {
+        var list: MutableList<BreadImageDto> = arrayListOf()
+        for(e in entity) {
+            list.add(BreadImageDto(e.imageUrl, e.isImageInfo))
+        }
+        return list
+    }
 }
