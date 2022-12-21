@@ -8,6 +8,7 @@ interface BreadQueryConverter {
     fun toQueryDto(entity: Stream<BreadDto>, last: Boolean): BreadQueryDto
 
     fun toQueryDto(entity: MutableList<BreadSize>): MutableList<BreadSizeDto>
+    fun toBreadSizeDto(entity: MutableList<BreadSize>): MutableList<BreadSizeDto>
 
     fun toQueryDto(breadSizeDto: MutableList<BreadSizeDto>, breadDetailDto: BreadDetailDto ): BreadDetailQueryDto
 }

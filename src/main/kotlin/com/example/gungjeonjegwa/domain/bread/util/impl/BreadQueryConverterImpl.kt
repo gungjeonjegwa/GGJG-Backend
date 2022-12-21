@@ -13,10 +13,10 @@ class BreadQueryConverterImpl : BreadQueryConverter {
         last = last
     )
 
-    override fun toQueryDto(entity: MutableList<BreadSize>): MutableList<BreadSizeDto> {
+    override fun toBreadSizeDto(entity: MutableList<BreadSize>): MutableList<BreadSizeDto> {
         var list: MutableList<BreadSizeDto> = arrayListOf()
         for(e in entity) {
-            list.add(BreadSizeDto(e.id, e.size, e.extramoney))
+            list.add(BreadSizeDto(e.size, e.extramoney, e.unit))
         }
         return list
     }
