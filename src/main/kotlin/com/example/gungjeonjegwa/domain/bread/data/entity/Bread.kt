@@ -12,7 +12,8 @@ class Bread(
 
     val title: String,
 
-    val price: Long,
+    @Column(nullable = true)
+    val price: Long?,
 
     @Enumerated(EnumType.STRING)
     val category: Category,

@@ -8,7 +8,7 @@ class BreadDto(
 
     val title: String,
 
-    val price: Long,
+    val price: Long?,
 
     val category: Category,
 
