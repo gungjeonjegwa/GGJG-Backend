@@ -39,14 +39,15 @@ class BreadServiceImpl(
     @Transactional(readOnly = true)
     override fun findPostByIndex(id: Long): BreadDetailQueryDto {
         val breadDetail: BreadDetail
-        val bread = breadDetailRepository.findById(id)
-            .orElseThrow { RuntimeException("hi") }
+        val bread = breadRepository.findById(id).orElseThrow{ RuntimeException("해당하는 데이터 빵이 없습니다") }
+        val breadDetailEntity= breadDetailRepository.findByBread(bread)
+            .orElseThrow{ RuntimeException("빵 세부사항 없음")}
             .also { breadDetail = it }
             .let { breadConverter.toDto(it) to it }
             .let { breadSizeRepository.findAllByDetailBread(it.second) to it.first }
             .let { breadQueryConverter.toBreadSizeDto(it.first) to it.second }
         return breadImageRepository.findByBreadDetail(breadDetail)
             .let { breadQueryConverter.toBreadImageDto(it)}
-            .let { breadQueryConverter.toQueryDto(bread.first, bread.second, it) }
+            .let { breadQueryConverter.toQueryDto(breadDetailEntity.first, breadDetailEntity.second, it) }
     }
 }
