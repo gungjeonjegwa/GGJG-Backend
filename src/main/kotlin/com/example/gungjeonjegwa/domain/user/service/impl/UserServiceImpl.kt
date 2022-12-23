@@ -51,3 +51,19 @@ class UserServiceImpl(
         val loginResponse: SignInResponse = SignInResponse(user.id, accessToken, refreshToken)
         return loginResponse
     }
+
+    @Transactional
+    override fun refreshTokenExecute(refreshToken: String): UserTokenResponseDto {
+        if(tokenProvider.isRefreshTokenExpired(refreshToken)) {
+            throw ExpiredTokenException()
+        }
+        val userId = tokenProvider.exactIdFromRefreshToken(refreshToken)
+        val user = userRepository.findById(userId).orElseThrow{ RuntimeException("유저 정보를 찾을수 없습니다.") }
+        if(user.refreshtoken == null || user.refreshtoken != refreshToken) {
+            throw InvalidTokenException()
+        }
+        val access = tokenProvider.generatedAccessToken(userId)
+        val refresh = tokenProvider.generatedRefreshToken(userId)
+        user.updateRefreshToken(refresh)
+        return UserTokenResponseDto(access, refresh)
+    }

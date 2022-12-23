@@ -28,3 +28,8 @@ class UserController(
     fun signIn(@RequestBody request: SignInRequest): ResponseEntity<SignInResponse> {
         return ResponseEntity(userService.signIn(request), HttpStatus.OK)
     }
+
+    @PostMapping("/refresh")
+    fun refreshToken(@RequestHeader refreshToken: String): UserTokenResponseDto {
+        return userService.refreshTokenExecute(refreshToken)
+    }
