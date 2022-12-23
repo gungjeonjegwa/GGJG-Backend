@@ -33,3 +33,9 @@ class UserController(
     fun refreshToken(@RequestHeader refreshToken: String): UserTokenResponseDto {
         return userService.refreshTokenExecute(refreshToken)
     }
+
+    @PostMapping("/signout")
+    fun signOut() {
+        return userService.signOut()
+    }
+}

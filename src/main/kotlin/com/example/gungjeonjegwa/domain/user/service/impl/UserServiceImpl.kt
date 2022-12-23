@@ -67,3 +67,10 @@ class UserServiceImpl(
         user.updateRefreshToken(refresh)
         return UserTokenResponseDto(access, refresh)
     }
+
+    @Transactional
+    override fun signOut() {
+        val currentUser = userUtil.fetchCurrentUser()
+        currentUser.updateRefreshToken(null)
+    }
+}
