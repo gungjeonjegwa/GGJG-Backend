@@ -33,3 +33,6 @@ class SecurityConfiguration(
             .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
 
+    @Bean
+    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder(12)
+}
