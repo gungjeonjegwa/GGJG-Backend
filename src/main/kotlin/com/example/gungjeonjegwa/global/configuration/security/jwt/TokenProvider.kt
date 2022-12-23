@@ -42,3 +42,39 @@ class TokenProvider(
             .setExpiration(Date(System.currentTimeMillis() + exp * 1000))
             .compact()
 
+    fun resolveToken(req: HttpServletRequest): String? = req.getHeader("Authorization") ?: null
+
+    fun authentication(token: String): Authentication {
+        val userDetails = authDetailsService.loadUserByUsername(getTokenSubject(token, jwtPropertices.accessSecert))
+        return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
+    }
+
+    private fun getTokenBody(token: String, secret: Key): Claims {
+        return try {
+            Jwts.parserBuilder()
+                .setSigningKey(secret)
+                .build()
+                .parseClaimsJws(token)
+                .body
+        } catch (e: ExpiredJwtException) {
+            throw ExpiredTokenException()
+        } catch (e: Exception) {
+            throw InvalidTokenException()
+        }
+    }
+
+    private fun getTokenSubject(token: String, secret: Key): String =
+        getTokenBody(token, secret).subject
+
+    fun exactIdFromRefreshToken(refresh: String): String =
+        getTokenSubject(refresh, jwtPropertices.refreshSecret)
+
+    fun isRefreshTokenExpired(token: String): Boolean {
+        try {
+            getTokenBody(token, jwtPropertices.refreshSecret).expiration
+            return false
+        } catch (e: ExpiredJwtException) {
+            return true
+        }
+    }
+}
