@@ -24,12 +24,13 @@ class BreadServiceImpl(
     val breadQueryConverter: BreadQueryConverter,
     val breadImageRepository: BreadImageRepository
 ) : BreadService {
-    @Transactional
+    @Transactional(readOnly = true)
     override fun findAllPost(pagination: PageRequest): BreadQueryDto {
         val findBy = breadRepository.findBy(pagination)
             .map { breadConverter.toDto(it) }
         return breadQueryConverter.toQueryDto(findBy.get(), findBy.isLast)
     }
+    @Transactional(readOnly = true)
     override fun findAllPostByCategory(pagination: PageRequest, category: Category): BreadQueryDto {
         val findByCategory = breadRepository.findAllByCategory(category, pagination)
             .map { breadConverter.toDto(it) }
