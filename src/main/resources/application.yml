@@ -11,3 +11,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
+jwt:
+  accessSecret: ${JWT_ACCESS_SECRET}
+  refreshSecret: ${JWT_REFRESH_SECRET}
