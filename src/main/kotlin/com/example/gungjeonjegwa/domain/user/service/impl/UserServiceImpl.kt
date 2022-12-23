@@ -34,3 +34,20 @@ class UserServiceImpl(
             .let { userConverter.toEntity(it, passwordEncoder.encode(it.password)) }
             .let { userRepository.save(it).id }
     }
+
+    @Transactional
+    override fun signIn(request: SignInRequest): SignInResponse {
+        val userEntity = userRepository.findById(request.id)
+        if(userEntity.isEmpty) {
+            throw RuntimeException("유저가 없습니다.")
+        }
+        val user: User = userEntity.get()
+        if(!passwordEncoder.matches(request.password, user.password)) {
+            throw RuntimeException("패스워드가 맞지 않습니다.")
+        }
+        val accessToken = tokenProvider.generatedAccessToken(user.id)
+        val refreshToken = tokenProvider.generatedRefreshToken(user.id)
+        user.updateRefreshToken(refreshToken)
+        val loginResponse: SignInResponse = SignInResponse(user.id, accessToken, refreshToken)
+        return loginResponse
+    }

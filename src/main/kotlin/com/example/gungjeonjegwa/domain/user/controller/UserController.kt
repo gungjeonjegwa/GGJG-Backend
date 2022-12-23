@@ -23,3 +23,8 @@ class UserController(
     fun signUp(@Valid @RequestBody request: SignUpRequest): ResponseEntity<String> {
         return ResponseEntity(userService.signUp(request), HttpStatus.CREATED)
     }
+
+    @PostMapping("/signin")
+    fun signIn(@RequestBody request: SignInRequest): ResponseEntity<SignInResponse> {
+        return ResponseEntity(userService.signIn(request), HttpStatus.OK)
+    }
