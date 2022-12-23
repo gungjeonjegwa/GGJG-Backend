@@ -16,3 +16,13 @@ class UserConverterImpl : UserConverter {
         email = request.email,
         refreshToken = null
     )
+
+    override fun toEntity(dto: UserDto, password: String): User = User(
+        id = dto.id,
+        password = password,
+        name = dto.name,
+        phone = dto.phone,
+        email = dto.email,
+        refreshtoken = dto.refreshToken
+    )
+}

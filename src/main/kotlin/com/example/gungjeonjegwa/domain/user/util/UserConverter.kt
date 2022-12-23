@@ -6,3 +6,5 @@ import com.example.gungjeonjegwa.domain.user.data.request.SignUpRequest
 
 interface UserConverter {
     fun toDto(request: SignUpRequest): UserDto
+    fun toEntity(dto: UserDto, password: String): User
+}
