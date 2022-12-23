@@ -4,6 +4,7 @@ import com.example.gungjeonjegwa.domain.user.data.entity.User
 import com.example.gungjeonjegwa.domain.user.data.request.SignInRequest
 import com.example.gungjeonjegwa.domain.user.data.request.SignUpRequest
 import com.example.gungjeonjegwa.domain.user.data.response.SignInResponse
+import com.example.gungjeonjegwa.domain.user.data.response.SignUpResponse
 import com.example.gungjeonjegwa.domain.user.data.response.UserTokenResponseDto
 import com.example.gungjeonjegwa.domain.user.repository.UserRepository
 import com.example.gungjeonjegwa.domain.user.service.UserService
@@ -25,14 +26,15 @@ class UserServiceImpl(
     val userUtil: UserUtil
 ) : UserService {
     @Transactional
-    override fun signUp(request: SignUpRequest): String {
+    override fun signUp(request: SignUpRequest): SignUpResponse {
         val isUser: Boolean = userRepository.existsById(request.id)
         if(isUser) {
             throw RuntimeException("유저가 존재합니다")
         }
         return userConverter.toDto(request)!!
             .let { userConverter.toEntity(it, passwordEncoder.encode(it.password)) }
-            .let { userRepository.save(it).id }
+            .let { userRepository.save(it) }
+            .let { SignUpResponse(it.id) }
     }
 
     @Transactional
