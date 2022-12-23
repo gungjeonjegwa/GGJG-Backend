@@ -1,0 +1,25 @@
+package com.example.gungjeonjegwa.domain.user.controller
+
+import com.example.gungjeonjegwa.domain.user.data.request.SignInRequest
+import com.example.gungjeonjegwa.domain.user.data.request.SignUpRequest
+import com.example.gungjeonjegwa.domain.user.data.response.SignInResponse
+import com.example.gungjeonjegwa.domain.user.data.response.UserTokenResponseDto
+import com.example.gungjeonjegwa.domain.user.service.UserService
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+import javax.validation.Valid
+
+@RestController
+@RequestMapping("/users")
+class UserController(
+    val userService: UserService
+) {
+    @PostMapping("/signup")
+    fun signUp(@Valid @RequestBody request: SignUpRequest): ResponseEntity<String> {
+        return ResponseEntity(userService.signUp(request), HttpStatus.CREATED)
+    }
