@@ -18,3 +18,14 @@ class GlobalExceptionHandler {
         val errorResponse = ErrorResponse(ex.errorCode)
         return ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.valueOf(ex.errorCode.code))
     }
+
+
+    @ExceptionHandler(BindException::class)
+    fun bindExceptionHandler(e: BindException): ResponseEntity<*> {
+        val errorMap: MutableMap<String, String?> = HashMap()
+        for (error in e.fieldErrors) {
+            errorMap[error.field] = error.defaultMessage
+        }
+        return ResponseEntity<Map<String, String?>>(errorMap, HttpStatus.BAD_REQUEST)
+    }
+}
