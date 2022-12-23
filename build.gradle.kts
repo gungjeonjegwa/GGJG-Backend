@@ -1,7 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.7.6"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.6.21"
     kotlin("jvm") version "1.6.21"
@@ -22,13 +21,16 @@ repositories {
 }
 
 dependencies {
+
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation ("org.springframework.boot:spring-boot-starter-validation")
     // JPA
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    // Security
+    implementation("org.springframework.boot:spring-boot-starter-security")
     // DB
     implementation("mysql:mysql-connector-java")
     implementation("org.mariadb.jdbc:mariadb-java-client:3.0.6")
