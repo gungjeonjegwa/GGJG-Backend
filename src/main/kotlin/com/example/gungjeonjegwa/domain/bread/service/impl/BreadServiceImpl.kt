@@ -47,6 +47,7 @@ class BreadServiceImpl(
 
     @Transactional(readOnly = true)
     override fun findPostByIndex(id: Long): BreadDetailQueryDto {
+        val user = userUtil.fetchCurrentUser()
         val breadDetail: BreadDetail
         val bread = breadRepository.findById(id).orElseThrow{ RuntimeException("해당하는 데이터 빵이 없습니다") }
         val breadDetailEntity= breadDetailRepository.findByBread(bread)
@@ -56,8 +57,17 @@ class BreadServiceImpl(
             .let { breadSizeRepository.findAllByDetailBread(it.second) to it.first }
             .let { breadQueryConverter.toBreadSizeDto(it.first) to it.second }
         return breadImageRepository.findByBreadDetail(breadDetail)
-            .let { breadQueryConverter.toBreadImageDto(it)}
-            .let { breadQueryConverter.toQueryDto(breadDetailEntity.first, breadDetailEntity.second, it) }
+            .let { breadQueryConverter.toBreadImageDto(it) }
+            .let { likeItemRepository.existsByUserAndBread(user, bread) to it }
+            .let {
+                if(it.first == true) {
+                    true to it.second
+                }
+                else {
+                    false to it.second
+                }
+            }
+            .let { breadQueryConverter.toQueryDto(breadDetailEntity.first, breadDetailEntity.second, it.second, it.first) }
     }
 
     private fun addLikeItemActivity(bread: Page<BreadDto>, likeItem: MutableList<LikeItem>): MutableList<BreadLikeDto> {
