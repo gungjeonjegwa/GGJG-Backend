@@ -24,7 +24,8 @@ class BreadQueryConverterImpl : BreadQueryConverter {
     override fun toQueryDto(
         breadSizeDto: MutableList<BreadSizeDto>,
         breadDetailDto: BreadDetailDto,
-        breadImageDto: MutableList<BreadImageDto>
+        breadImageDto: MutableList<BreadImageDto>,
+        isLikeItem: Boolean
     ): BreadDetailQueryDto = BreadDetailQueryDto(
         id = breadDetailDto.id,
         content = breadDetailDto.content,
@@ -36,6 +37,7 @@ class BreadQueryConverterImpl : BreadQueryConverter {
         deliveryNotice = breadDetailDto.deliveryNotice,
         allergy = breadDetailDto.allergy,
         ingredient = breadDetailDto.ingredient,
+        isLikeItem = isLikeItem,
         breadSize = breadSizeDto,
         breadImage = breadImageDto
     )

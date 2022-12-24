@@ -3,10 +3,8 @@ package com.example.gungjeonjegwa.domain.bread.util.impl
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDetailDto
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDto
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadLikeDto
-import com.example.gungjeonjegwa.domain.bread.data.dto.LikeItemDto
 import com.example.gungjeonjegwa.domain.bread.data.entity.Bread
 import com.example.gungjeonjegwa.domain.bread.data.entity.BreadDetail
-import com.example.gungjeonjegwa.domain.bread.data.entity.LikeItem
 import com.example.gungjeonjegwa.domain.bread.util.BreadConverter
 import org.springframework.stereotype.Component
 
@@ -20,7 +18,7 @@ class BreadConverterImpl : BreadConverter {
         isSoldOut = entity.isSoldOut,
         previewUrl = entity.previewUrl,
         sellDeliveryType = entity.sellDeliveryType,
-        likeItem = false
+        isLikeItem = false
     )
 
     override fun toDto(entity: BreadDetail, id: Long): BreadDetailDto = BreadDetailDto(
@@ -44,6 +42,6 @@ class BreadConverterImpl : BreadConverter {
         isSoldOut = entity.isSoldOut,
         previewUrl = entity.previewUrl,
         sellDeliveryType = entity.sellDeliveryType,
-        likeItem = isLike
+        isLikeItem = isLike
     )
 }

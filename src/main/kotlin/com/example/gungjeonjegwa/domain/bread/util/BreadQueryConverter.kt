@@ -11,5 +11,5 @@ interface BreadQueryConverter {
 
     fun toBreadImageDto(entity: MutableList<BreadImage>): MutableList<BreadImageDto>
 
-    fun toQueryDto(breadSizeDto: MutableList<BreadSizeDto>, breadDetailDto: BreadDetailDto, breadImageDto: MutableList<BreadImageDto>): BreadDetailQueryDto
+    fun toQueryDto(breadSizeDto: MutableList<BreadSizeDto>, breadDetailDto: BreadDetailDto, breadImageDto: MutableList<BreadImageDto>, isLikeItem: Boolean): BreadDetailQueryDto
 }
