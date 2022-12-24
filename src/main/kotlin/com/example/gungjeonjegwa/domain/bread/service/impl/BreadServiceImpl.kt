@@ -1,16 +1,18 @@
 package com.example.gungjeonjegwa.domain.bread.service.impl
 
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDetailQueryDto
+import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDto
+import com.example.gungjeonjegwa.domain.bread.data.dto.BreadLikeDto
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadQueryDto
 import com.example.gungjeonjegwa.domain.bread.data.entity.BreadDetail
+import com.example.gungjeonjegwa.domain.bread.data.entity.LikeItem
 import com.example.gungjeonjegwa.domain.bread.data.enum.Category
-import com.example.gungjeonjegwa.domain.bread.repository.BreadDetailRepository
-import com.example.gungjeonjegwa.domain.bread.repository.BreadImageRepository
-import com.example.gungjeonjegwa.domain.bread.repository.BreadRepository
-import com.example.gungjeonjegwa.domain.bread.repository.BreadSizeRepository
+import com.example.gungjeonjegwa.domain.bread.repository.*
 import com.example.gungjeonjegwa.domain.bread.service.BreadService
 import com.example.gungjeonjegwa.domain.bread.util.BreadConverter
 import com.example.gungjeonjegwa.domain.bread.util.BreadQueryConverter
+import com.example.gungjeonjegwa.global.util.UserUtil
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -22,19 +24,25 @@ class BreadServiceImpl(
     val breadSizeRepository: BreadSizeRepository,
     val breadConverter: BreadConverter,
     val breadQueryConverter: BreadQueryConverter,
-    val breadImageRepository: BreadImageRepository
+    val breadImageRepository: BreadImageRepository,
+    val userUtil: UserUtil,
+    val likeItemRepository: LikeItemRepository
 ) : BreadService {
     @Transactional(readOnly = true)
     override fun findAllPost(pagination: PageRequest): BreadQueryDto {
-        val findBy = breadRepository.findBy(pagination)
+        val user = userUtil.fetchCurrentUser()
+        val likeItems = likeItemRepository.findAllByUser(user)
+        val bread = breadRepository.findBy(pagination)
             .map { breadConverter.toDto(it) }
-        return breadQueryConverter.toQueryDto(findBy.get(), findBy.isLast)
+        return breadQueryConverter.toQueryDto(addLikeItemActivity(bread, likeItems), bread.isLast)
     }
     @Transactional(readOnly = true)
     override fun findAllPostByCategory(pagination: PageRequest, category: Category): BreadQueryDto {
+        val user = userUtil.fetchCurrentUser()
+        val likeItems = likeItemRepository.findAllByUser(user)
         val findByCategory = breadRepository.findAllByCategory(category, pagination)
             .map { breadConverter.toDto(it) }
-        return breadQueryConverter.toQueryDto(findByCategory.get(), findByCategory.isLast)
+        return breadQueryConverter.toQueryDto(addLikeItemActivity(findByCategory, likeItems), findByCategory.isLast)
     }
 
     @Transactional(readOnly = true)
@@ -50,5 +58,19 @@ class BreadServiceImpl(
         return breadImageRepository.findByBreadDetail(breadDetail)
             .let { breadQueryConverter.toBreadImageDto(it)}
             .let { breadQueryConverter.toQueryDto(breadDetailEntity.first, breadDetailEntity.second, it) }
+    }
+
+    private fun addLikeItemActivity(bread: Page<BreadDto>, likeItem: MutableList<LikeItem>): MutableList<BreadLikeDto> {
+        val list: MutableList<BreadLikeDto> = mutableListOf()
+        for (b in bread) {
+            for(i in likeItem) {
+                if(b.id == i.bread.id) {
+                    list.add(breadConverter.toDto(b, true))
+                    break
+                }
+            }
+            list.add(breadConverter.toDto(b, false))
+        }
+        return list
     }
 }

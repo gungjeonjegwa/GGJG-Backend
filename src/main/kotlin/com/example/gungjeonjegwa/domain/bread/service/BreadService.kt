@@ -9,6 +9,8 @@ import org.springframework.data.domain.PageRequest
 
 interface BreadService {
     fun findAllPost(pagination: PageRequest): BreadQueryDto
+
     fun findAllPostByCategory(pagination: PageRequest, category: Category): BreadQueryDto
+
     fun findPostByIndex(id: Long): BreadDetailQueryDto
 }
