@@ -3,7 +3,6 @@ package com.example.gungjeonjegwa.domain.user.controller
 import com.example.gungjeonjegwa.domain.user.data.request.SignInRequest
 import com.example.gungjeonjegwa.domain.user.data.request.SignUpRequest
 import com.example.gungjeonjegwa.domain.user.data.response.SignInResponse
-import com.example.gungjeonjegwa.domain.user.data.response.SignUpResponse
 import com.example.gungjeonjegwa.domain.user.data.response.UserTokenResponseDto
 import com.example.gungjeonjegwa.domain.user.service.UserService
 import org.springframework.http.HttpStatus
@@ -21,7 +20,7 @@ class UserController(
     val userService: UserService
 ) {
     @PostMapping("/signup")
-    fun signUp(@Valid @RequestBody request: SignUpRequest): ResponseEntity<SignUpResponse> {
+    fun signUp(@Valid @RequestBody request: SignUpRequest): ResponseEntity<*> {
         return ResponseEntity(userService.signUp(request), HttpStatus.CREATED)
     }
 

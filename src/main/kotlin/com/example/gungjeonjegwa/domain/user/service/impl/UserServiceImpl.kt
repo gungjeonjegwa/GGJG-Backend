@@ -26,7 +26,7 @@ class UserServiceImpl(
     val userUtil: UserUtil
 ) : UserService {
     @Transactional
-    override fun signUp(request: SignUpRequest): SignUpResponse {
+    override fun signUp(request: SignUpRequest) {
         val isUser: Boolean = userRepository.existsById(request.id)
         if(isUser) {
             throw RuntimeException("유저가 존재합니다")
@@ -34,7 +34,6 @@ class UserServiceImpl(
         return userConverter.toDto(request)!!
             .let { userConverter.toEntity(it, passwordEncoder.encode(it.password)) }
             .let { userRepository.save(it) }
-            .let { SignUpResponse(it.id) }
     }
 
     @Transactional
@@ -50,7 +49,7 @@ class UserServiceImpl(
         val accessToken = tokenProvider.generatedAccessToken(user.id)
         val refreshToken = tokenProvider.generatedRefreshToken(user.id)
         user.updateRefreshToken(refreshToken)
-        val loginResponse: SignInResponse = SignInResponse(user.id, accessToken, refreshToken)
+        val loginResponse: SignInResponse = SignInResponse(accessToken, refreshToken)
         return loginResponse
     }
 
