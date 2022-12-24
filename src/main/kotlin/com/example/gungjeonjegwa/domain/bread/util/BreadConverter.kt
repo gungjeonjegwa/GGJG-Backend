@@ -8,6 +8,6 @@ import com.example.gungjeonjegwa.domain.bread.data.entity.BreadDetail
 interface BreadConverter {
     fun toDto(entity: Bread): BreadDto
 
-    fun toDto(entity: BreadDetail): BreadDetailDto
+    fun toDto(entity: BreadDetail, id: Long): BreadDetailDto
 
 }

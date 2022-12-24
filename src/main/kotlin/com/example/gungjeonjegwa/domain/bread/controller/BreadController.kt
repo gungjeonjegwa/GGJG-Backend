@@ -1,17 +1,12 @@
 package com.example.gungjeonjegwa.domain.bread.controller
 
-import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDetailDto
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDetailQueryDto
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadQueryDto
 import com.example.gungjeonjegwa.domain.bread.data.enum.Category
 import com.example.gungjeonjegwa.domain.bread.service.BreadService
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/bread")

@@ -44,7 +44,7 @@ class BreadServiceImpl(
         val breadDetailEntity= breadDetailRepository.findByBread(bread)
             .orElseThrow{ RuntimeException("빵 세부사항 없음")}
             .also { breadDetail = it }
-            .let { breadConverter.toDto(it) to it }
+            .let { breadConverter.toDto(it, id) to it }
             .let { breadSizeRepository.findAllByDetailBread(it.second) to it.first }
             .let { breadQueryConverter.toBreadSizeDto(it.first) to it.second }
         return breadImageRepository.findByBreadDetail(breadDetail)

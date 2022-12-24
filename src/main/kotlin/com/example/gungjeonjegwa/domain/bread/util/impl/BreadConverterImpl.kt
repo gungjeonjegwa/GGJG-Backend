@@ -19,8 +19,8 @@ class BreadConverterImpl : BreadConverter {
         sellDeliveryType = entity.sellDeliveryType,
     )
 
-    override fun toDto(entity: BreadDetail): BreadDetailDto = BreadDetailDto(
-        id = entity.id,
+    override fun toDto(entity: BreadDetail, id: Long): BreadDetailDto = BreadDetailDto(
+        id = id,
         content = entity.content,
         size = entity.size,
         stroage = entity.stroage,
