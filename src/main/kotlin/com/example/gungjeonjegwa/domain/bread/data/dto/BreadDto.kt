@@ -18,6 +18,7 @@ class BreadDto(
 
     val sellDeliveryType: MutableList<SellDeliveryType>,
 
+    val likeItem: Boolean
 ) {
 
 }

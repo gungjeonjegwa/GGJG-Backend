@@ -17,6 +17,7 @@ class BreadConverterImpl : BreadConverter {
         isSoldOut = entity.isSoldOut,
         previewUrl = entity.previewUrl,
         sellDeliveryType = entity.sellDeliveryType,
+        likeItem = false
     )
 
     override fun toDto(entity: BreadDetail, id: Long): BreadDetailDto = BreadDetailDto(
