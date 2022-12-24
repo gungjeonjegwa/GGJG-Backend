@@ -23,6 +23,8 @@ class BreadDetailQueryDto(
 
     val ingredient: String, // 성분표시
 
+    val isLikeItem: Boolean,
+
     val breadSize: MutableList<BreadSizeDto>,
 
     val breadImage: MutableList<BreadImageDto>
