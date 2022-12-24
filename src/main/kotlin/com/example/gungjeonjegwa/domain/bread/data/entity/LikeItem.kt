@@ -9,12 +9,12 @@ class LikeItem(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    val user: User,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bread_id")
+    val bread: Bread,
 
     @ManyToOne
-    @JoinColumn(name = "bread_id")
-    val bread: Bread
+    @JoinColumn(name = "user_id")
+    val user: User
 ) {
 }

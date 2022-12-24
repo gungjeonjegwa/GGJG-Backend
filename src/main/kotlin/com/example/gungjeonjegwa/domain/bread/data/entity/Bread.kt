@@ -27,6 +27,9 @@ class Bread(
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "bread")
     val breadDetail: BreadDetail,
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bread")
+    val likeItem: MutableList<LikeItem> = ArrayList(),
+
     @OneToMany(mappedBy = "bread",fetch = FetchType.LAZY)
     val sellDeliveryType: MutableList<SellDeliveryType> = ArrayList()
 ) {
