@@ -11,16 +11,21 @@ import org.springframework.stereotype.Component
 class UserUtil(
     private val userRepository: UserRepository
 ) {
-    fun fetchCurrentUser(): User {
+    fun fetchCurrentUser(): User? {
         val principal = SecurityContextHolder.getContext().authentication.principal
         val userId = if(principal is UserDetails) {
             (principal as AuthDetails).username
         } else {
             principal.toString()
         }
-        return fetchUserByEmail(userId)
+        return fetchUserById(userId)
     }
 
-    fun fetchUserByEmail(userId: String): User =
-        userRepository.findById(userId).orElseThrow{ RuntimeException("유저를 찾을수 없습니다.") }
+    fun fetchUserById(userId: String): User? {
+        if(userId == "anonymousUser") {
+            return null
+        } else {
+            return userRepository.findById(userId).orElseThrow { RuntimeException("유저를 찾을수 없습니다.") }
+        }
+    }
 }
