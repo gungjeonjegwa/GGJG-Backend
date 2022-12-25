@@ -12,6 +12,8 @@ class BreadDetailDto(
 
     val content: String,
 
+    val deliveryPrice: Long,
+
     val size: Long,
 
     val stroage: String, // 보관방법

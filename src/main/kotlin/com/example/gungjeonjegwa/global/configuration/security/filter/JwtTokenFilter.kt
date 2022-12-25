@@ -9,10 +9,6 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @Component
-
-
-
-
 class JwtTokenFilter(
     private val jwtTokenProvider: TokenProvider
 ): OncePerRequestFilter() {

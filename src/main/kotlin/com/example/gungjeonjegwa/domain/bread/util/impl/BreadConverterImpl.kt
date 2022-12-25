@@ -33,6 +33,7 @@ class BreadConverterImpl : BreadConverter {
         deliveryNotice = entity.deliveryNotice,
         allergy = entity.allergy,
         ingredient = entity.ingredient,
+        deliveryPrice = entity.deliveryPrice
     )
 
     override fun toDto(entity: BreadDto, isLike: Boolean): BreadLikeDto = BreadLikeDto(
