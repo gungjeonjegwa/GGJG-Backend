@@ -1,9 +1,6 @@
 package com.example.gungjeonjegwa.domain.bread.service.impl
 
-import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDetailQueryDto
-import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDto
-import com.example.gungjeonjegwa.domain.bread.data.dto.BreadLikeDto
-import com.example.gungjeonjegwa.domain.bread.data.dto.BreadQueryDto
+import com.example.gungjeonjegwa.domain.bread.data.dto.*
 import com.example.gungjeonjegwa.domain.bread.data.entity.BreadDetail
 import com.example.gungjeonjegwa.domain.bread.data.entity.LikeItem
 import com.example.gungjeonjegwa.domain.bread.data.enum.Category
@@ -59,6 +56,8 @@ class BreadServiceImpl(
 
     @Transactional(readOnly = true)
     override fun findPostByIndex(id: Long): BreadDetailQueryDto {
+        val breadImageInfoList: MutableList<BreadImageUrlDto> = mutableListOf()
+        val breadImageList: MutableList<BreadImageUrlDto> = mutableListOf()
         val user = userUtil.fetchCurrentUser()
         val breadDetail: BreadDetail
         val bread = breadRepository.findById(id).orElseThrow{ BreadNotFoundException() }
@@ -68,7 +67,7 @@ class BreadServiceImpl(
             .let { breadConverter.toDto(it, id, bread.title) to it }
             .let { breadSizeRepository.findAllByDetailBread(it.second) to it.first }
             .let { breadQueryConverter.toBreadSizeDto(it.first) to it.second }
-        return breadImageRepository.findByBreadDetail(breadDetail)
+        val findByBreadDetail = breadImageRepository.findByBreadDetail(breadDetail)
             .let { breadQueryConverter.toBreadImageDto(it) }
             .let { likeItemRepository.existsByUserAndBread(user, bread) to it }
             .let {
@@ -79,7 +78,23 @@ class BreadServiceImpl(
                     false to it.second
                 }
             }
-            .let { breadQueryConverter.toQueryDto(breadDetailEntity.first, breadDetailEntity.second, it.second, it.first) }
+        findByBreadDetail.second.forEach{img ->
+            run {
+                if (img.isImageInfo == true) {
+                    breadImageInfoList.add(BreadImageUrlDto(img.imageUrl))
+                } else {
+                    breadImageList.add(BreadImageUrlDto(img.imageUrl))
+                }
+            }
+        }
+            return breadQueryConverter.toQueryDto(
+                breadDetailEntity.first,
+                breadDetailEntity.second,
+                breadImageList,
+                breadImageInfoList,
+                findByBreadDetail.first,
+                bread
+            )
     }
 
     private fun addLikeItemActivity(bread: Page<BreadDto>, likeItem: MutableList<LikeItem>): MutableList<BreadLikeDto> {
