@@ -81,5 +81,9 @@ class UserServiceImpl(
         val existsUserById: Boolean = userRepository.existsById(id)
         return DuplicatedResponse(existsUserById)
     }
+
+    override fun checkEmail(email: String): DuplicatedResponse {
+        val existsUserByEmail: Boolean = userRepository.existsByEmail(email)
+        return DuplicatedResponse(existsUserByEmail)
     }
 }
