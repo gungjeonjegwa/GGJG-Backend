@@ -7,6 +7,8 @@ import com.example.gungjeonjegwa.domain.bread.data.dto.BreadQueryDto
 import com.example.gungjeonjegwa.domain.bread.data.entity.BreadDetail
 import com.example.gungjeonjegwa.domain.bread.data.entity.LikeItem
 import com.example.gungjeonjegwa.domain.bread.data.enum.Category
+import com.example.gungjeonjegwa.domain.bread.exception.BreadDetailNotFoundException
+import com.example.gungjeonjegwa.domain.bread.exception.BreadNotFoundException
 import com.example.gungjeonjegwa.domain.bread.repository.*
 import com.example.gungjeonjegwa.domain.bread.service.BreadService
 import com.example.gungjeonjegwa.domain.bread.util.BreadConverter
@@ -61,7 +63,7 @@ class BreadServiceImpl(
         val breadDetail: BreadDetail
         val bread = breadRepository.findById(id).orElseThrow{ BreadNotFoundException() }
         val breadDetailEntity= breadDetailRepository.findByBread(bread)
-            .orElseThrow{ RuntimeException("빵 세부사항 없음")}
+            .orElseThrow{ BreadDetailNotFoundException()}
             .also { breadDetail = it }
             .let { breadConverter.toDto(it, id) to it }
             .let { breadSizeRepository.findAllByDetailBread(it.second) to it.first }
