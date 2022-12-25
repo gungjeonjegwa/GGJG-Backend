@@ -1,6 +1,7 @@
 package com.example.gungjeonjegwa.domain.bread.util.impl
 
 import com.example.gungjeonjegwa.domain.bread.data.dto.*
+import com.example.gungjeonjegwa.domain.bread.data.entity.Bread
 import com.example.gungjeonjegwa.domain.bread.data.entity.BreadImage
 import com.example.gungjeonjegwa.domain.bread.data.entity.BreadSize
 import com.example.gungjeonjegwa.domain.bread.util.BreadQueryConverter
@@ -24,14 +25,19 @@ class BreadQueryConverterImpl : BreadQueryConverter {
     override fun toQueryDto(
         breadSizeDto: MutableList<BreadSizeDto>,
         breadDetailDto: BreadDetailDto,
-        breadImageDto: MutableList<BreadImageDto>,
-        isLikeItem: Boolean
+        breadImageDto: MutableList<BreadImageUrlDto>,
+        breadImageInfoDto: MutableList<BreadImageUrlDto>,
+        isLikeItem: Boolean,
+        bread: Bread
     ): BreadDetailQueryDto = BreadDetailQueryDto(
         id = breadDetailDto.id,
         title = breadDetailDto.title,
         content = breadDetailDto.content,
+        price = bread.price,
+        deliveryPrice = breadDetailDto.deliveryPrice,
+        isSoldOut = bread.isSoldOut,
         size = breadDetailDto.size,
-        stroage = breadDetailDto.stroage,
+        storage = breadDetailDto.stroage,
         expirationDate = breadDetailDto.expirationDate,
         previewUrl = breadDetailDto.previewUrl,
         precaution = breadDetailDto.precaution,
@@ -40,7 +46,9 @@ class BreadQueryConverterImpl : BreadQueryConverter {
         ingredient = breadDetailDto.ingredient,
         isLikeItem = isLikeItem,
         breadSize = breadSizeDto,
-        breadImage = breadImageDto
+        breadImage = breadImageDto,
+        breadImageInfo = breadImageInfoDto,
+        sellDeliveryType = bread.sellDeliveryType
     )
 
     override fun toBreadImageDto(entity: MutableList<BreadImage>): MutableList<BreadImageDto> {
