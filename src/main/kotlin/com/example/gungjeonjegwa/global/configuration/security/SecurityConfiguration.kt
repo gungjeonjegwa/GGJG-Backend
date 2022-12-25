@@ -1,6 +1,10 @@
 package com.example.gungjeonjegwa.global.configuration.security
 
+import com.example.gungjeonjegwa.global.configuration.security.config.FilterConfig
+import com.example.gungjeonjegwa.global.configuration.security.filter.ExceptionFilter
 import com.example.gungjeonjegwa.global.configuration.security.filter.JwtTokenFilter
+import com.example.gungjeonjegwa.global.configuration.security.jwt.TokenProvider
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -15,7 +19,8 @@ import org.springframework.stereotype.Component
 @Component
 @EnableWebSecurity
 class SecurityConfiguration(
-    val jwtTokenFilter: JwtTokenFilter
+    private val jwtTokenProvider: TokenProvider,
+    private val objectMapper: ObjectMapper
 ) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain =
@@ -33,7 +38,11 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/bread/**").permitAll()
             .anyRequest().authenticated()
             .and()
-            .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .exceptionHandling()
+            .authenticationEntryPoint(CustomAuthenticationEntryPoint(objectMapper))
+            .and()
+            .apply(FilterConfig(jwtTokenProvider, objectMapper))
+            .and()
             .build()
 
     @Bean
