@@ -13,8 +13,9 @@ class BreadDetail(
 
     val size: Long,
 
-    val stroage: String, // 보관방법
     val deliveryPrice: Long,
+
+    val storage: String, // 보관방법
 
     val expirationDate: String, // 유통기한
 

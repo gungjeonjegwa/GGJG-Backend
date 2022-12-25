@@ -12,7 +12,7 @@ class BreadDetailQueryDto(
     val deliveryPrice: Long,
     val size: Long,
 
-    val stroage: String, // 보관방법
+    val storage: String, // 보관방법
 
     val expirationDate: String, // 유통기한
 
