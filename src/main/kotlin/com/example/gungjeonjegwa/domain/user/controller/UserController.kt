@@ -1,6 +1,5 @@
 package com.example.gungjeonjegwa.domain.user.controller
 
-import com.example.gungjeonjegwa.domain.user.data.request.CheckEmailRequest
 import com.example.gungjeonjegwa.domain.user.data.request.SignInRequest
 import com.example.gungjeonjegwa.domain.user.data.request.SignUpRequest
 import com.example.gungjeonjegwa.domain.user.data.response.DuplicatedResponse

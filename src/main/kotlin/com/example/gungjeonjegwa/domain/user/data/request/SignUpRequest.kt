@@ -1,9 +1,6 @@
 package com.example.gungjeonjegwa.domain.user.data.request
 
-import javax.validation.constraints.Email
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
-import javax.validation.constraints.Pattern
+import javax.validation.constraints.*
 
 data class SignUpRequest(
     @field:NotBlank(message = "아이디는 필수 입력 값입니다.")
@@ -19,9 +16,7 @@ data class SignUpRequest(
     @field:NotNull
     var name: String,
 
-    @field:NotBlank(message = "전화번호는 필수 입력 값입니다.")
-    @field:NotNull
-    var phone: String,
+    var phone: String?,
 
     @field:NotBlank(message = "이메일은 필수 입력 값 입니다.")
     @field:NotNull
