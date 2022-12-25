@@ -3,8 +3,8 @@ package com.example.gungjeonjegwa.domain.user.service.impl
 import com.example.gungjeonjegwa.domain.user.data.entity.User
 import com.example.gungjeonjegwa.domain.user.data.request.SignInRequest
 import com.example.gungjeonjegwa.domain.user.data.request.SignUpRequest
+import com.example.gungjeonjegwa.domain.user.data.response.DuplicatedResponse
 import com.example.gungjeonjegwa.domain.user.data.response.SignInResponse
-import com.example.gungjeonjegwa.domain.user.data.response.SignUpResponse
 import com.example.gungjeonjegwa.domain.user.data.response.UserTokenResponseDto
 import com.example.gungjeonjegwa.domain.user.repository.UserRepository
 import com.example.gungjeonjegwa.domain.user.service.UserService
@@ -72,6 +72,14 @@ class UserServiceImpl(
     @Transactional
     override fun signOut() {
         val currentUser = userUtil.fetchCurrentUser()
-        currentUser.updateRefreshToken(null)
+        if (currentUser != null) {
+            currentUser.updateRefreshToken(null)
+        }
+    }
+
+    override fun checkId(id: String): DuplicatedResponse {
+        val existsUserById: Boolean = userRepository.existsById(id)
+        return DuplicatedResponse(existsUserById)
+    }
     }
 }
