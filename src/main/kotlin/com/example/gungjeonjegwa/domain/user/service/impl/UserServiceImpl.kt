@@ -31,7 +31,7 @@ class UserServiceImpl(
     override fun signUp(request: SignUpRequest) {
         val isUser: Boolean = userRepository.existsById(request.id)
         if(isUser) {
-            throw RuntimeException("유저가 존재합니다")
+            throw UserNotFoundException()
         }
         return userConverter.toDto(request)!!
             .let { userConverter.toEntity(it, passwordEncoder.encode(it.password)) }
