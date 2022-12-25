@@ -2,6 +2,7 @@ package com.example.gungjeonjegwa.global.configuration.security
 
 import com.example.gungjeonjegwa.global.configuration.security.filter.JwtTokenFilter
 import org.springframework.context.annotation.Bean
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -27,7 +28,9 @@ class SecurityConfiguration(
             .antMatchers("/users/signup").permitAll()
             .antMatchers("/users/signin").permitAll()
             .antMatchers("/users/refresh").permitAll()
-            .antMatchers("/bread/**").permitAll()
+            .antMatchers("/users/idcheck").permitAll()
+            .antMatchers("/users/emailcheck").permitAll()
+            .antMatchers(HttpMethod.GET, "/bread/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
