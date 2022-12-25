@@ -40,7 +40,7 @@ class UserServiceImpl(
     override fun signIn(request: SignInRequest): SignInResponse {
         val userEntity = userRepository.findById(request.id)
         if(userEntity.isEmpty) {
-            throw RuntimeException("유저가 없습니다.")
+            throw UserNotFoundException()
         }
         val user: User = userEntity.get()
         if(!passwordEncoder.matches(request.password, user.password)) {
@@ -59,7 +59,7 @@ class UserServiceImpl(
             throw ExpiredTokenException()
         }
         val userId = tokenProvider.exactIdFromRefreshToken(refreshToken)
-        val user = userRepository.findById(userId).orElseThrow{ RuntimeException("유저 정보를 찾을수 없습니다.") }
+        val user = userRepository.findById(userId).orElseThrow{ UserNotFoundException() }
         if(user.refreshtoken == null || user.refreshtoken != refreshToken) {
             throw InvalidTokenException()
         }

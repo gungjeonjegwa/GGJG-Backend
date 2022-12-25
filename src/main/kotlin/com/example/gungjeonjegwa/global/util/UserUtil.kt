@@ -1,6 +1,7 @@
 package com.example.gungjeonjegwa.global.util
 
 import com.example.gungjeonjegwa.domain.user.data.entity.User
+import com.example.gungjeonjegwa.domain.user.exception.UserNotFoundException
 import com.example.gungjeonjegwa.domain.user.repository.UserRepository
 import com.example.gungjeonjegwa.global.configuration.security.auth.AuthDetails
 import org.springframework.security.core.context.SecurityContextHolder
@@ -25,7 +26,7 @@ class UserUtil(
         if(userId == "anonymousUser") {
             return null
         } else {
-            return userRepository.findById(userId).orElseThrow { RuntimeException("유저를 찾을수 없습니다.") }
+            return userRepository.findById(userId).orElseThrow { UserNotFoundException() }
         }
     }
 }
