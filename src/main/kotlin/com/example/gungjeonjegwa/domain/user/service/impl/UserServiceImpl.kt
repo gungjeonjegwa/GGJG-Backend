@@ -6,6 +6,8 @@ import com.example.gungjeonjegwa.domain.user.data.request.SignUpRequest
 import com.example.gungjeonjegwa.domain.user.data.response.DuplicatedResponse
 import com.example.gungjeonjegwa.domain.user.data.response.SignInResponse
 import com.example.gungjeonjegwa.domain.user.data.response.UserTokenResponseDto
+import com.example.gungjeonjegwa.domain.user.exception.PasswordNotMatchedException
+import com.example.gungjeonjegwa.domain.user.exception.UserNotFoundException
 import com.example.gungjeonjegwa.domain.user.repository.UserRepository
 import com.example.gungjeonjegwa.domain.user.service.UserService
 import com.example.gungjeonjegwa.domain.user.util.UserConverter
@@ -44,7 +46,7 @@ class UserServiceImpl(
         }
         val user: User = userEntity.get()
         if(!passwordEncoder.matches(request.password, user.password)) {
-            throw RuntimeException("패스워드가 맞지 않습니다.")
+            throw PasswordNotMatchedException()
         }
         val accessToken = tokenProvider.generatedAccessToken(user.id)
         val refreshToken = tokenProvider.generatedRefreshToken(user.id)
