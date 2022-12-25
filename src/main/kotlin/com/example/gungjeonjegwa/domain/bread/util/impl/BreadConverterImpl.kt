@@ -21,8 +21,9 @@ class BreadConverterImpl : BreadConverter {
         isLikeItem = false
     )
 
-    override fun toDto(entity: BreadDetail, id: Long): BreadDetailDto = BreadDetailDto(
+    override fun toDto(entity: BreadDetail, id: Long, title: String): BreadDetailDto = BreadDetailDto(
         id = id,
+        title = title,
         content = entity.content,
         size = entity.size,
         stroage = entity.stroage,

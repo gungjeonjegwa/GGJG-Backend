@@ -28,6 +28,7 @@ class BreadQueryConverterImpl : BreadQueryConverter {
         isLikeItem: Boolean
     ): BreadDetailQueryDto = BreadDetailQueryDto(
         id = breadDetailDto.id,
+        title = breadDetailDto.title,
         content = breadDetailDto.content,
         size = breadDetailDto.size,
         stroage = breadDetailDto.stroage,

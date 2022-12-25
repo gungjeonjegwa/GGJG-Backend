@@ -5,6 +5,8 @@ import java.time.LocalDateTime
 class BreadDetailQueryDto(
     val id: Long,
 
+    val title: String,
+
     val content: String,
 
     val size: Long,

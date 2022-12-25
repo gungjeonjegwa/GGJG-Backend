@@ -65,7 +65,7 @@ class BreadServiceImpl(
         val breadDetailEntity= breadDetailRepository.findByBread(bread)
             .orElseThrow{ BreadDetailNotFoundException()}
             .also { breadDetail = it }
-            .let { breadConverter.toDto(it, id) to it }
+            .let { breadConverter.toDto(it, id, bread.title) to it }
             .let { breadSizeRepository.findAllByDetailBread(it.second) to it.first }
             .let { breadQueryConverter.toBreadSizeDto(it.first) to it.second }
         return breadImageRepository.findByBreadDetail(breadDetail)
