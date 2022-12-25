@@ -1,6 +1,6 @@
 package com.example.gungjeonjegwa.domain.bread.data.dto
 
-import java.time.LocalDateTime
+import com.example.gungjeonjegwa.domain.delivery.data.entity.SellDeliveryType
 
 class BreadDetailQueryDto(
     val id: Long,
@@ -9,7 +9,12 @@ class BreadDetailQueryDto(
 
     val content: String,
 
+    val price: Long?,
+
     val deliveryPrice: Long,
+
+    val isSoldOut: Boolean,
+
     val size: Long,
 
     val storage: String, // 보관방법
@@ -30,6 +35,10 @@ class BreadDetailQueryDto(
 
     val breadSize: MutableList<BreadSizeDto>,
 
-    val breadImage: MutableList<BreadImageDto>
+    val breadImage: MutableList<BreadImageUrlDto>,
+
+    val breadImageInfo: MutableList<BreadImageUrlDto>,
+
+    val sellDeliveryType: MutableList<SellDeliveryType>,
 ) {
 }
