@@ -1,12 +1,16 @@
 package com.example.gungjeonjegwa.domain.user.controller
 
+import com.example.gungjeonjegwa.domain.user.data.request.CheckEmailRequest
 import com.example.gungjeonjegwa.domain.user.data.request.SignInRequest
 import com.example.gungjeonjegwa.domain.user.data.request.SignUpRequest
+import com.example.gungjeonjegwa.domain.user.data.response.DuplicatedResponse
 import com.example.gungjeonjegwa.domain.user.data.response.SignInResponse
 import com.example.gungjeonjegwa.domain.user.data.response.UserTokenResponseDto
 import com.example.gungjeonjegwa.domain.user.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -43,5 +47,10 @@ class UserController(
     @GetMapping("/idcheck")
     fun checkId(@RequestParam id: String): DuplicatedResponse {
         return userService.checkId(id)
+    }
+
+    @GetMapping("/emailcheck")
+    fun checkEmail(@RequestParam email: String): DuplicatedResponse {
+        return userService.checkEmail(email)
     }
 }
