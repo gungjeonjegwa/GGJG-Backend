@@ -13,7 +13,8 @@ class User(
 
     val name: String,
 
-    val phone: String,
+    @Column(nullable = true)
+    val phone: String?,
 
     val email: String,
 
