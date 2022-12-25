@@ -6,7 +6,7 @@ import com.example.gungjeonjegwa.domain.user.data.entity.User
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface LikeItemRepository : JpaRepository<LikeItem, Long> {
-    fun findAllByUser(entity: User): MutableList<LikeItem>
+    fun findAllByUser(entity: User?): MutableList<LikeItem>
 
-    fun existsByUserAndBread(entity: User, bread: Bread): Boolean
+    fun existsByUserAndBread(entity: User?, bread: Bread): Boolean
 }

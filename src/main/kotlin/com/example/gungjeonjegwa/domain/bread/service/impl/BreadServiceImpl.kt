@@ -31,7 +31,12 @@ class BreadServiceImpl(
     @Transactional(readOnly = true)
     override fun findAllPost(pagination: PageRequest): BreadQueryDto {
         val user = userUtil.fetchCurrentUser()
-        val likeItems = likeItemRepository.findAllByUser(user)
+        val likeItems: MutableList<LikeItem>
+        if(user == null) {
+            likeItems = likeItemRepository.findAllByUser(user)
+        } else {
+            likeItems = likeItemRepository.findAllByUser(user)
+        }
         val bread = breadRepository.findBy(pagination)
             .map { breadConverter.toDto(it) }
         return breadQueryConverter.toQueryDto(addLikeItemActivity(bread, likeItems), bread.isLast)
@@ -39,7 +44,12 @@ class BreadServiceImpl(
     @Transactional(readOnly = true)
     override fun findAllPostByCategory(pagination: PageRequest, category: Category): BreadQueryDto {
         val user = userUtil.fetchCurrentUser()
-        val likeItems = likeItemRepository.findAllByUser(user)
+        val likeItems: MutableList<LikeItem>
+        if(user == null) {
+            likeItems = likeItemRepository.findAllByUser(user)
+        } else {
+            likeItems = likeItemRepository.findAllByUser(user)
+        }
         val findByCategory = breadRepository.findAllByCategory(category, pagination)
             .map { breadConverter.toDto(it) }
         return breadQueryConverter.toQueryDto(addLikeItemActivity(findByCategory, likeItems), findByCategory.isLast)
