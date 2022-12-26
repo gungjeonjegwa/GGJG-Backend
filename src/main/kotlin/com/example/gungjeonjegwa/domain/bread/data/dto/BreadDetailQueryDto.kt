@@ -35,9 +35,9 @@ class BreadDetailQueryDto(
 
     val breadSize: MutableList<BreadSizeDto>,
 
-    val breadImage: MutableList<BreadImageUrlDto>,
+    val breadImage: MutableList<String>,
 
-    val breadImageInfo: MutableList<BreadImageUrlDto>,
+    val breadImageInfo: MutableList<String>,
 
     val sellDeliveryType: MutableList<SellDeliveryType>,
 ) {

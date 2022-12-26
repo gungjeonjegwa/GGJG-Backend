@@ -25,7 +25,7 @@ class BreadServiceImpl(
     val breadQueryConverter: BreadQueryConverter,
     val breadImageRepository: BreadImageRepository,
     val userUtil: UserUtil,
-    val likeItemRepository: LikeItemRepository
+    val likeItemRepository: LikeItemRepository,
 ) : BreadService {
     @Transactional(readOnly = true)
     override fun findAllPost(pagination: PageRequest): BreadQueryDto {
@@ -56,8 +56,8 @@ class BreadServiceImpl(
 
     @Transactional(readOnly = true)
     override fun findPostByIndex(id: Long): BreadDetailQueryDto {
-        val breadImageInfoList: MutableList<BreadImageUrlDto> = mutableListOf()
-        val breadImageList: MutableList<BreadImageUrlDto> = mutableListOf()
+        val breadImageInfoList: MutableList<String> = mutableListOf()
+        val breadImageList: MutableList<String> = mutableListOf()
         val user = userUtil.fetchCurrentUser()
         val breadDetail: BreadDetail
         val bread = breadRepository.findById(id).orElseThrow{ BreadNotFoundException() }
@@ -81,9 +81,9 @@ class BreadServiceImpl(
         findByBreadDetail.second.forEach{img ->
             run {
                 if (img.isImageInfo == true) {
-                    breadImageInfoList.add(BreadImageUrlDto(img.imageUrl))
+                    breadImageInfoList.add(img.imageUrl)
                 } else {
-                    breadImageList.add(BreadImageUrlDto(img.imageUrl))
+                    breadImageList.add(img.imageUrl)
                 }
             }
         }
