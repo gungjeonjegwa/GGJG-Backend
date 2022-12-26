@@ -11,7 +11,8 @@ class BreadDetail(
 
     val content: String,
 
-    val size: Long,
+    @Column(nullable = true)
+    val size: Long?,
 
     val deliveryPrice: Long,
 

@@ -25,7 +25,7 @@ class BreadConverterImpl : BreadConverter {
         id = id,
         title = title,
         content = entity.content,
-        size = entity.size,
+        size = entity?.size,
         stroage = entity.storage,
         expirationDate = entity.expirationDate,
         previewUrl = entity.previewUrl,

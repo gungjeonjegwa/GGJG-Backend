@@ -36,7 +36,7 @@ class BreadQueryConverterImpl : BreadQueryConverter {
         price = bread.price,
         deliveryPrice = breadDetailDto.deliveryPrice,
         isSoldOut = bread.isSoldOut,
-        size = breadDetailDto.size,
+        size = breadDetailDto?.size,
         storage = breadDetailDto.stroage,
         expirationDate = breadDetailDto.expirationDate,
         previewUrl = breadDetailDto.previewUrl,

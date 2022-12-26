@@ -15,7 +15,7 @@ class BreadDetailQueryDto(
 
     val isSoldOut: Boolean,
 
-    val size: Long,
+    val size: Long?,
 
     val storage: String, // 보관방법
 

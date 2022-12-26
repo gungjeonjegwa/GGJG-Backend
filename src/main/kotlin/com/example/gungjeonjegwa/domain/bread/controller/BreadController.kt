@@ -1,7 +1,9 @@
 package com.example.gungjeonjegwa.domain.bread.controller
 
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDetailQueryDto
+import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDto
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadQueryDto
+import com.example.gungjeonjegwa.domain.bread.data.entity.Bread
 import com.example.gungjeonjegwa.domain.bread.data.enum.Category
 import com.example.gungjeonjegwa.domain.bread.service.BreadService
 import org.springframework.data.domain.PageRequest
