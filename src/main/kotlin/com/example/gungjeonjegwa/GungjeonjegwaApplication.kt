@@ -9,6 +9,5 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @ConfigurationPropertiesScan
 class GungjeonjegwaApplication
 fun main(args: Array<String>) {
-
     runApplication<GungjeonjegwaApplication>(*args)
 }

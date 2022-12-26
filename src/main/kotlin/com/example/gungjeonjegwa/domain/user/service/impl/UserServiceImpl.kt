@@ -50,8 +50,9 @@ class UserServiceImpl(
         }
         val accessToken = tokenProvider.generatedAccessToken(user.id)
         val refreshToken = tokenProvider.generatedRefreshToken(user.id)
+        val accessTokenExpired = tokenProvider.getAccessTokenExpired()
         user.updateRefreshToken(refreshToken)
-        val loginResponse: SignInResponse = SignInResponse(accessToken, refreshToken)
+        val loginResponse: SignInResponse = SignInResponse(accessTokenExpired, accessToken, refreshToken)
         return loginResponse
     }
 
