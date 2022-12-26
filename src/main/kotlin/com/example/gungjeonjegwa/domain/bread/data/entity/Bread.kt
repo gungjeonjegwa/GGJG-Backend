@@ -2,7 +2,6 @@ package com.example.gungjeonjegwa.domain.bread.data.entity
 
 import com.example.gungjeonjegwa.domain.bread.data.enum.Category
 import com.example.gungjeonjegwa.domain.delivery.data.entity.SellDeliveryType
-import org.springframework.data.elasticsearch.annotations.Document
 import javax.persistence.*
 
 @Entity
