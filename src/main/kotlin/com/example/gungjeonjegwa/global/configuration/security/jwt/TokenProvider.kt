@@ -26,6 +26,7 @@ class TokenProvider(
         const val REFRESH_TYPE = "refresh"
         const val ACCESS_EXP = 60L * 15 // 15min
         const val REFRESH_EXP = 60L * 60 * 24 * 7 // 1 weeks
+        const val TOKEN_PREFIX = "Bearer "
     }
 
     fun generatedAccessToken(id: String): String =
@@ -43,7 +44,13 @@ class TokenProvider(
             .setExpiration(Date(System.currentTimeMillis() + exp * 1000))
             .compact()
 
-    fun resolveToken(req: HttpServletRequest): String? = req.getHeader("Authorization") ?: null
+    fun resolveToken(req: HttpServletRequest): String? {
+        val token = req.getHeader("Authorization") ?: return null
+        return parseToken(token)
+    }
+
+    fun parseToken(token: String): String? =
+        if (token.startsWith(TOKEN_PREFIX)) token.replace(TOKEN_PREFIX, "") else null
 
     fun authentication(token: String): Authentication {
         val userDetails = authDetailsService.loadUserByUsername(getTokenSubject(token, jwtPropertices.accessSecert))

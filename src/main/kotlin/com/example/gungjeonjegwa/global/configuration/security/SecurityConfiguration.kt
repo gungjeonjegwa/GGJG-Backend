@@ -29,7 +29,7 @@ class SecurityConfiguration(
             .httpBasic().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-            .authorizeHttpRequests()
+            .authorizeRequests()
             .antMatchers("/users/signup").permitAll()
             .antMatchers("/users/signin").permitAll()
             .antMatchers("/users/refresh").permitAll()
