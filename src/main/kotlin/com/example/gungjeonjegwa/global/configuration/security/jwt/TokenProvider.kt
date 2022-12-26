@@ -13,6 +13,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.stereotype.Component
 import java.security.Key
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 
@@ -85,7 +87,7 @@ class TokenProvider(
             return true
         }
     }
-    fun getAccessTokenExpired(): LocalDateTime {
-        return LocalDateTime.now().plusSeconds(ACCESS_EXP)
+    fun getAccessTokenExpired(): ZonedDateTime {
+        return ZonedDateTime.now(ZoneId.of("Asia/Seoul")).plusSeconds(ACCESS_EXP)
     }
 }

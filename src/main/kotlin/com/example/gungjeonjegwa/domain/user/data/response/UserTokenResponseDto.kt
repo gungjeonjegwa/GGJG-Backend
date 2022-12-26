@@ -1,9 +1,10 @@
 package com.example.gungjeonjegwa.domain.user.data.response
 
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 class UserTokenResponseDto(
-    val expiredAt: LocalDateTime,
+    val expiredAt: ZonedDateTime,
 
     val accessToken: String,
 
