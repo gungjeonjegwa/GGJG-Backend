@@ -32,6 +32,7 @@ class SecurityConfiguration(
             .authorizeRequests()
             .antMatchers("/users/signup").permitAll()
             .antMatchers("/users/signin").permitAll()
+            .antMatchers("/users/signout").permitAll()
             .antMatchers("/users/refresh").permitAll()
             .antMatchers("/users/idcheck").permitAll()
             .antMatchers("/users/emailcheck").permitAll()
