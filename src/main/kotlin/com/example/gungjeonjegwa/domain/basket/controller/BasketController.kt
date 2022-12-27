@@ -1,6 +1,7 @@
 package com.example.gungjeonjegwa.domain.basket.controller
 
 import com.example.gungjeonjegwa.domain.basket.data.dto.BasketDto
+import com.example.gungjeonjegwa.domain.basket.data.request.BasketCreateRequest
 import com.example.gungjeonjegwa.domain.basket.service.BasketService
 import org.springframework.web.bind.annotation.*
 
@@ -27,5 +28,10 @@ class BasketController(
     @PatchMapping("/minus/{id}")
     fun patchMinusCount(@PathVariable id: Long): Int {
         return basketService.minusCount(id)
+    }
+
+    @PostMapping
+    fun createBasket(@RequestBody basket: BasketCreateRequest) {
+        return basketService.createBasket(basket)
     }
 }

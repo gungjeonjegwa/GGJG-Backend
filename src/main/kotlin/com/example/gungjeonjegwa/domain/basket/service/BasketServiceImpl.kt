@@ -1,9 +1,14 @@
 package com.example.gungjeonjegwa.domain.basket.service
 
 import com.example.gungjeonjegwa.domain.basket.data.dto.BasketDto
+import com.example.gungjeonjegwa.domain.basket.data.entity.Basket
+import com.example.gungjeonjegwa.domain.basket.data.request.BasketCreateRequest
+import com.example.gungjeonjegwa.domain.basket.exception.LessRequestDataException
 import com.example.gungjeonjegwa.domain.basket.repository.BasketRepository
 import com.example.gungjeonjegwa.domain.basket.util.BasketConverter
+import com.example.gungjeonjegwa.domain.bread.data.entity.BreadSize
 import com.example.gungjeonjegwa.domain.bread.repository.BreadRepository
+import com.example.gungjeonjegwa.domain.bread.repository.BreadSizeRepository
 import com.example.gungjeonjegwa.global.util.UserUtil
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -13,7 +18,8 @@ class BasketServiceImpl(
     private val userUtil: UserUtil,
     private val basketRepository: BasketRepository,
     private val basketConverter: BasketConverter,
-    private val breadRepository: BreadRepository
+    private val breadRepository: BreadRepository,
+    private val breadSizeRepository: BreadSizeRepository
 ) : BasketService{
     override fun findBasketByUser(): List<BasketDto> {
         val currentUser = userUtil.fetchCurrentUser()
@@ -42,5 +48,29 @@ class BasketServiceImpl(
         val baskets = basketRepository.findByIdAndUser(id, currentUser!!)
         baskets.minusCount()
         return baskets.count
+    }
+
+    override fun createBasket(basket: BasketCreateRequest) {
+        val breadSize: BreadSize
+        val currentUser = userUtil.fetchCurrentUser()
+        val bread = breadRepository.findById(basket.breadId).orElseThrow{ RuntimeException("빵 데이터가 없습니다. ") }
+        val existsByDetailBread = breadSizeRepository.existsByDetailBread(bread.breadDetail)
+        if(existsByDetailBread == true) {
+            if(basket.age == null || basket.size == null || basket.unit == null || basket.extramoney == null) {
+                throw LessRequestDataException()
+            } else {
+                breadSize =
+                    breadSizeRepository.findBySizeAndExtramoneyAndUnitAndDetailBread(
+                        basket.size!!,
+                        basket.extramoney!!,
+                        basket.unit!!,
+                        bread.breadDetail
+                    )
+                basketRepository.save(Basket(0, basket.age, basket.count, bread, currentUser!!, breadSize))
+            }
+        }
+        if(basket.age == null || basket.size == null || basket.unit == null || basket.extramoney == null) {
+            basketRepository.save(Basket(0, null, basket.count, bread, currentUser!!, null))
+        }
     }
 }
