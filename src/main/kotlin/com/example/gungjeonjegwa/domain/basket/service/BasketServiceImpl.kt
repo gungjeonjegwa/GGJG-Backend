@@ -36,4 +36,11 @@ class BasketServiceImpl(
         baskets.plusCount()
         return baskets.count
     }
+    @Transactional
+    override fun minusCount(id: Long): Int {
+        val currentUser = userUtil.fetchCurrentUser()
+        val baskets = basketRepository.findByIdAndUser(id, currentUser!!)
+        baskets.minusCount()
+        return baskets.count
+    }
 }

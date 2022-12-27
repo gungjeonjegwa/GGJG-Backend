@@ -9,4 +9,5 @@ interface BasketService {
 
     fun plusCount(id: Long): Int
 
+    fun minusCount(id: Long): Int
 }

@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface BasketRepository : JpaRepository<Basket, Long> {
     fun findByUser(user: User): List<Basket>
+
+    fun findByIdAndUser(id: Long, user: User): Basket
 }

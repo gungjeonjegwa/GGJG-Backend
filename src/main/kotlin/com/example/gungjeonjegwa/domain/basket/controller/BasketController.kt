@@ -23,4 +23,9 @@ class BasketController(
     fun patchPlusCount(@PathVariable id: Long): Int {
         return basketService.plusCount(id)
     }
+
+    @PatchMapping("/minus/{id}")
+    fun patchMinusCount(@PathVariable id: Long): Int {
+        return basketService.minusCount(id)
+    }
 }
