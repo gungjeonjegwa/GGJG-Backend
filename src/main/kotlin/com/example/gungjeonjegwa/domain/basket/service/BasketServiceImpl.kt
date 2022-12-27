@@ -1,7 +1,6 @@
 package com.example.gungjeonjegwa.domain.basket.service
 
 import com.example.gungjeonjegwa.domain.basket.data.dto.BasketDto
-import com.example.gungjeonjegwa.domain.basket.data.entity.Basket
 import com.example.gungjeonjegwa.domain.basket.repository.BasketRepository
 import com.example.gungjeonjegwa.domain.basket.util.BasketConverter
 import com.example.gungjeonjegwa.global.util.UserUtil
@@ -19,3 +18,9 @@ class BasketServiceImpl(
             .map { basketConverter.toDto(it) }
         return baskets
     }
+
+//    override fun deleteBasketByUser(id: Long) {
+//        val currentUser = userUtil.fetchCurrentUser()
+//        basketRepository.findByUser(currentUser!!)
+//    }
+}

@@ -14,3 +14,9 @@ class BasketController(
     fun findBasket(): List<BasketDto> {
         return basketService.findBasketByUser()
     }
+
+//    @DeleteMapping("/{id}")
+//    fun deleteBasket(@RequestParam("id") id: Long): ResponseEntity<*>{
+//        return ResponseEntity.ok(basketService.deleteBasketByUser(id))
+//    }
+}
