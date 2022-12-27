@@ -3,8 +3,8 @@ package com.example.gungjeonjegwa.domain.bread.controller
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDetailQueryDto
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDto
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadQueryDto
-import com.example.gungjeonjegwa.domain.bread.data.entity.Bread
 import com.example.gungjeonjegwa.domain.bread.data.enum.Category
+import com.example.gungjeonjegwa.domain.bread.service.BreadElasticSearch
 import com.example.gungjeonjegwa.domain.bread.service.BreadService
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.ResponseEntity
@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/bread")
 class BreadController(
-    val breadService: BreadService
+    val breadService: BreadService,
+    val breadElasticSearch: BreadElasticSearch
 ) {
     @GetMapping
     fun findAllBread(
@@ -35,5 +36,10 @@ class BreadController(
     @GetMapping("/{id}")
     fun findPostByIndex(@PathVariable("id") breadId: Long): BreadDetailQueryDto {
         return breadService.findPostByIndex(breadId)
+    }
+
+    @GetMapping("/search")
+    fun search(@RequestParam("title") title: String): List<BreadDto>{
+        return breadElasticSearch.searchByTitle(title)
     }
 }
