@@ -3,6 +3,7 @@ package com.example.gungjeonjegwa.domain.basket.data.dto
 class BasketDto(
     val id: Long,
     val title: String,
+    val previewUrl: String,
     val age: Long?,
     val price: Long,
     val size: String?,

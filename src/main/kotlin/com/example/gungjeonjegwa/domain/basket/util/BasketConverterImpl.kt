@@ -9,6 +9,7 @@ class BasketConverterImpl : BasketConverter {
     override fun toDto(entity: Basket): BasketDto = BasketDto(
         id = entity.id,
         title = entity.bread.title,
+        previewUrl = entity.bread.previewUrl,
         age = entity.age,
         price = entity.bread.price!!,
         size = entity.breadSize?.size,
