@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     driver-class-name: ${DB_DRIVER}
     url: ${DB_URL}
@@ -14,3 +16,11 @@ spring:
 jwt:
   accessSecret: ${JWT_ACCESS_SECRET}
   refreshSecret: ${JWT_REFRESH_SECRET}
+elasticsearch:
+  host: ${ELASTICSEARCH_HOST}
+  port: 9200
+
+logging:
+  level:
+    org.springframework: INFO
+    org.devkuma: DEBUG
