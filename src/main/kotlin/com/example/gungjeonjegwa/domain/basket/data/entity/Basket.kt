@@ -14,7 +14,7 @@ class Basket(
     @Column(nullable = true)
     val age: Long? = null,
 
-    val count: Long,
+    var count: Int,
 
     @ManyToOne
     @JoinColumn(name = "bread_id", nullable = true)

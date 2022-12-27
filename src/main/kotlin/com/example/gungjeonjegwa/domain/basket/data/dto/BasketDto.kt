@@ -10,7 +10,7 @@ class BasketDto(
     val extramoney: Long?,
     val unit: String?,
     val isSoldOut: Boolean,
-    val count: Long,
+    val count: Int,
     val remaincount: Long,
 ) {
 }
