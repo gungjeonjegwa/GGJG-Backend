@@ -6,6 +6,7 @@ import com.example.gungjeonjegwa.domain.basket.util.BasketConverter
 import com.example.gungjeonjegwa.domain.bread.repository.BreadRepository
 import com.example.gungjeonjegwa.global.util.UserUtil
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class BasketServiceImpl(
@@ -26,5 +27,13 @@ class BasketServiceImpl(
         val baskets = basketRepository.findByUser(currentUser!!)
             .filter { it.id == id }
         basketRepository.deleteAll(baskets)
+    }
+    @Transactional
+
+    override fun plusCount(id: Long): Int {
+        val currentUser = userUtil.fetchCurrentUser()
+        val baskets = basketRepository.findByIdAndUser(id, currentUser!!)
+        baskets.plusCount()
+        return baskets.count
     }
 }

@@ -15,7 +15,12 @@ class BasketController(
     }
 
     @DeleteMapping("{id}")
-    fun deleteBasket(@PathVariable() id: Long){
+    fun deleteBasket(@PathVariable id: Long){
         return basketService.deleteBasketByUser(id)
+    }
+
+    @PatchMapping("/plus/{id}")
+    fun patchPlusCount(@PathVariable id: Long): Int {
+        return basketService.plusCount(id)
     }
 }

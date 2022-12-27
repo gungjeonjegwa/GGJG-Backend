@@ -6,4 +6,7 @@ interface BasketService {
     fun findBasketByUser(): List<BasketDto>
 
     fun deleteBasketByUser(id: Long)
+
+    fun plusCount(id: Long): Int
+
 }
