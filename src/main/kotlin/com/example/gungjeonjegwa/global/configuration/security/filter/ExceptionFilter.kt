@@ -5,13 +5,11 @@ import com.example.gungjeonjegwa.global.exception.ErrorResponse
 import com.example.gungjeonjegwa.global.exception.exceptions.BasicException
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.MediaType
-import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-@Component
 class ExceptionFilter(
     private val objectMapper: ObjectMapper
 ) : OncePerRequestFilter() {
