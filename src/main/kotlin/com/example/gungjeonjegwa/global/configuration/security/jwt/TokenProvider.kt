@@ -26,7 +26,7 @@ class TokenProvider(
     companion object {
         const val ACCESS_TYPE = "access"
         const val REFRESH_TYPE = "refresh"
-        const val ACCESS_EXP = 60L * 15 // 15min
+        const val ACCESS_EXP = 60L * 60 * 24 * 7  // 15min 60L * 15
         const val REFRESH_EXP = 60L * 60 * 24 * 7 // 1 weeks
         const val TOKEN_PREFIX = "Bearer "
     }
