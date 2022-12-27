@@ -27,6 +27,9 @@ class Basket(
     @ManyToOne
     @JoinColumn(name = "breadsize_id", nullable = true)
     val breadSize: BreadSize? = null
-
 ) {
+    fun plusCount() {
+        this.count += 1
+    }
+
 }
