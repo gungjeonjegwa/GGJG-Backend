@@ -32,4 +32,10 @@ class Basket(
         this.count += 1
     }
 
+    fun minusCount() {
+        if(this.count == 1) {
+            return
+        }
+        this.count -= 1
+    }
 }
