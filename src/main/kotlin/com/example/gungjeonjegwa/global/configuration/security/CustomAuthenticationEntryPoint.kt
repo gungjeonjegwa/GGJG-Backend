@@ -17,7 +17,7 @@ class CustomAuthenticationEntryPoint(
     override fun commence(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        authException: AuthenticationException?
+        authException: AuthenticationException
     ) {
         val errorCode = ErrorCode.UNAUTHORIZED
         val responseString = objectMapper.writeValueAsString(ErrorResponse(errorCode))
