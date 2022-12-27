@@ -36,6 +36,8 @@ dependencies {
     implementation("mysql:mysql-connector-java")
     implementation("org.mariadb.jdbc:mariadb-java-client:3.0.6")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    // elasticSearch
+    implementation("org.springframework.data:spring-data-elasticsearch")
     // JWT
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
