@@ -2,7 +2,6 @@ package com.example.gungjeonjegwa.domain.basket.controller
 
 import com.example.gungjeonjegwa.domain.basket.data.dto.BasketDto
 import com.example.gungjeonjegwa.domain.basket.service.BasketService
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -15,8 +14,8 @@ class BasketController(
         return basketService.findBasketByUser()
     }
 
-//    @DeleteMapping("/{id}")
-//    fun deleteBasket(@RequestParam("id") id: Long): ResponseEntity<*>{
-//        return ResponseEntity.ok(basketService.deleteBasketByUser(id))
-//    }
+    @DeleteMapping("{id}")
+    fun deleteBasket(@PathVariable() id: Long){
+        return basketService.deleteBasketByUser(id)
+    }
 }
