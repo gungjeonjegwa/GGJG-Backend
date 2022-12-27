@@ -4,6 +4,7 @@ enum class ErrorCode(
     val msg: String,
     val code: Int
 ) {
+    LESS_REQUEST_DATA("요구하는 Request 정보가 더 필요합니다.", 400),
     UNAUTHORIZED("권한 없음", 401),
     EXPIRED_TOKEN("토큰 만료", 401),
     INVALID_TOKEN("토큰 변질", 401),
