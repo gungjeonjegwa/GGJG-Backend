@@ -13,4 +13,6 @@ interface BasketRepository : JpaRepository<Basket, Long> {
     fun findByIdAndUser(id: Long, user: User): Basket
 
     fun existsByBreadAndUserAndBreadSize(bread: Bread, user: User, breadSize: BreadSize?): Boolean
+
+    fun existsByBreadAndUser(bread: Bread, user: User): Boolean
 }
