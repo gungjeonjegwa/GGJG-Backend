@@ -19,4 +19,18 @@ class BasketConverterImpl : BasketConverter {
         count = entity.count,
         remaincount = entity.bread.count
     )
+
+    override fun toDto(entity: Basket, count: Int): BasketDto = BasketDto(
+        id = entity.id,
+        title = entity.bread.title,
+        previewUrl = entity.bread.previewUrl,
+        age = entity.age,
+        price = entity.bread.price!!,
+        size = entity.breadSize?.size,
+        extramoney = entity.breadSize?.extramoney,
+        unit = entity.breadSize?.unit,
+        isSoldOut = entity.bread.isSoldOut,
+        count = count,
+        remaincount = entity.bread.count
+    )
 }
