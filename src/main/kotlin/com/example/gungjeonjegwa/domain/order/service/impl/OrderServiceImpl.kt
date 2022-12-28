@@ -1,0 +1,63 @@
+package com.example.gungjeonjegwa.domain.order.service.impl
+
+import com.example.gungjeonjegwa.domain.bread.exception.BreadNotFoundException
+import com.example.gungjeonjegwa.domain.bread.repository.BreadRepository
+import com.example.gungjeonjegwa.domain.bread.repository.BreadSizeRepository
+import com.example.gungjeonjegwa.domain.order.data.entity.Orders
+import com.example.gungjeonjegwa.domain.order.data.entity.PayOrder
+import com.example.gungjeonjegwa.domain.order.data.enum.ActivityType
+import com.example.gungjeonjegwa.domain.order.data.enum.ProductType
+import com.example.gungjeonjegwa.domain.order.data.request.CreateOrderListRequest
+import com.example.gungjeonjegwa.domain.order.exception.PaymentFaildException
+import com.example.gungjeonjegwa.domain.order.repository.OrderRepository
+import com.example.gungjeonjegwa.domain.order.repository.PayOrderRepository
+import com.example.gungjeonjegwa.domain.order.service.OrderService
+import com.example.gungjeonjegwa.global.util.UserUtil
+import org.springframework.stereotype.Service
+import java.text.SimpleDateFormat
+import java.util.*
+
+@Service
+class OrderServiceImpl(
+    private val orderRepository: OrderRepository,
+    private val payOrderRepository: PayOrderRepository,
+    private val breadRepository: BreadRepository,
+    private val breadSizeRepository: BreadSizeRepository,
+    private val userUtil: UserUtil
+) : OrderService {
+
+    override fun createOrderList(request: CreateOrderListRequest) {
+        if(!request.isPayment) {
+            throw PaymentFaildException()
+        }
+        val currentUser = userUtil.fetchCurrentUser()
+        val order = Orders(
+            id = generatedOrderId(),
+            activity = ActivityType.WAITORDER,
+            deliveryPrice = 3000,
+            user = currentUser!!
+        )
+        orderRepository.save(order)
+        request.list.forEach{list ->
+            run {
+                val bread = breadRepository.findById(list.breadId).orElseThrow { BreadNotFoundException() }
+                val payOrder = PayOrder(
+                    id = 0,
+                    count = list.count,
+                    price = list.price,
+                    type = ProductType.ORDER,
+                    age = list.age,
+                    orders = order,
+                    bread = bread,
+                    breadSize = list.unit?.let {
+                        breadSizeRepository.findByDetailBreadAndUnit(
+                            bread.breadDetail,
+                            it
+                        )
+                    }
+                )
+                payOrderRepository.save(payOrder)
+            }
+        }
+    }
+
