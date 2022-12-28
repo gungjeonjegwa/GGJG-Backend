@@ -61,3 +61,12 @@ class OrderServiceImpl(
         }
     }
 
+    private fun generatedOrderId(): String {
+        val currentTime = System.currentTimeMillis()
+        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        val date = sdf.format(currentTime).replace("-", "")
+        val random = Random()
+        val number = random.nextInt(8999) + 1000
+        return "B$date$number"
+    }
+}
