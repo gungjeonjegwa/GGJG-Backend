@@ -1,9 +1,12 @@
 package com.example.gungjeonjegwa.domain.order.controller
 
+import com.example.gungjeonjegwa.domain.order.data.dto.OrderListDto
+import com.example.gungjeonjegwa.domain.order.data.request.CreateOrderBuyRequest
 import com.example.gungjeonjegwa.domain.order.data.request.CreateOrderListRequest
 import com.example.gungjeonjegwa.domain.order.service.OrderService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,5 +20,11 @@ class OrderController(
     @PostMapping("/buy")
     fun createOrderList(@RequestBody request: CreateOrderBuyRequest): ResponseEntity<*> {
         return ResponseEntity(orderService.createOrderList(request), HttpStatus.CREATED)
+    }
+
+    @GetMapping("/list")
+    fun selectOrder(): OrderListDto{
+        return orderService.selectOrder()
+
     }
 }
