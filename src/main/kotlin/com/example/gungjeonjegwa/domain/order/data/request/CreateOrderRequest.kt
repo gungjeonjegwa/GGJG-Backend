@@ -1,8 +1,6 @@
 package com.example.gungjeonjegwa.domain.order.data.request
 
 class CreateOrderRequest(
-    val isPayment: Boolean = false,
-
     val breadId: Long,
 
     val count: Long,
