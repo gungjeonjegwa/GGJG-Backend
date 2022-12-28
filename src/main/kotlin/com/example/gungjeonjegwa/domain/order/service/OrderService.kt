@@ -6,4 +6,5 @@ import com.example.gungjeonjegwa.domain.order.data.request.CreateOrderBuyRequest
 interface OrderService {
     fun createOrderList(request: CreateOrderBuyRequest)
 
+    fun selectOrder(): OrderListDto
 }

@@ -70,6 +70,25 @@ class OrderServiceImpl(
         }
     }
 
+    override fun selectOrder(): OrderListDto {
+        val currentUser = userUtil.fetchCurrentUser()
+        var addRessDto: AddressDto? = null
+        val addressList = addressRepository.findAllByUser(currentUser!!)
+        addressList.forEach{
+            if(it.isBasic) {
+                addRessDto = AddressDto(
+                    id = it.id,
+                    zipCode = it.zipCode,
+                    roadName = it.roadName,
+                    landNumber = it.landNumber,
+                    detailAddress = it.detailAddress,
+                    isBasic = it.isBasic
+                )
+            }
+        }
+        return OrderListDto(name = currentUser!!.name, phone = currentUser!!.phone, address = addRessDto)
+    }
+
     private fun generatedOrderId(): String {
         val currentTime = System.currentTimeMillis()
         val sdf = SimpleDateFormat("yyyy-MM-dd")
