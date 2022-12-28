@@ -1,10 +1,13 @@
 package com.example.gungjeonjegwa.domain.basket.service
 
+import com.example.gungjeonjegwa.domain.basket.data.CountResponse
 import com.example.gungjeonjegwa.domain.basket.data.dto.BasketDto
 import com.example.gungjeonjegwa.domain.basket.data.entity.Basket
 import com.example.gungjeonjegwa.domain.basket.data.request.BasketCreateRequest
-import com.example.gungjeonjegwa.domain.basket.exception.ExistBasketException
+import com.example.gungjeonjegwa.domain.basket.exception.BasketNotFoundException
+import com.example.gungjeonjegwa.domain.basket.exception.ExistNotBasketException
 import com.example.gungjeonjegwa.domain.basket.exception.LessRequestDataException
+import com.example.gungjeonjegwa.domain.basket.exception.OverCountException
 import com.example.gungjeonjegwa.domain.basket.repository.BasketRepository
 import com.example.gungjeonjegwa.domain.basket.util.BasketConverter
 import com.example.gungjeonjegwa.domain.bread.data.entity.BreadSize
@@ -28,7 +31,7 @@ class BasketServiceImpl(
         val currentUser = userUtil.fetchCurrentUser()
         val baskets = basketRepository.findByUser(currentUser!!)
             .map {
-                if(it.count > it.bread.count) {
+                if(it.count >= it.bread.count) {
                     it.count = it.bread.count.toInt()
                     basketConverter.toDto(it, it.bread.count.toInt())
                 }
@@ -47,19 +50,21 @@ class BasketServiceImpl(
         basketRepository.deleteAll(baskets)
     }
     @Transactional
-
-    override fun plusCount(id: Long): Int {
+    override fun plusCount(id: Long): CountResponse {
         val currentUser = userUtil.fetchCurrentUser()
-        val baskets = basketRepository.findByIdAndUser(id, currentUser!!)
+        val baskets = basketRepository.findByIdAndUser(id, currentUser!!) ?: throw ExistNotBasketException()
+        if(baskets.count >= baskets.bread.count) {
+            throw OverCountException()
+        }
         baskets.plusCount()
-        return baskets.count
+        return CountResponse(baskets.count)
     }
     @Transactional
-    override fun minusCount(id: Long): Int {
+    override fun minusCount(id: Long): CountResponse {
         val currentUser = userUtil.fetchCurrentUser()
-        val baskets = basketRepository.findByIdAndUser(id, currentUser!!)
+        val baskets = basketRepository.findByIdAndUser(id, currentUser!!) ?: throw BasketNotFoundException()
         baskets.minusCount()
-        return baskets.count
+        return CountResponse(baskets.count)
     }
 
     override fun createBasket(basket: List<BasketCreateRequest>) {
@@ -78,12 +83,12 @@ class BasketServiceImpl(
                     val existsByBasket =
                         basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser!!, sizes)
                     if (existsByBasket == true) {
-                        throw ExistBasketException()
+                        throw ExistNotBasketException()
                     }
                 } else {
                     val breadAndUser = basketRepository.existsByBreadAndUser(bread, currentUser!!)
                     if (breadAndUser == true) {
-                        throw ExistBasketException()
+                        throw ExistNotBasketException()
                     }
                 }
                 val existsByDetailBread = breadSizeRepository.existsByDetailBread(bread.breadDetail)

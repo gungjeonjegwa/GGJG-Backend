@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface BasketRepository : JpaRepository<Basket, Long> {
     fun findByUser(user: User): List<Basket>
 
-    fun findByIdAndUser(id: Long, user: User): Basket
+    fun findByIdAndUser(id: Long, user: User): Basket?
 
     fun existsByBreadAndUserAndBreadSize(bread: Bread, user: User, breadSize: BreadSize?): Boolean
 
