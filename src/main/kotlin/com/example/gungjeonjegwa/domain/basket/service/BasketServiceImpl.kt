@@ -64,15 +64,33 @@ class BasketServiceImpl(
     }
 
     override fun createBasket(basket: BasketCreateRequest) {
-        val breadSize: BreadSize
         val currentUser = userUtil.fetchCurrentUser()
-        val bread = breadRepository.findById(basket.breadId).orElseThrow{ RuntimeException("빵 데이터가 없습니다. ") }
+        val bread = breadRepository.findAllById(basket.breadId)
+        if(bread.category == Category.CAKE) {
+            val sizes: BreadSize? =
+                breadSizeRepository.findBySizeAndExtramoneyAndUnitAndDetailBread(
+                    basket.size!!,
+                    basket.extramoney!!,
+                    basket.unit!!,
+                    bread.breadDetail
+                )
+            val existsByBasket =
+                basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser!!, sizes)
+            if(existsByBasket == true) {
+                throw ExistBasketException()
+            }
+        } else {
+            val breadAndUser = basketRepository.existsByBreadAndUser(bread, currentUser!!)
+            if(breadAndUser == true) {
+                throw ExistBasketException()
+            }
+        }
         val existsByDetailBread = breadSizeRepository.existsByDetailBread(bread.breadDetail)
         if(existsByDetailBread == true) {
-            if(basket.age == null || basket.size == null || basket.unit == null || basket.extramoney == null) {
+            if(basket.size == null || basket.unit == null || basket.extramoney == null) {
                 throw LessRequestDataException()
             } else {
-                breadSize =
+                val breadSize: BreadSize? =
                     breadSizeRepository.findBySizeAndExtramoneyAndUnitAndDetailBread(
                         basket.size!!,
                         basket.extramoney!!,
@@ -82,7 +100,7 @@ class BasketServiceImpl(
                 basketRepository.save(Basket(0, basket.age, basket.count, bread, currentUser!!, breadSize))
             }
         }
-        if(basket.age == null || basket.size == null || basket.unit == null || basket.extramoney == null) {
+        else if(basket.age == null || basket.size == null || basket.unit == null || basket.extramoney == null) {
             basketRepository.save(Basket(0, null, basket.count, bread, currentUser!!, null))
         }
     }
