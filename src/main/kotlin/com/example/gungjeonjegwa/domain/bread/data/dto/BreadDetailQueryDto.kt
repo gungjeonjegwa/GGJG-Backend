@@ -17,6 +17,8 @@ class BreadDetailQueryDto(
 
     val size: Long?,
 
+    val count: Long,
+
     val storage: String, // 보관방법
 
     val expirationDate: String, // 유통기한
