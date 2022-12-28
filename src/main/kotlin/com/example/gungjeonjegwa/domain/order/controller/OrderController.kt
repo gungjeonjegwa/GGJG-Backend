@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController
 class OrderController(
     private val orderService: OrderService
 ) {
-    @PostMapping()
-    fun createOrderList(@RequestBody request: CreateOrderListRequest): ResponseEntity<*> {
+    @PostMapping("/buy")
+    fun createOrderList(@RequestBody request: CreateOrderBuyRequest): ResponseEntity<*> {
         return ResponseEntity(orderService.createOrderList(request), HttpStatus.CREATED)
     }
 }
