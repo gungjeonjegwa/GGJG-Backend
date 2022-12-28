@@ -3,15 +3,21 @@ package com.example.gungjeonjegwa.domain.order.service.impl
 import com.example.gungjeonjegwa.domain.bread.exception.BreadNotFoundException
 import com.example.gungjeonjegwa.domain.bread.repository.BreadRepository
 import com.example.gungjeonjegwa.domain.bread.repository.BreadSizeRepository
+import com.example.gungjeonjegwa.domain.order.data.dto.OrderDto
+import com.example.gungjeonjegwa.domain.order.data.dto.OrderListDto
 import com.example.gungjeonjegwa.domain.order.data.entity.Orders
 import com.example.gungjeonjegwa.domain.order.data.entity.PayOrder
 import com.example.gungjeonjegwa.domain.order.data.enum.ActivityType
 import com.example.gungjeonjegwa.domain.order.data.enum.ProductType
+import com.example.gungjeonjegwa.domain.order.data.request.CreateOrderBuyRequest
 import com.example.gungjeonjegwa.domain.order.data.request.CreateOrderListRequest
+import com.example.gungjeonjegwa.domain.order.exception.AddressNotFoundException
 import com.example.gungjeonjegwa.domain.order.exception.PaymentFaildException
 import com.example.gungjeonjegwa.domain.order.repository.OrderRepository
 import com.example.gungjeonjegwa.domain.order.repository.PayOrderRepository
 import com.example.gungjeonjegwa.domain.order.service.OrderService
+import com.example.gungjeonjegwa.domain.user.data.dto.AddressDto
+import com.example.gungjeonjegwa.domain.user.repository.AddressRepository
 import com.example.gungjeonjegwa.global.util.UserUtil
 import org.springframework.stereotype.Service
 import java.text.SimpleDateFormat
@@ -23,19 +29,22 @@ class OrderServiceImpl(
     private val payOrderRepository: PayOrderRepository,
     private val breadRepository: BreadRepository,
     private val breadSizeRepository: BreadSizeRepository,
-    private val userUtil: UserUtil
+    private val userUtil: UserUtil,
+    private val addressRepository: AddressRepository
 ) : OrderService {
 
-    override fun createOrderList(request: CreateOrderListRequest) {
+    override fun createOrderList(request: CreateOrderBuyRequest) {
         if(!request.isPayment) {
             throw PaymentFaildException()
         }
+        val addressOptional = addressRepository.findById(request.address.id).orElseThrow { AddressNotFoundException() }
         val currentUser = userUtil.fetchCurrentUser()
         val order = Orders(
             id = generatedOrderId(),
             activity = ActivityType.WAITORDER,
             deliveryPrice = 3000,
-            user = currentUser!!
+            user = currentUser!!,
+            address = addressOptional
         )
         orderRepository.save(order)
         request.list.forEach{list ->
