@@ -9,7 +9,6 @@ import com.example.gungjeonjegwa.domain.basket.repository.BasketRepository
 import com.example.gungjeonjegwa.domain.basket.util.BasketConverter
 import com.example.gungjeonjegwa.domain.bread.data.entity.BreadSize
 import com.example.gungjeonjegwa.domain.bread.data.enum.Category
-import com.example.gungjeonjegwa.domain.bread.repository.BreadDetailRepository
 import com.example.gungjeonjegwa.domain.bread.repository.BreadRepository
 import com.example.gungjeonjegwa.domain.bread.repository.BreadSizeRepository
 import com.example.gungjeonjegwa.global.util.UserUtil
@@ -63,45 +62,48 @@ class BasketServiceImpl(
         return baskets.count
     }
 
-    override fun createBasket(basket: BasketCreateRequest) {
+    override fun createBasket(basket: List<BasketCreateRequest>) {
         val currentUser = userUtil.fetchCurrentUser()
-        val bread = breadRepository.findAllById(basket.breadId)
-        if(bread.category == Category.CAKE) {
-            val sizes: BreadSize? =
-                breadSizeRepository.findBySizeAndExtramoneyAndUnitAndDetailBread(
-                    basket.size!!,
-                    basket.extramoney!!,
-                    basket.unit!!,
-                    bread.breadDetail
-                )
-            val existsByBasket =
-                basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser!!, sizes)
-            if(existsByBasket == true) {
-                throw ExistBasketException()
+        basket.forEach{basket ->
+            run {
+                val bread = breadRepository.findAllById(basket.breadId)
+                if (bread.category == Category.CAKE) {
+                    val sizes: BreadSize? =
+                        breadSizeRepository.findBySizeAndExtramoneyAndUnitAndDetailBread(
+                            basket.size!!,
+                            basket.extramoney!!,
+                            basket.unit!!,
+                            bread.breadDetail
+                        )
+                    val existsByBasket =
+                        basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser!!, sizes)
+                    if (existsByBasket == true) {
+                        throw ExistBasketException()
+                    }
+                } else {
+                    val breadAndUser = basketRepository.existsByBreadAndUser(bread, currentUser!!)
+                    if (breadAndUser == true) {
+                        throw ExistBasketException()
+                    }
+                }
+                val existsByDetailBread = breadSizeRepository.existsByDetailBread(bread.breadDetail)
+                if (existsByDetailBread == true) {
+                    if (basket.size == null || basket.unit == null || basket.extramoney == null) {
+                        throw LessRequestDataException()
+                    } else {
+                        val breadSize: BreadSize? =
+                            breadSizeRepository.findBySizeAndExtramoneyAndUnitAndDetailBread(
+                                basket.size!!,
+                                basket.extramoney!!,
+                                basket.unit!!,
+                                bread.breadDetail
+                            )
+                        basketRepository.save(Basket(0, basket.age, basket.count, bread, currentUser!!, breadSize))
+                    }
+                } else if (basket.age == null || basket.size == null || basket.unit == null || basket.extramoney == null) {
+                    basketRepository.save(Basket(0, null, basket.count, bread, currentUser!!, null))
+                }
             }
-        } else {
-            val breadAndUser = basketRepository.existsByBreadAndUser(bread, currentUser!!)
-            if(breadAndUser == true) {
-                throw ExistBasketException()
-            }
-        }
-        val existsByDetailBread = breadSizeRepository.existsByDetailBread(bread.breadDetail)
-        if(existsByDetailBread == true) {
-            if(basket.size == null || basket.unit == null || basket.extramoney == null) {
-                throw LessRequestDataException()
-            } else {
-                val breadSize: BreadSize? =
-                    breadSizeRepository.findBySizeAndExtramoneyAndUnitAndDetailBread(
-                        basket.size!!,
-                        basket.extramoney!!,
-                        basket.unit!!,
-                        bread.breadDetail
-                    )
-                basketRepository.save(Basket(0, basket.age, basket.count, bread, currentUser!!, breadSize))
-            }
-        }
-        else if(basket.age == null || basket.size == null || basket.unit == null || basket.extramoney == null) {
-            basketRepository.save(Basket(0, null, basket.count, bread, currentUser!!, null))
         }
     }
 }

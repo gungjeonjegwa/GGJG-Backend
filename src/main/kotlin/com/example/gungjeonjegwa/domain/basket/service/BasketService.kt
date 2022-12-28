@@ -12,5 +12,5 @@ interface BasketService {
 
     fun minusCount(id: Long): Int
 
-    fun createBasket(basket: BasketCreateRequest)
+    fun createBasket(basket: List<BasketCreateRequest>)
 }

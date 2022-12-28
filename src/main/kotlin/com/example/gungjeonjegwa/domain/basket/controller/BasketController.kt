@@ -31,7 +31,7 @@ class BasketController(
     }
 
     @PostMapping
-    fun createBasket(@RequestBody basket: BasketCreateRequest) {
+    fun createBasket(@RequestBody basket: List<BasketCreateRequest>) {
         return basketService.createBasket(basket)
     }
 }
