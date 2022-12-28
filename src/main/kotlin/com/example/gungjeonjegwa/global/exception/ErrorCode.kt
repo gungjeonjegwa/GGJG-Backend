@@ -14,5 +14,6 @@ enum class ErrorCode(
     BREADDETAIL_NOT_FOUND("빵 세부정보를 찾을 수 없습니다.", 404),
     PAYMENT_FAILED("미결제 사용자가 구매 요청을 보냈습니다.", 400),
     EXIST_BASKET("장바구니에 해당하는 아이템이 이미 존재합니다.", 409),
+    BASKET_NOT_FOUND("장바구니에 해당하는 아이템이 존재하지 않습니다.", 404),
     INTERNAL_SERVER_ERROR("서버 내부 에러", 500)
 }
