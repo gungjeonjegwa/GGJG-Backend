@@ -1,5 +1,6 @@
 package com.example.gungjeonjegwa.domain.basket.controller
 
+import com.example.gungjeonjegwa.domain.basket.data.CountResponse
 import com.example.gungjeonjegwa.domain.basket.data.dto.BasketDto
 import com.example.gungjeonjegwa.domain.basket.data.request.BasketCreateRequest
 import com.example.gungjeonjegwa.domain.basket.service.BasketService
@@ -21,12 +22,12 @@ class BasketController(
     }
 
     @PatchMapping("/plus/{id}")
-    fun patchPlusCount(@PathVariable id: Long): Int {
+    fun patchPlusCount(@PathVariable id: Long): CountResponse {
         return basketService.plusCount(id)
     }
 
     @PatchMapping("/minus/{id}")
-    fun patchMinusCount(@PathVariable id: Long): Int {
+    fun patchMinusCount(@PathVariable id: Long): CountResponse {
         return basketService.minusCount(id)
     }
 
