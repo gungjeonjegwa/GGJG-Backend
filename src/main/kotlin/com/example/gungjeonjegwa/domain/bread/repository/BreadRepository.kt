@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface BreadRepository : JpaRepository<Bread, Long> {
+    fun findAllById(id: Long): Bread
     fun findBy(pagination: PageRequest): Page<Bread>
 
     fun findAllByCategory(category: Category, pagination: PageRequest): Page<Bread>
