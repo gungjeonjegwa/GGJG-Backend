@@ -12,5 +12,6 @@ enum class ErrorCode(
     PASSWORD_NOT_MATCHED("패스워드가 올바르지 않습니다.", 404),
     BREAD_NOT_FOUND("빵 정보를 찾을 수 없습니다.", 404),
     BREADDETAIL_NOT_FOUND("빵 세부정보를 찾을 수 없습니다.", 404),
+    EXIST_BASKET("장바구니에 해당하는 아이템이 이미 존재합니다.", 409),
     INTERNAL_SERVER_ERROR("서버 내부 에러", 500)
 }
