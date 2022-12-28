@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface BreadSizeRepository : JpaRepository<BreadSize, Long> {
     fun findAllByDetailBread(id: BreadDetail): MutableList<BreadSize>
-    fun findBySizeAndExtramoneyAndUnitAndDetailBread(size: String, extramoney: Long, unit: String, detailBread: BreadDetail): BreadSize
+    fun findBySizeAndExtramoneyAndUnitAndDetailBread(size: String, extramoney: Long, unit: String, detailBread: BreadDetail): BreadSize?
 
     fun existsByDetailBread(detailBread: BreadDetail): Boolean
 }
