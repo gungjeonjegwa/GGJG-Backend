@@ -36,7 +36,7 @@ class SecurityConfiguration(
             .antMatchers("/users/refresh").permitAll()
             .antMatchers("/users/idcheck").permitAll()
             .antMatchers("/users/emailcheck").permitAll()
-            .antMatchers( "/bread/**").permitAll()
+            .antMatchers( "/bread/**/**").permitAll()
             .antMatchers("/basket/**").authenticated()
             .antMatchers("/order/**").authenticated()
             .antMatchers("/likeitem/**").authenticated()
