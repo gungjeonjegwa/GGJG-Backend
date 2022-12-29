@@ -19,7 +19,7 @@ class Orders(
     @JoinColumn(name = "user_id")
     val user: User,
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "orders")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "orders", cascade = [CascadeType.REMOVE])
     val payOrder: MutableList<PayOrder> = arrayListOf(),
 
     @ManyToOne
