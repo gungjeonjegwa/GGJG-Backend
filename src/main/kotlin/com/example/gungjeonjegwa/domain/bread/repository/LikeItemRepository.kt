@@ -9,4 +9,5 @@ interface LikeItemRepository : JpaRepository<LikeItem, Long> {
     fun findAllByUser(entity: User?): MutableList<LikeItem>
 
     fun existsByUserAndBread(entity: User?, bread: Bread): Boolean
+    fun findByUserAndBread(entity: User?, bread: Bread): LikeItem
 }
