@@ -29,8 +29,9 @@ class OrderController(
     }
 
     @GetMapping("/list")
-    fun selectOrder(): OrderListDto{
-        return orderService.selectOrder()
+    fun findAllBuyOrderList(): OrderListDto{
+        return orderService.selectBuyOrder()
+    }
 
     }
 }

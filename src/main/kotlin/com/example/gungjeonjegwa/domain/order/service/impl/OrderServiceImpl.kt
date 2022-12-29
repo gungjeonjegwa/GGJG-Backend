@@ -3,12 +3,10 @@ package com.example.gungjeonjegwa.domain.order.service.impl
 import com.example.gungjeonjegwa.domain.bread.exception.BreadNotFoundException
 import com.example.gungjeonjegwa.domain.bread.repository.BreadRepository
 import com.example.gungjeonjegwa.domain.bread.repository.BreadSizeRepository
-import com.example.gungjeonjegwa.domain.order.data.dto.OrderId
-import com.example.gungjeonjegwa.domain.order.data.dto.OrderListDto
+import com.example.gungjeonjegwa.domain.order.data.dto.*
 import com.example.gungjeonjegwa.domain.order.data.entity.Orders
 import com.example.gungjeonjegwa.domain.order.data.entity.PayOrder
 import com.example.gungjeonjegwa.domain.order.data.enum.ActivityType
-import com.example.gungjeonjegwa.domain.order.data.enum.ProductType
 import com.example.gungjeonjegwa.domain.order.data.request.CreateOrderBuyRequest
 import com.example.gungjeonjegwa.domain.order.exception.AddressNotFoundException
 import com.example.gungjeonjegwa.domain.order.exception.OrderIdNotFoundException
@@ -21,6 +19,7 @@ import com.example.gungjeonjegwa.domain.user.repository.AddressRepository
 import com.example.gungjeonjegwa.global.util.UserUtil
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import reactor.core.publisher.zip
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,7 +50,6 @@ class OrderServiceImpl(
                     id = 0,
                     count = list.count,
                     price = list.price,
-                    type = ProductType.ORDER,
                     age = list.age,
                     orders = order,
                     bread = bread,
@@ -67,7 +65,7 @@ class OrderServiceImpl(
         }
     }
 
-    override fun selectOrder(): OrderListDto {
+    override fun selectBuyOrder(): OrderListDto {
         val currentUser = userUtil.fetchCurrentUser()
         var addRessDto: AddressDto? = null
         val addressList = addressRepository.findAllByUser(currentUser!!)

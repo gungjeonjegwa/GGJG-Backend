@@ -9,5 +9,5 @@ interface OrderService {
 
     fun createOrderId(): OrderId
 
-    fun selectOrder(): OrderListDto
+    fun selectBuyOrder(): OrderListDto
 }
