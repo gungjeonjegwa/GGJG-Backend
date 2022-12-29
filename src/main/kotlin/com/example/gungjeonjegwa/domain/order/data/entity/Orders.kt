@@ -3,6 +3,7 @@ package com.example.gungjeonjegwa.domain.order.data.entity
 import com.example.gungjeonjegwa.domain.order.data.enum.ActivityType
 import com.example.gungjeonjegwa.domain.user.data.entity.Address
 import com.example.gungjeonjegwa.domain.user.data.entity.User
+import com.example.gungjeonjegwa.global.entity.BaseTimeEntity
 import javax.persistence.*
 
 @Entity
@@ -24,6 +25,6 @@ class Orders(
 
     @ManyToOne
     @JoinColumn(name = "address_id")
-    var address: Address?
-) {
+    var address: Address?,
+) : BaseTimeEntity() {
 }
