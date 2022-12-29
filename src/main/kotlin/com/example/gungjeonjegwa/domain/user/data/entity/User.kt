@@ -1,6 +1,7 @@
 package com.example.gungjeonjegwa.domain.user.data.entity
 
 import com.example.gungjeonjegwa.domain.bread.data.entity.LikeItem
+import com.example.gungjeonjegwa.domain.order.data.entity.Orders
 import com.example.gungjeonjegwa.domain.user.data.enum.UserRole
 import javax.persistence.*
 
@@ -27,7 +28,10 @@ class User(
     var refreshtoken: String?,
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    val likeItem: MutableList<LikeItem> = ArrayList()
+    val likeItem: MutableList<LikeItem> = ArrayList(),
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    val orders: MutableList<Orders> = ArrayList(),
 ) {
     fun updateRefreshToken(refreshtoken: String?) {
         this.refreshtoken = refreshtoken
