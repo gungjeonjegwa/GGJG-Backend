@@ -17,6 +17,6 @@ enum class ErrorCode(
     ADDRESS_NOT_FOUND("주소를 찾을 수 없습니다.", 404),
     BASKET_NOT_FOUND("장바구니에 해당하는 아이템이 존재하지 않습니다.", 404),
     ORDERID_NOT_FOUND("주문 번호를 찾을 수 없습니다.", 404),
-    EXIST_BASKET("장바구니에 해당하는 아이템이 이미 존재합니다.", 409),
+    EXIST_NOT_BASKET("장바구니에 해당하는 아이템이 존재하지 않습니다.", 404),
     INTERNAL_SERVER_ERROR("서버 내부 에러", 500)
 }

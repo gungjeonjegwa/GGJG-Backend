@@ -5,7 +5,7 @@ import com.example.gungjeonjegwa.domain.basket.data.dto.BasketDto
 import com.example.gungjeonjegwa.domain.basket.data.entity.Basket
 import com.example.gungjeonjegwa.domain.basket.data.request.BasketCreateRequest
 import com.example.gungjeonjegwa.domain.basket.exception.BasketNotFoundException
-import com.example.gungjeonjegwa.domain.basket.exception.ExistBasketException
+import com.example.gungjeonjegwa.domain.basket.exception.ExistNotBasketException
 import com.example.gungjeonjegwa.domain.basket.exception.LessRequestDataException
 import com.example.gungjeonjegwa.domain.basket.exception.OverCountException
 import com.example.gungjeonjegwa.domain.basket.repository.BasketRepository
@@ -52,7 +52,7 @@ class BasketServiceImpl(
     @Transactional
     override fun plusCount(id: Long): CountResponse {
         val currentUser = userUtil.fetchCurrentUser()
-        val baskets = basketRepository.findByIdAndUser(id, currentUser!!) ?: throw ExistBasketException()
+        val baskets = basketRepository.findByIdAndUser(id, currentUser!!) ?: throw ExistNotBasketException()
         if(baskets.count >= baskets.bread.count) {
             throw OverCountException()
         }
@@ -83,12 +83,12 @@ class BasketServiceImpl(
                     val existsByBasket =
                         basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser!!, sizes)
                     if (existsByBasket == true) {
-                        throw ExistBasketException()
+                        throw ExistNotBasketException()
                     }
                 } else {
                     val breadAndUser = basketRepository.existsByBreadAndUser(bread, currentUser!!)
                     if (breadAndUser == true) {
-                        throw ExistBasketException()
+                        throw ExistNotBasketException()
                     }
                 }
                 val existsByDetailBread = breadSizeRepository.existsByDetailBread(bread.breadDetail)
