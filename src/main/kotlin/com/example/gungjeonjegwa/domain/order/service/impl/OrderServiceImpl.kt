@@ -98,6 +98,22 @@ class OrderServiceImpl(
             .let { OrderId(orderId =  it) }
     }
 
+    override fun findMyOrderList(): MutableList<MyOrderList>{
+        val currentUser = userUtil.fetchCurrentUser()
+        val list: MutableList<MyOrderList> = mutableListOf()
+        for((index, value) in currentUser!!.orders.withIndex()) {
+            list.add(
+                MyOrderList(
+                    orderId = value.id,
+                    activityType = value.activity,
+                    title = value.payOrder[index].bread.title,
+                    price = value.payOrder[index].bread.price,
+                    preview_url = value.payOrder[index].bread.previewUrl,
+                    createdDate = value.createdAt
+                ))
+        }
+        return list;
+    }
     private fun generatedOrderId(): String {
         val currentTime = System.currentTimeMillis()
         val sdf = SimpleDateFormat("yyyy-MM-dd")

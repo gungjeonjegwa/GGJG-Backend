@@ -10,4 +10,6 @@ interface OrderService {
     fun createOrderId(): OrderId
 
     fun selectBuyOrder(): OrderListDto
+
+    fun findMyOrderList(): MutableList<MyOrderList>
 }
