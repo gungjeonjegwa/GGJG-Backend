@@ -99,14 +99,19 @@ class BreadServiceImpl(
 
     private fun addLikeItemActivity(bread: Page<BreadDto>, likeItem: MutableList<LikeItem>): MutableList<BreadLikeDto> {
         val list: MutableList<BreadLikeDto> = mutableListOf()
+        var isEnabled: Boolean = false
         for (b in bread) {
             for(i in likeItem) {
+                isEnabled = false
                 if(b.id == i.bread.id) {
+                    isEnabled = true
                     list.add(breadConverter.toDto(b, true))
                     break
                 }
             }
-            list.add(breadConverter.toDto(b, false))
+            if(!isEnabled) {
+                list.add(breadConverter.toDto(b, false))
+            }
         }
         return list
     }
