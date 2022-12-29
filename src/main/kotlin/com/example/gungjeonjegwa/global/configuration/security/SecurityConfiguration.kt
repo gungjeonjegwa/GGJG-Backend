@@ -39,6 +39,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/bread/**").permitAll()
             .antMatchers("/basket/**").authenticated()
             .antMatchers("/order/**").authenticated()
+            .antMatchers("/likeitem/**").authenticated()
             .anyRequest().denyAll()
             .and()
             .exceptionHandling()
