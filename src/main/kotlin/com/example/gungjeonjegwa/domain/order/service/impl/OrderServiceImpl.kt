@@ -33,8 +33,14 @@ class OrderServiceImpl(
     private val addressRepository: AddressRepository
 ) : OrderService {
 
+    @Transactional
     override fun createOrderList(request: CreateOrderBuyRequest) {
+        val addressOptional = addressRepository.findById(request.address.id).orElseThrow { AddressNotFoundException() }
+        val currentUser = userUtil.fetchCurrentUser()
+        val order = orderRepository.findById(request.orderId).orElseThrow { OrderIdNotFoundException() }
+        order.address = addressOptional
         if(!request.isPayment) {
+            orderRepository.delete(order)
             throw PaymentFaildException()
         }
         val addressOptional = addressRepository.findById(request.address.id).orElseThrow { AddressNotFoundException() }
