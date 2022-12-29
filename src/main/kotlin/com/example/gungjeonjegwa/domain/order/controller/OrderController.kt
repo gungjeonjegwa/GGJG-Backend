@@ -1,9 +1,10 @@
 package com.example.gungjeonjegwa.domain.order.controller
 
+import com.example.gungjeonjegwa.domain.order.data.dto.MyOrderDetailListDto
+import com.example.gungjeonjegwa.domain.order.data.dto.MyOrderList
 import com.example.gungjeonjegwa.domain.order.data.dto.OrderId
 import com.example.gungjeonjegwa.domain.order.data.dto.OrderListDto
 import com.example.gungjeonjegwa.domain.order.data.request.CreateOrderBuyRequest
-import com.example.gungjeonjegwa.domain.order.data.request.CreateOrderListRequest
 import com.example.gungjeonjegwa.domain.order.service.OrderService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -39,5 +40,9 @@ class OrderController(
     fun findMyOrderList(): MutableList<MyOrderList> {
         return orderService.findMyOrderList()
     }
+
+    @GetMapping("/user/{orderId}")
+    fun findMyDetailOrder(@PathVariable("orderId") orderId: String): MyOrderDetailListDto {
+        return orderService.findMyDetailOrder(orderId)
     }
 }
