@@ -3,15 +3,15 @@ package com.example.gungjeonjegwa.domain.order.service.impl
 import com.example.gungjeonjegwa.domain.bread.exception.BreadNotFoundException
 import com.example.gungjeonjegwa.domain.bread.repository.BreadRepository
 import com.example.gungjeonjegwa.domain.bread.repository.BreadSizeRepository
-import com.example.gungjeonjegwa.domain.order.data.dto.OrderDto
+import com.example.gungjeonjegwa.domain.order.data.dto.OrderId
 import com.example.gungjeonjegwa.domain.order.data.dto.OrderListDto
 import com.example.gungjeonjegwa.domain.order.data.entity.Orders
 import com.example.gungjeonjegwa.domain.order.data.entity.PayOrder
 import com.example.gungjeonjegwa.domain.order.data.enum.ActivityType
 import com.example.gungjeonjegwa.domain.order.data.enum.ProductType
 import com.example.gungjeonjegwa.domain.order.data.request.CreateOrderBuyRequest
-import com.example.gungjeonjegwa.domain.order.data.request.CreateOrderListRequest
 import com.example.gungjeonjegwa.domain.order.exception.AddressNotFoundException
+import com.example.gungjeonjegwa.domain.order.exception.OrderIdNotFoundException
 import com.example.gungjeonjegwa.domain.order.exception.PaymentFaildException
 import com.example.gungjeonjegwa.domain.order.repository.OrderRepository
 import com.example.gungjeonjegwa.domain.order.repository.PayOrderRepository
@@ -20,6 +20,7 @@ import com.example.gungjeonjegwa.domain.user.data.dto.AddressDto
 import com.example.gungjeonjegwa.domain.user.repository.AddressRepository
 import com.example.gungjeonjegwa.global.util.UserUtil
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -43,16 +44,6 @@ class OrderServiceImpl(
             orderRepository.delete(order)
             throw PaymentFaildException()
         }
-        val addressOptional = addressRepository.findById(request.address.id).orElseThrow { AddressNotFoundException() }
-        val currentUser = userUtil.fetchCurrentUser()
-        val order = Orders(
-            id = generatedOrderId(),
-            activity = ActivityType.WAITORDER,
-            deliveryPrice = 3000,
-            user = currentUser!!,
-            address = addressOptional
-        )
-        orderRepository.save(order)
         request.list.forEach{list ->
             run {
                 val bread = breadRepository.findById(list.breadId).orElseThrow { BreadNotFoundException() }
@@ -93,6 +84,20 @@ class OrderServiceImpl(
             }
         }
         return OrderListDto(name = currentUser!!.name, phone = currentUser!!.phone, address = addRessDto)
+    }
+
+
+    override fun createOrderId(): OrderId {
+        val currentUser = userUtil.fetchCurrentUser()
+        val order = Orders(
+            id = generatedOrderId(),
+            activity = ActivityType.WAITORDER,
+            deliveryPrice = 3000,
+            user = currentUser!!,
+            address = null
+        )
+        return orderRepository.save(order).id
+            .let { OrderId(orderId =  it) }
     }
 
     private fun generatedOrderId(): String {

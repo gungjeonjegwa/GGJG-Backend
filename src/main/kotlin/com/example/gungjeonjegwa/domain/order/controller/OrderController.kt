@@ -1,5 +1,6 @@
 package com.example.gungjeonjegwa.domain.order.controller
 
+import com.example.gungjeonjegwa.domain.order.data.dto.OrderId
 import com.example.gungjeonjegwa.domain.order.data.dto.OrderListDto
 import com.example.gungjeonjegwa.domain.order.data.request.CreateOrderBuyRequest
 import com.example.gungjeonjegwa.domain.order.data.request.CreateOrderListRequest
@@ -20,6 +21,11 @@ class OrderController(
     @PostMapping("/buy")
     fun createOrderList(@RequestBody request: CreateOrderBuyRequest): ResponseEntity<*> {
         return ResponseEntity(orderService.createOrderList(request), HttpStatus.CREATED)
+    }
+
+    @PostMapping("/issued")
+    fun generatedOrderId(): OrderId {
+        return orderService.createOrderId()
     }
 
     @GetMapping("/list")
