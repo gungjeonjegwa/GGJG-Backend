@@ -2,7 +2,6 @@ package com.example.gungjeonjegwa.domain.order.data.entity
 
 import com.example.gungjeonjegwa.domain.bread.data.entity.Bread
 import com.example.gungjeonjegwa.domain.bread.data.entity.BreadSize
-import com.example.gungjeonjegwa.domain.order.data.enum.ProductType
 import javax.persistence.*
 
 @Entity
@@ -14,9 +13,6 @@ class PayOrder(
     val count: Long,
 
     val price: Long,
-
-    @Enumerated(EnumType.STRING)
-    val type: ProductType,
 
     @Column(nullable = true)
     val age: Long?,
