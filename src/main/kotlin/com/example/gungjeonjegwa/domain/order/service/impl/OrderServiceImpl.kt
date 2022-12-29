@@ -114,6 +114,39 @@ class OrderServiceImpl(
         }
         return list;
     }
+
+    override fun findMyDetailOrder(orderId: String): MyOrderDetailListDto {
+        val currentUser = userUtil.fetchCurrentUser()
+        val order = orderRepository.findById(orderId).orElseThrow { OrderIdNotFoundException() }
+        val list: MutableList<MyOrderDetailDto> = mutableListOf()
+        order.payOrder.forEach {
+            list.add(MyOrderDetailDto(
+                title = it.bread.title,
+                age = it.age,
+                unit = it.breadSize?.unit,
+                size = it.breadSize?.size,
+                extraMoney = it.breadSize?.extramoney,
+                price = it.price,
+                count = it.count
+            ))
+        }
+        val addressDto = AddressDto(
+            id = order.address!!.id,
+            zipCode = order.address!!.zipCode,
+            roadName = order.address!!.roadName,
+            landNumber = order.address!!.landNumber,
+            detailAddress = order.address?.detailAddress,
+            isBasic = order.address!!.isBasic
+        )
+        return MyOrderDetailListDto(
+            address = addressDto,
+            orderId = order.id,
+            name = order.user.name,
+            phone = order.user.phone,
+            list = list
+        )
+    }
+
     private fun generatedOrderId(): String {
         val currentTime = System.currentTimeMillis()
         val sdf = SimpleDateFormat("yyyy-MM-dd")
