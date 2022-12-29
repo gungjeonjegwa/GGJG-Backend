@@ -24,6 +24,6 @@ class Orders(
 
     @ManyToOne
     @JoinColumn(name = "address_id")
-    val address: Address
+    var address: Address?
 ) {
 }
