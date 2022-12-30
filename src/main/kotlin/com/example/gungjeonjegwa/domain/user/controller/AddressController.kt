@@ -1,6 +1,7 @@
 package com.example.gungjeonjegwa.domain.user.controller
 
 import com.example.gungjeonjegwa.domain.user.data.dto.AddressDto
+import com.example.gungjeonjegwa.domain.user.data.dto.AddressLatelyDto
 import com.example.gungjeonjegwa.domain.user.service.AddressService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,6 +17,11 @@ class AddressController(
     @PostMapping("/basic")
     fun basicDelivery(@RequestBody address: AddressDto) {
         return addressService.createDefaultAddress(address)
+    }
+
+    @PostMapping("/lately")
+    fun latelyDeliveryAddress(@RequestBody address: AddressLatelyDto) {
+        return addressService.latelyAddress(address)
     }
 
     @GetMapping

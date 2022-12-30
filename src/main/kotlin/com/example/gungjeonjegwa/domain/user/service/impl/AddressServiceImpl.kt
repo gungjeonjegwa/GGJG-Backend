@@ -2,7 +2,10 @@ package com.example.gungjeonjegwa.domain.user.service.impl
 
 import com.example.gungjeonjegwa.domain.order.exception.AddressNotFoundException
 import com.example.gungjeonjegwa.domain.user.data.dto.AddressDto
+import com.example.gungjeonjegwa.domain.user.data.dto.AddressLatelyDto
 import com.example.gungjeonjegwa.domain.user.data.entity.Address
+import com.example.gungjeonjegwa.domain.user.exception.AlreadyLatelyAddressException
+import com.example.gungjeonjegwa.domain.user.exception.MaximumLatelyException
 import com.example.gungjeonjegwa.domain.user.repository.AddressRepository
 import com.example.gungjeonjegwa.domain.user.service.AddressService
 import com.example.gungjeonjegwa.domain.user.util.AddressConverter
@@ -47,5 +50,31 @@ class AddressServiceImpl(
         return addressRepository.findAllByUser(currentUser!!)
             .map { AddressDto(it.zipCode, it.roadName, it.landNumber, it.detailAddress, it.typeBasic) }
             .filter { !it.isBasic }
+    }
+
+    @Transactional
+    override fun latelyAddress(address: AddressLatelyDto) {
+        val currentUser = userUtil.fetchCurrentUser()
+        val latelySize = addressRepository.findAllByUser(currentUser!!)
+            .filter { !it.typeBasic }
+            .size
+        val existsAddress =
+            addressRepository.existsByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUserAndTypeBasic(
+                address.zipCode,
+                address.roadName,
+                address.landNumber,
+                address.detailAddress,
+                currentUser!!,
+                false
+            )
+        if(existsAddress) {
+            throw AlreadyLatelyAddressException()
+        } else {
+            if(latelySize >= 3) {
+                throw MaximumLatelyException()
+            }
+            val addressEntity = addressConverter.toEntity(address, currentUser)
+            addressRepository.save(addressEntity)
+        }
     }
 }
