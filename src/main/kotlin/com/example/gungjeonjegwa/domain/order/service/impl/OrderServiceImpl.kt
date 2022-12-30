@@ -175,6 +175,7 @@ class OrderServiceImpl(
                 age = it.age,
                 unit = it.breadSize?.unit,
                 size = it.breadSize?.size,
+                previewUrl = it.bread.previewUrl,
                 extraMoney = it.breadSize?.extramoney,
                 price = it.price,
                 count = it.count
