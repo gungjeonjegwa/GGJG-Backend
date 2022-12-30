@@ -22,7 +22,7 @@ class Bread(
 
     var count: Long,
 
-    val isSoldOut: Boolean,
+    var isSoldOut: Boolean,
 
     val previewUrl: String,
 

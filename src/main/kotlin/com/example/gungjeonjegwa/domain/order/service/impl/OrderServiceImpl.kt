@@ -68,6 +68,9 @@ class OrderServiceImpl(
                 val bread = breadRepository.findById(it.breadId).orElseThrow { BreadNotFoundException() }
                 val breadSize = breadSizeRepository.findByDetailBreadAndUnit(bread.breadDetail, it.unit)
                 bread.count -= it.count
+                if(bread.count <= 0) {
+                    bread.isSoldOut = true
+                }
                 val payOrder = PayOrder(
                     id = 0,
                     count = it.count,
@@ -108,6 +111,9 @@ class OrderServiceImpl(
             request.list.forEach{
                 val bread = breadRepository.findById(it.breadId).orElseThrow { BreadNotFoundException() }
                 bread.count -= it.count
+                if(bread.count <= 0) {
+                    bread.isSoldOut = true
+                }
                 val breadSize = breadSizeRepository.findByDetailBreadAndUnit(bread.breadDetail, it.unit)
                 val payOrder = PayOrder(
                     id = 0,
