@@ -20,7 +20,7 @@ class Bread(
     @Enumerated(EnumType.STRING)
     val category: Category,
 
-    val count: Long,
+    var count: Long,
 
     val isSoldOut: Boolean,
 

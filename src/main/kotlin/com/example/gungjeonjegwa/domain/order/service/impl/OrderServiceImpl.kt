@@ -19,6 +19,7 @@ import com.example.gungjeonjegwa.domain.user.data.entity.Address
 import com.example.gungjeonjegwa.domain.user.repository.AddressRepository
 import com.example.gungjeonjegwa.global.util.UserUtil
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,6 +33,7 @@ class OrderServiceImpl(
     private val addressRepository: AddressRepository
 ) : OrderService {
 
+    @Transactional
     override fun createOrderList(request: CreateOrderBuyRequest) {
         val currentUser = userUtil.fetchCurrentUser()
         if(!request.address.isBasic) { // 기본 배송지가 아니라면
@@ -63,6 +65,7 @@ class OrderServiceImpl(
             request.list.forEach{
                 val bread = breadRepository.findById(it.breadId).orElseThrow { BreadNotFoundException() }
                 val breadSize = breadSizeRepository.findByDetailBreadAndUnit(bread.breadDetail, it.unit)
+                bread.count -= it.count
                 val payOrder = PayOrder(
                     id = 0,
                     count = it.count,
@@ -96,6 +99,7 @@ class OrderServiceImpl(
             orderRepository.save(order)
             request.list.forEach{
                 val bread = breadRepository.findById(it.breadId).orElseThrow { BreadNotFoundException() }
+                bread.count -= it.count
                 val breadSize = breadSizeRepository.findByDetailBreadAndUnit(bread.breadDetail, it.unit)
                 val payOrder = PayOrder(
                     id = 0,
