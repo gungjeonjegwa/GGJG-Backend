@@ -40,6 +40,7 @@ class SecurityConfiguration(
             .antMatchers("/bread/likeitem/**").permitAll()
             .antMatchers("/basket/**").authenticated()
             .antMatchers("/order/**").authenticated()
+            .antMatchers("/coupon/**").authenticated()
             .anyRequest().authenticated()
             .and()
             .exceptionHandling()
