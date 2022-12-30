@@ -1,5 +1,6 @@
 package com.example.gungjeonjegwa.domain.order.service.impl
 
+import com.example.gungjeonjegwa.domain.basket.repository.BasketRepository
 import com.example.gungjeonjegwa.domain.bread.exception.BreadNotFoundException
 import com.example.gungjeonjegwa.domain.bread.repository.BreadRepository
 import com.example.gungjeonjegwa.domain.bread.repository.BreadSizeRepository
@@ -30,7 +31,8 @@ class OrderServiceImpl(
     private val breadRepository: BreadRepository,
     private val breadSizeRepository: BreadSizeRepository,
     private val userUtil: UserUtil,
-    private val addressRepository: AddressRepository
+    private val addressRepository: AddressRepository,
+    private val basketRepository: BasketRepository
 ) : OrderService {
 
     @Transactional
@@ -76,6 +78,12 @@ class OrderServiceImpl(
                     breadSize = breadSize,
                 )
                 payOrderRepository.save(payOrder)
+                val existsBasket = basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser, breadSize)
+                if(existsBasket) {
+                    val basket =
+                        basketRepository.findByBreadAndBreadSizeAndUser(bread, breadSize, currentUser)
+                    basketRepository.delete(basket)
+                }
             }
         } else {
             val order = orderRepository.findById(request.orderId).orElseThrow { OrderIdNotFoundException() }
@@ -111,6 +119,13 @@ class OrderServiceImpl(
                     breadSize = breadSize,
                 )
                 payOrderRepository.save(payOrder)
+                val existsBasket = basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser, breadSize)
+                if(existsBasket) {
+                    val basket =
+                        basketRepository.findByBreadAndBreadSizeAndUser(bread, breadSize, currentUser)
+                    basketRepository.delete(basket)
+                }
+
             }
         }
     }
