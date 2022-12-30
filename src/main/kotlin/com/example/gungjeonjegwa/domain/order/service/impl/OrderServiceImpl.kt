@@ -70,14 +70,13 @@ class OrderServiceImpl(
         var addRessDto: AddressDto? = null
         val addressList = addressRepository.findAllByUser(currentUser!!)
         addressList.forEach{
-            if(it.isBasic) {
+            if(it.typeBasic) {
                 addRessDto = AddressDto(
-                    id = it.id,
                     zipCode = it.zipCode,
                     roadName = it.roadName,
                     landNumber = it.landNumber,
                     detailAddress = it.detailAddress,
-                    isBasic = it.isBasic
+                    isBasic = it.typeBasic
                 )
             }
         }
@@ -131,12 +130,11 @@ class OrderServiceImpl(
             ))
         }
         val addressDto = AddressDto(
-            id = order.address!!.id,
             zipCode = order.address!!.zipCode,
             roadName = order.address!!.roadName,
             landNumber = order.address!!.landNumber,
             detailAddress = order.address?.detailAddress,
-            isBasic = order.address!!.isBasic
+            isBasic = order.address!!.typeBasic
         )
         return MyOrderDetailListDto(
             address = addressDto,

@@ -1,6 +1,5 @@
 package com.example.gungjeonjegwa.domain.bread.data.entity
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 @Entity
