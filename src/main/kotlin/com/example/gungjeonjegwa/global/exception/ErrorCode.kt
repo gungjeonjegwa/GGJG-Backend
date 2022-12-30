@@ -21,5 +21,6 @@ enum class ErrorCode(
     EXIST_NOT_BASKET("장바구니에 해당하는 아이템이 존재하지 않습니다.", 404),
     COUPON_CODE_NOT_FOUND("쿠폰 코드가 존재하지 않습니다.", 404),
     ALREADY_USED_COUPON("이미 사용되었거나, 등록되어 있는 쿠폰입니다.", 404),
+    EXPIRED_COUPON("이벤트 기간이 아니거나 만료된 쿠폰입니다.", 404),
     INTERNAL_SERVER_ERROR("서버 내부 에러", 500)
 }
