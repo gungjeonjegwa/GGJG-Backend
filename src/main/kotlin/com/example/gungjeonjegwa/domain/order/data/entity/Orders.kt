@@ -21,7 +21,7 @@ class Orders(
     val user: User,
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "orders", cascade = [CascadeType.REMOVE])
-    val payOrder: MutableList<PayOrder> = arrayListOf(),
+    val payOrder: MutableList<PayOrder> = ArrayList(),
 
     @ManyToOne
     @JoinColumn(name = "address_id")

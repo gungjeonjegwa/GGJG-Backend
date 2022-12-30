@@ -147,17 +147,18 @@ class OrderServiceImpl(
             .let { OrderId(orderId =  it) }
     }
 
-    override fun findMyOrderList(): MutableList<MyOrderList>{
+    override fun findMyOrderList(): MutableList<MyOrderList>{ // 500 에러 for 문 에러
         val currentUser = userUtil.fetchCurrentUser()
         val list: MutableList<MyOrderList> = mutableListOf()
         for((index, value) in currentUser!!.orders.withIndex()) {
+            if(value.payOrder.isEmpty()) continue
             list.add(
                 MyOrderList(
                     orderId = value.id,
                     activityType = value.activity,
-                    title = value.payOrder[index].bread.title,
-                    price = value.payOrder[index].bread.price,
-                    previewUrl = value.payOrder[index].bread.previewUrl,
+                    title = value.payOrder[0].bread.title,
+                    price = value.payOrder[0].bread.price,
+                    previewUrl = value.payOrder[0].bread.previewUrl,
                     createdDate = value.createdAt
                 ))
         }
