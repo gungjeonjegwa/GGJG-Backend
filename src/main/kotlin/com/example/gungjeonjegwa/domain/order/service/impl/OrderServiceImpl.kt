@@ -107,7 +107,7 @@ class OrderServiceImpl(
                     activityType = value.activity,
                     title = value.payOrder[index].bread.title,
                     price = value.payOrder[index].bread.price,
-                    preview_url = value.payOrder[index].bread.previewUrl,
+                    previewUrl = value.payOrder[index].bread.previewUrl,
                     createdDate = value.createdAt
                 ))
         }
