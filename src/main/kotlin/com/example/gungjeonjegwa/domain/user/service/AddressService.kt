@@ -4,4 +4,6 @@ import com.example.gungjeonjegwa.domain.user.data.dto.AddressDto
 
 interface AddressService {
     fun createDefaultAddress(address: AddressDto)
+
+    fun getLatelyAddress(): List<AddressDto>
 }

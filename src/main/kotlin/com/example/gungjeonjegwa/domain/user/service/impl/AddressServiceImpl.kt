@@ -41,4 +41,11 @@ class AddressServiceImpl(
             addressEntity.typeBasic = address.isBasic
         }
     }
+
+    override fun getLatelyAddress(): List<AddressDto> {
+        val currentUser = userUtil.fetchCurrentUser()
+        return addressRepository.findAllByUser(currentUser!!)
+            .map { AddressDto(it.zipCode, it.roadName, it.landNumber, it.detailAddress, it.typeBasic) }
+            .filter { !it.isBasic }
+    }
 }
