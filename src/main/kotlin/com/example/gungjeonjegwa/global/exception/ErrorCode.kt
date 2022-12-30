@@ -15,6 +15,7 @@ enum class ErrorCode(
     BREAD_NOT_FOUND("빵 정보를 찾을 수 없습니다.", 404),
     BREADDETAIL_NOT_FOUND("빵 세부정보를 찾을 수 없습니다.", 404),
     ADDRESS_NOT_FOUND("주소를 찾을 수 없습니다.", 404),
+    DEFAULT_ADDRESS_NOT_FOUND("기본 배송지를 찾을 수 없습니다.", 404),
     BASKET_NOT_FOUND("장바구니에 해당하는 아이템이 존재하지 않습니다.", 404),
     ORDERID_NOT_FOUND("주문 번호를 찾을 수 없습니다.", 404),
     EXIST_NOT_BASKET("장바구니에 해당하는 아이템이 존재하지 않습니다.", 404),
