@@ -40,3 +40,9 @@ class CouponServiceImpl(
             throw ExpiredCouponException()
         }
     }
+
+    override fun createCoupon() {
+        couponRepository.save(Coupon("1111222233334444", "3천원", DisCountType.NORMAL, 3000, true, LocalDateTime.now()))
+        val list: MutableList<String> = mutableListOf()
+    }
+}

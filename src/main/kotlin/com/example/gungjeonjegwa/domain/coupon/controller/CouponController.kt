@@ -15,3 +15,9 @@ class CouponController(
     fun addCoupon(@PathVariable("code") code: Long) {
         couponService.addCouponFromUser(code)
     }
+
+    @PostMapping
+    fun createCoupon() {
+        couponService.createCoupon()
+    }
+}
