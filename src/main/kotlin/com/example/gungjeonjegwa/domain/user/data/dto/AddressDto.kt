@@ -1,9 +1,7 @@
 package com.example.gungjeonjegwa.domain.user.data.dto
 
 class AddressDto(
-    val id: Long,
-
-    val zipCode: String,
+    val zipCode: Long,
 
     val roadName: String,
 
