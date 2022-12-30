@@ -8,18 +8,17 @@ import com.example.gungjeonjegwa.domain.order.data.entity.Orders
 import com.example.gungjeonjegwa.domain.order.data.entity.PayOrder
 import com.example.gungjeonjegwa.domain.order.data.enum.ActivityType
 import com.example.gungjeonjegwa.domain.order.data.request.CreateOrderBuyRequest
-import com.example.gungjeonjegwa.domain.order.exception.AddressNotFoundException
+import com.example.gungjeonjegwa.domain.order.exception.DefaultAddressNotFoundException
 import com.example.gungjeonjegwa.domain.order.exception.OrderIdNotFoundException
 import com.example.gungjeonjegwa.domain.order.exception.PaymentFaildException
 import com.example.gungjeonjegwa.domain.order.repository.OrderRepository
 import com.example.gungjeonjegwa.domain.order.repository.PayOrderRepository
 import com.example.gungjeonjegwa.domain.order.service.OrderService
 import com.example.gungjeonjegwa.domain.user.data.dto.AddressDto
+import com.example.gungjeonjegwa.domain.user.data.entity.Address
 import com.example.gungjeonjegwa.domain.user.repository.AddressRepository
 import com.example.gungjeonjegwa.global.util.UserUtil
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
-import reactor.core.publisher.zip
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,32 +32,79 @@ class OrderServiceImpl(
     private val addressRepository: AddressRepository
 ) : OrderService {
 
-    @Transactional
     override fun createOrderList(request: CreateOrderBuyRequest) {
-        val addressOptional = addressRepository.findById(request.address.id).orElseThrow { AddressNotFoundException() }
         val currentUser = userUtil.fetchCurrentUser()
-        val order = orderRepository.findById(request.orderId).orElseThrow { OrderIdNotFoundException() }
-        order.address = addressOptional
-        if(!request.isPayment) {
-            orderRepository.delete(order)
-            throw PaymentFaildException()
-        }
-        request.list.forEach{list ->
-            run {
-                val bread = breadRepository.findById(list.breadId).orElseThrow { BreadNotFoundException() }
+        if(!request.address.isBasic) { // 기본 배송지가 아니라면
+            val address = Address(
+                0,
+                request.address.zipCode,
+                request.address.roadName,
+                request.address.landNumber,
+                request.address.detailAddress,
+                request.address.isBasic,
+                currentUser!!
+            )
+            val existsAddress: Boolean = addressRepository.existsByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUserAndTypeBasic(request.address.zipCode,
+                request.address.roadName,
+                request.address.landNumber,
+                request.address.detailAddress,
+                currentUser!!,
+                request.address.isBasic)
+            if(!existsAddress) {
+                addressRepository.save(address)
+            }
+            val order = orderRepository.findById(request.orderId).orElseThrow { OrderIdNotFoundException() }
+            if(!request.isPayment) {
+                orderRepository.delete(order)
+                throw PaymentFaildException()
+            }
+            order.address = address
+            orderRepository.save(order)
+            request.list.forEach{
+                val bread = breadRepository.findById(it.breadId).orElseThrow { BreadNotFoundException() }
+                val breadSize = breadSizeRepository.findByDetailBreadAndUnit(bread.breadDetail, it.unit)
                 val payOrder = PayOrder(
                     id = 0,
-                    count = list.count,
-                    price = list.price,
-                    age = list.age,
+                    count = it.count,
+                    price = it.price,
+                    age = it.age,
                     orders = order,
                     bread = bread,
-                    breadSize = list.unit?.let {
-                        breadSizeRepository.findByDetailBreadAndUnit(
-                            bread.breadDetail,
-                            it
-                        )
-                    }
+                    breadSize = breadSize,
+                )
+                payOrderRepository.save(payOrder)
+            }
+        } else {
+            val order = orderRepository.findById(request.orderId).orElseThrow { OrderIdNotFoundException() }
+            if(!request.isPayment) {
+                orderRepository.delete(order)
+                throw PaymentFaildException()
+            }
+            val address = addressRepository.findByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUserAndTypeBasic(
+                request.address.zipCode,
+                request.address.roadName,
+                request.address.landNumber,
+                request.address.detailAddress,
+                currentUser!!,
+                request.address.isBasic,
+            )
+            if(!(address?.zipCode == request.address.zipCode && address.roadName == request.address.roadName &&
+                address?.landNumber == request.address.landNumber && address.detailAddress == request.address.detailAddress && address.typeBasic == request.address.isBasic)) {
+                throw DefaultAddressNotFoundException()
+            }
+            order.address = address
+            orderRepository.save(order)
+            request.list.forEach{
+                val bread = breadRepository.findById(it.breadId).orElseThrow { BreadNotFoundException() }
+                val breadSize = breadSizeRepository.findByDetailBreadAndUnit(bread.breadDetail, it.unit)
+                val payOrder = PayOrder(
+                    id = 0,
+                    count = it.count,
+                    price = it.price,
+                    age = it.age,
+                    orders = order,
+                    bread = bread,
+                    breadSize = breadSize,
                 )
                 payOrderRepository.save(payOrder)
             }
