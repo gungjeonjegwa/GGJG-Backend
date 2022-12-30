@@ -70,7 +70,7 @@ class AddressServiceImpl(
         if(existsAddress) {
             throw AlreadyLatelyAddressException()
         } else {
-            if(latelySize >= 3) {
+            if(latelySize >= 5) {
                 throw MaximumLatelyException()
             }
             val addressEntity = addressConverter.toEntity(address, currentUser)
