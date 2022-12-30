@@ -9,15 +9,15 @@ class Address(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    val zipCode: String,
+    var zipCode: Long,
 
-    val roadName: String,
+    var roadName: String,
 
-    val landNumber: String,
+    var landNumber: String,
 
-    val detailAddress: String?,
+    var detailAddress: String?,
 
-    val isBasic: Boolean,
+    var typeBasic: Boolean,
 
     @ManyToOne
     @JoinColumn(name = "user_id")
