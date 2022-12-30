@@ -22,5 +22,6 @@ enum class ErrorCode(
     COUPON_CODE_NOT_FOUND("쿠폰 코드가 존재하지 않습니다.", 404),
     ALREADY_USED_COUPON("이미 사용되었거나, 등록되어 있는 쿠폰입니다.", 404),
     EXPIRED_COUPON("이벤트 기간이 아니거나 만료된 쿠폰입니다.", 404),
+    ALREADY_LATELY_ADDRESS("이미 존재하는 최근 배송지입니다.", 409),
     INTERNAL_SERVER_ERROR("서버 내부 에러", 500)
 }
