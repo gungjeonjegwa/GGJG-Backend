@@ -21,6 +21,8 @@ enum class ErrorCode(
     ORDERID_NOT_FOUND("주문 번호를 찾을 수 없습니다.", 404),
     EXIST_NOT_BASKET("장바구니에 해당하는 아이템이 존재하지 않습니다.", 404),
     COUPON_CODE_NOT_FOUND("쿠폰 코드가 존재하지 않습니다.", 404),
+    COUPON_NOT_ENABLED("쿠폰이 활성화 되어있지 않습니다.", 404),
+    MYCOUPON_NOT_FOUND("내가 가지고 있는 쿠폰이 존재하지 않습니다.", 404),
     ALREADY_USED_COUPON("이미 사용되었거나, 등록되어 있는 쿠폰입니다.", 404),
     EXPIRED_COUPON("이벤트 기간이 아니거나 만료된 쿠폰입니다.", 404),
     ALREADY_LATELY_ADDRESS("이미 존재하는 최근 배송지입니다.", 409),
