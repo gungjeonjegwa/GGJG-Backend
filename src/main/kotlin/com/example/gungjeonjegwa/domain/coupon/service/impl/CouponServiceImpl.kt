@@ -1,5 +1,6 @@
 package com.example.gungjeonjegwa.domain.coupon.service.impl
 
+import com.example.gungjeonjegwa.domain.coupon.data.dto.CouponDto
 import com.example.gungjeonjegwa.domain.coupon.data.entity.Coupon
 import com.example.gungjeonjegwa.domain.coupon.data.entity.MyCoupon
 import com.example.gungjeonjegwa.domain.coupon.data.enum.DisCountType
@@ -31,7 +32,6 @@ class CouponServiceImpl(
         if(coupon.isEnabledCoupon && before) { // 쿠폰 마감기한보다 낮으면 등록 가능
             val myCoupon = MyCoupon(
                 id = 0,
-                expiredAt = coupon.finishDate,
                 coupon = coupon,
                 user = currentUser
             )
@@ -39,6 +39,28 @@ class CouponServiceImpl(
         } else {
             throw ExpiredCouponException()
         }
+    }
+
+    override fun getCouponByUser(): MutableList<CouponDto> {
+        val currentUser = userUtil.fetchCurrentUser()
+        var myCouponDtoList: MutableList<CouponDto> = mutableListOf()
+        val myCouponList = myCouponRepository.findAllByUser(currentUser!!)
+        for(coupon in myCouponList) {
+            if(coupon.isUsed) continue
+            if(LocalDateTime.now().isAfter(coupon.coupon.finishDate)) {
+                continue
+            } // 쿠폰 사용한 날짜가 만료기간보다 많을때,
+            val couponDto = CouponDto(
+                myCouponId = coupon.id,
+                name = coupon.coupon.name,
+                createdAt = coupon.createdAt,
+                finishedAt = coupon.coupon.finishDate,
+                disCountType = coupon.coupon.disCountType,
+                price = coupon.coupon.couponPrice
+            )
+            myCouponDtoList.add(couponDto)
+        }
+        return myCouponDtoList
     }
 
     override fun createCoupon() {

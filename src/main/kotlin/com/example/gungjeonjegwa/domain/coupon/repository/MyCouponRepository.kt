@@ -7,4 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface MyCouponRepository : JpaRepository<MyCoupon, Long> {
     fun existsByCouponAndUser(coupon: Coupon, user: User): Boolean
+
+    fun findAllByUser(user: User): List<MyCoupon>
+
 }

@@ -17,9 +17,7 @@ class MyCoupon(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    val expiredAt: LocalDateTime,
-
-    val isUsed: Boolean = false,
+    var isUsed: Boolean = false,
 
     @ManyToOne
     @JoinColumn(name = "coupon_id")
