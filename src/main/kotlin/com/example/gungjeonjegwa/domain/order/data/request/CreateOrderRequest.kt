@@ -10,5 +10,7 @@ class CreateOrderRequest(
     val unit: String? = null,
 
     val age: Long? = null,
+
+    val couponId: Long
 ) {
 }

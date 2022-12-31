@@ -1,6 +1,7 @@
 package com.example.gungjeonjegwa.domain.user.data.entity
 
 import com.example.gungjeonjegwa.domain.order.data.entity.Orders
+import com.example.gungjeonjegwa.global.entity.BaseTimeEntity
 import javax.persistence.*
 
 @Entity
@@ -25,5 +26,5 @@ class Address(
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "address")
     val ordersList: MutableList<Orders> = arrayListOf()
-) {
+) : BaseTimeEntity() {
 }

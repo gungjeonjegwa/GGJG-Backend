@@ -4,6 +4,9 @@ import com.example.gungjeonjegwa.domain.basket.repository.BasketRepository
 import com.example.gungjeonjegwa.domain.bread.exception.BreadNotFoundException
 import com.example.gungjeonjegwa.domain.bread.repository.BreadRepository
 import com.example.gungjeonjegwa.domain.bread.repository.BreadSizeRepository
+import com.example.gungjeonjegwa.domain.coupon.exception.CouponNotEnabledException
+import com.example.gungjeonjegwa.domain.coupon.exception.MyCouponNotFoundException
+import com.example.gungjeonjegwa.domain.coupon.repository.MyCouponRepository
 import com.example.gungjeonjegwa.domain.order.data.dto.*
 import com.example.gungjeonjegwa.domain.order.data.entity.Orders
 import com.example.gungjeonjegwa.domain.order.data.entity.PayOrder
@@ -22,6 +25,7 @@ import com.example.gungjeonjegwa.global.util.UserUtil
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
@@ -32,7 +36,8 @@ class OrderServiceImpl(
     private val breadSizeRepository: BreadSizeRepository,
     private val userUtil: UserUtil,
     private val addressRepository: AddressRepository,
-    private val basketRepository: BasketRepository
+    private val basketRepository: BasketRepository,
+    private val myCouponRepository: MyCouponRepository,
 ) : OrderService {
 
     @Transactional
@@ -114,6 +119,8 @@ class OrderServiceImpl(
                 if(bread.count <= 0) {
                     bread.isSoldOut = true
                 }
+                myCouponRepository.findAllByUser(currentUser)
+                    .filter { myCoupon -> myCoupon.coupon.id == it.couponId.toString()}
                 val breadSize = breadSizeRepository.findByDetailBreadAndUnit(bread.breadDetail, it.unit)
                 val payOrder = PayOrder(
                     id = 0,
@@ -125,6 +132,7 @@ class OrderServiceImpl(
                     breadSize = breadSize,
                 )
                 payOrderRepository.save(payOrder)
+
                 val existsBasket = basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser, breadSize)
                 if(existsBasket) {
                     val basket =
@@ -225,5 +233,16 @@ class OrderServiceImpl(
         val random = Random()
         val number = random.nextInt(8999) + 1000
         return "B$date$number"
+    }
+
+    private fun useCoupon(mycouponId: Long) {
+        val mycoupon = myCouponRepository.findById(mycouponId).orElseThrow{ MyCouponNotFoundException() }
+        if(!mycoupon.coupon.isEnabledCoupon) {
+            throw CouponNotEnabledException()
+        }
+        if(LocalDateTime.now().isAfter(mycoupon.coupon.finishDate)) {
+
+        }
+
     }
 }

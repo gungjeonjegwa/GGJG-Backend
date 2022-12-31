@@ -47,7 +47,7 @@ class AddressServiceImpl(
 
     override fun getLatelyAddress(): List<AddressDto> {
         val currentUser = userUtil.fetchCurrentUser()
-        return addressRepository.findAllByUser(currentUser!!)
+        return addressRepository.findAllByUserOrderByCreatedAtDesc(currentUser!!)
             .map { AddressDto(it.zipCode, it.roadName, it.landNumber, it.detailAddress, it.typeBasic) }
             .filter { !it.isBasic }
     }
@@ -68,10 +68,15 @@ class AddressServiceImpl(
                 false
             )
         if(existsAddress) {
-            throw AlreadyLatelyAddressException()
+            return
         } else {
             if(latelySize >= 5) {
-                throw MaximumLatelyException()
+                val orderByCreatedAtAsc =
+                    addressRepository.findAllByUserAndTypeBasicOrderByCreatedAtDesc(currentUser, false)
+                addressRepository.delete(orderByCreatedAtAsc[4])
+                val addressEntity = addressConverter.toEntity(address, currentUser)
+                addressRepository.save(addressEntity)
+                return
             }
             val addressEntity = addressConverter.toEntity(address, currentUser)
             addressRepository.save(addressEntity)
