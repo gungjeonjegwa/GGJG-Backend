@@ -35,7 +35,10 @@ class User(
     val orders: MutableList<Orders> = ArrayList(),
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    val myCoupon: MutableList<MyCoupon> = ArrayList()
+    val myCoupon: MutableList<MyCoupon> = ArrayList(),
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    val stamp: MutableList<Stamp> = ArrayList()
 ) {
     fun updateRefreshToken(refreshtoken: String?) {
         this.refreshtoken = refreshtoken
