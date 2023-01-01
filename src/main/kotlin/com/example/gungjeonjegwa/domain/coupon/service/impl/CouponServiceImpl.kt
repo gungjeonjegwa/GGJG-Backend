@@ -77,7 +77,7 @@ class CouponServiceImpl(
             var myCouponClassTypeList: MutableList<MyCoupon> = mutableListOf()
             val myCouponList = myCouponRepository.findAllByUser(currentUser!!).forEach {
                 for(couponType in it.coupon.couponType) {
-                    if(couponType.classType.name == breadCategory.category.name) {
+                    if(couponType.classType.name == breadCategory.category.name || couponType.classType.name == ClassType.ALL.name) {
                         myCouponClassTypeList.add(it)
                     }
                 }
