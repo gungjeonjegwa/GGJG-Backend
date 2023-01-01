@@ -2,6 +2,7 @@ package com.example.gungjeonjegwa.domain.user.service.impl
 
 import com.example.gungjeonjegwa.domain.coupon.repository.MyCouponRepository
 import com.example.gungjeonjegwa.domain.order.repository.OrderRepository
+import com.example.gungjeonjegwa.domain.order.repository.PayOrderRepository
 import com.example.gungjeonjegwa.domain.user.data.dto.AddressDto
 import com.example.gungjeonjegwa.domain.user.data.entity.Address
 import com.example.gungjeonjegwa.domain.user.data.response.MyProfileResponse
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service
 class ProfileServiceImpl(
     private val orderRepository: OrderRepository,
     private val myProfileRepository: MyCouponRepository,
+    private val payOrderRepository: PayOrderRepository,
     private val stampRepository: StampRepository,
     private val addressRepository: AddressRepository,
     private val userUtil: UserUtil
@@ -29,15 +31,19 @@ class ProfileServiceImpl(
         var returnMoney: Long = 0
         val orders = orderRepository.findAllByUser(currentUser!!)
         orders.forEach { // WAITORDER, DELIVERYING, COMPLETEDELIVERY, WAITCANCEL, CANCEL, WAITRETURN, RETURN
-            when(it.activity.name) {
-                "WAITORDER" -> waitorder++
-                "DELIVERYING" -> deliverying++
-                "COMPLETEDELIVERY" -> completedDelivery++
-                "WAITCANCEL" -> cancel++
-                "CANCEL" -> cancel++
-                "WAITRETURN" -> returnMoney++
-                "RETURN" -> returnMoney++
+            val existsPayOrder: Boolean = payOrderRepository.existsByOrders(it)
+            if(existsPayOrder) {
+                when(it.activity.name) {
+                    "WAITORDER" -> waitorder++
+                    "DELIVERYING" -> deliverying++
+                    "COMPLETEDELIVERY" -> completedDelivery++
+                    "WAITCANCEL" -> cancel++
+                    "CANCEL" -> cancel++
+                    "WAITRETURN" -> returnMoney++
+                    "RETURN" -> returnMoney++
+                }
             }
+
         }
         val couponSize = myProfileRepository.findAllByUser(currentUser!!).size
         val stampCount = stampRepository.findAllByUser(currentUser!!).size
