@@ -7,7 +7,7 @@ class CreateOrderRequest(
 
     val price: Long,
 
-    val discountPrice: Long,
+    val discountPrice: Long?,
 
     val unit: String?,
 
