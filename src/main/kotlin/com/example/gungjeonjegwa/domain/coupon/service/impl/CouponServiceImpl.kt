@@ -104,10 +104,24 @@ class CouponServiceImpl(
 
     override fun createCoupon() {
         val coupon: Coupon = Coupon(
-            id = "111122223333",
-            name = "3천원",
+            id = "1111222233336666",
+            name = "30%퍼센트 할인쿠폰 (빵)",
+            disCountType = DisCountType.PERCENT,
+            couponPrice = 30,
+            isEnabledCoupon = true,
+            finishDate = LocalDateTime.now())
+        val coupon1: Coupon = Coupon(
+            id = "1111222233337777",
+            name = "20%퍼센트 할인쿠폰 (케이크)",
+            disCountType = DisCountType.PERCENT,
+            couponPrice = 20,
+            isEnabledCoupon = true,
+            finishDate = LocalDateTime.now())
+        val coupon2: Coupon = Coupon(
+            id = "1111222233338888",
+            name = "2000원 할인쿠폰 (케이크)",
             disCountType = DisCountType.NORMAL,
-            couponPrice = 3000,
+            couponPrice = 2000,
             isEnabledCoupon = true,
             finishDate = LocalDateTime.now())
         val couponType: CouponType = CouponType(
@@ -115,8 +129,22 @@ class CouponServiceImpl(
             classType = ClassType.BREAD,
             coupon = coupon
         )
+        val couponType2: CouponType = CouponType(
+            id = 0,
+            classType = ClassType.CAKE,
+            coupon = coupon1
+        )
+        val couponType3: CouponType = CouponType(
+            id = 0,
+            classType = ClassType.CAKE,
+            coupon = coupon2
+        )
         couponRepository.save(coupon)
+        couponRepository.save(coupon1)
+        couponRepository.save(coupon2)
         couponTypeRepository.save(couponType)
+        couponTypeRepository.save(couponType2)
+        couponTypeRepository.save(couponType3)
         val list: MutableList<String> = mutableListOf()
     }
 }
