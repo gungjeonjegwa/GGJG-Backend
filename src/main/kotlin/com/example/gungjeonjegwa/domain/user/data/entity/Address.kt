@@ -5,7 +5,7 @@ import com.example.gungjeonjegwa.global.entity.BaseTimeEntity
 import javax.persistence.*
 
 @Entity
-class Address(
+data class Address(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,

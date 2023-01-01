@@ -55,6 +55,7 @@ class OrderServiceImpl(
                 orderRepository.delete(order)
                 throw PaymentFaildException()
             }
+            println("1")
             val address = addressRepository.findByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUserAndTypeBasic(
                 request.address.zipCode,
                 request.address.roadName,
@@ -63,11 +64,12 @@ class OrderServiceImpl(
                 currentUser!!,
                 request.address.isBasic
             )
+            println("2 " + address)
             if(!(address?.zipCode == request.address.zipCode && address.roadName == request.address.roadName &&
                         address?.landNumber == request.address.landNumber && address.detailAddress == request.address.detailAddress && address.typeBasic == request.address.isBasic)) {
                 throw LatelyAddressException()
             }
-            order.exchangeAddress(address)
+            order.address = address
             request.list.forEach{
                 val bread = breadRepository.findById(it.breadId).orElseThrow { BreadNotFoundException() }
                 bread.count -= it.count
@@ -127,6 +129,7 @@ class OrderServiceImpl(
                 orderRepository.delete(order)
                 throw PaymentFaildException()
             }
+            println("1")
             val address = addressRepository.findByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUserAndTypeBasic(
                 request.address.zipCode,
                 request.address.roadName,
@@ -135,12 +138,13 @@ class OrderServiceImpl(
                 currentUser!!,
                 request.address.isBasic,
             )
+            println("2")
             if(!(address?.zipCode == request.address.zipCode && address.roadName == request.address.roadName &&
                 address?.landNumber == request.address.landNumber && address.detailAddress == request.address.detailAddress && address.typeBasic == request.address.isBasic)) {
                 throw DefaultAddressNotFoundException()
             }
+            println("3 ${address.toString()}")
             order.address = address
-            orderRepository.save(order)
             request.list.forEach{
                 val bread = breadRepository.findById(it.breadId).orElseThrow { BreadNotFoundException() }
                 bread.count -= it.count
