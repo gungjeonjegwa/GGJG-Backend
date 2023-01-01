@@ -261,7 +261,7 @@ class OrderServiceImpl(
                     orderId = orders.id,
                     activityType = orders.activity,
                     title = orders.payOrder[0].bread.title + text,
-                    price = price,
+                    price = price + 3000,
                     previewUrl = orders.payOrder[0].bread.previewUrl,
                     createdDate = orders.createdAt
                 ))
