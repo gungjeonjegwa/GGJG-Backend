@@ -47,6 +47,7 @@ class OrderServiceImpl(
 
     @Transactional
     override fun createOrderList(request: CreateOrderBuyRequest) {
+        println(request.address.toString())
         val currentUser = userUtil.fetchCurrentUser()
         if(!request.address.isBasic) { // 기본 배송지가 아니라면
             val order = orderRepository.findById(request.orderId).orElseThrow { OrderIdNotFoundException() }
