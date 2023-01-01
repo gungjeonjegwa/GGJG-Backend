@@ -17,7 +17,8 @@ class PayOrder(
     @Column(nullable = true)
     val age: Long?,
 
-    val discountPrice: Long,
+    @Column(nullable = true)
+    val discountPrice: Long?,
 
     @ManyToOne
     @JoinColumn(name = "order_id")
