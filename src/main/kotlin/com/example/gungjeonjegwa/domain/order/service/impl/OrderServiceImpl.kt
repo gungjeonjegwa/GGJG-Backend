@@ -73,25 +73,48 @@ class OrderServiceImpl(
                 if(bread.count <= 0) {
                     bread.isSoldOut = true
                 }
-                myCouponRepository.findAllByUser(currentUser)
-                    .filter { myCoupon -> myCoupon.coupon.id == it.couponId.toString()}
-                val breadSize = breadSizeRepository.findByDetailBreadAndUnit(bread.breadDetail, it.unit)
-                val payOrder = PayOrder(
-                    id = 0,
-                    count = it.count,
-                    price = it.price,
-                    age = it.age,
-                    orders = order,
-                    bread = bread,
-                    breadSize = breadSize,
-                )
-                payOrderRepository.save(payOrder)
-
-                val existsBasket = basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser, breadSize)
-                if(existsBasket) {
-                    val basket =
-                        basketRepository.findByBreadAndBreadSizeAndUser(bread, breadSize, currentUser)
-                    basketRepository.delete(basket)
+                if(it.couponId != null) {
+                    val myCoupons = myCouponRepository.findAllByUser(currentUser)
+                        .filter { myCoupon -> myCoupon.coupon.id == it.couponId.toString() }
+                    myCoupons[0].isUsed = true
+                }
+                if(it.unit == null) {
+                    val payOrder = PayOrder(
+                        id = 0,
+                        count = it.count,
+                        price = it.price,
+                        discountPrice = it.discountPrice,
+                        age = it.age,
+                        orders = order,
+                        bread = bread,
+                        breadSize = null,
+                    )
+                    payOrderRepository.save(payOrder)
+                    val existsBasket = basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser, null)
+                    if(existsBasket) {
+                        val basket =
+                            basketRepository.findByBreadAndBreadSizeAndUser(bread, null, currentUser)
+                        basketRepository.delete(basket)
+                    }
+                } else {
+                    val breadSize = breadSizeRepository.findByDetailBreadAndUnit(bread.breadDetail, it.unit)
+                    val payOrder = PayOrder(
+                        id = 0,
+                        count = it.count,
+                        price = it.price,
+                        discountPrice = it.discountPrice,
+                        age = it.age,
+                        orders = order,
+                        bread = bread,
+                        breadSize = breadSize,
+                    )
+                    payOrderRepository.save(payOrder)
+                    val existsBasket = basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser, breadSize)
+                    if(existsBasket) {
+                        val basket =
+                            basketRepository.findByBreadAndBreadSizeAndUser(bread, breadSize, currentUser)
+                        basketRepository.delete(basket)
+                    }
                 }
             }
         } else {
@@ -120,27 +143,50 @@ class OrderServiceImpl(
                 if(bread.count <= 0) {
                     bread.isSoldOut = true
                 }
-                myCouponRepository.findAllByUser(currentUser)
-                    .filter { myCoupon -> myCoupon.coupon.id == it.couponId.toString()}
-                val breadSize = breadSizeRepository.findByDetailBreadAndUnit(bread.breadDetail, it.unit)
-                val payOrder = PayOrder(
-                    id = 0,
-                    count = it.count,
-                    price = it.price,
-                    age = it.age,
-                    orders = order,
-                    bread = bread,
-                    breadSize = breadSize,
-                )
-                payOrderRepository.save(payOrder)
-
-                val existsBasket = basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser, breadSize)
-                if(existsBasket) {
-                    val basket =
-                        basketRepository.findByBreadAndBreadSizeAndUser(bread, breadSize, currentUser)
-                    basketRepository.delete(basket)
+                if(it.couponId != null) {
+                    val myCoupons = myCouponRepository.findAllByUser(currentUser)
+                        .filter { myCoupon -> myCoupon.coupon.id == it.couponId.toString() }
+                    myCoupons[0].isUsed = true
                 }
 
+                if(it.unit == null) {
+                    val payOrder = PayOrder(
+                        id = 0,
+                        count = it.count,
+                        price = it.price,
+                        discountPrice = it.discountPrice,
+                        age = it.age,
+                        orders = order,
+                        bread = bread,
+                        breadSize = null,
+                    )
+                    payOrderRepository.save(payOrder)
+                    val existsBasket = basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser, null)
+                    if(existsBasket) {
+                        val basket =
+                            basketRepository.findByBreadAndBreadSizeAndUser(bread, null, currentUser)
+                        basketRepository.delete(basket)
+                    }
+                } else {
+                    val breadSize = breadSizeRepository.findByDetailBreadAndUnit(bread.breadDetail, it.unit)
+                    val payOrder = PayOrder(
+                        id = 0,
+                        count = it.count,
+                        price = it.price,
+                        discountPrice = it.discountPrice,
+                        age = it.age,
+                        orders = order,
+                        bread = bread,
+                        breadSize = breadSize,
+                    )
+                    payOrderRepository.save(payOrder)
+                    val existsBasket = basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser, breadSize)
+                    if(existsBasket) {
+                        val basket =
+                            basketRepository.findByBreadAndBreadSizeAndUser(bread, breadSize, currentUser)
+                        basketRepository.delete(basket)
+                    }
+                }
             }
         }
     }

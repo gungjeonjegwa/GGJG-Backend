@@ -52,6 +52,7 @@ class AddressServiceImpl(
 
     @Transactional
     override fun latelyAddress(address: AddressLatelyDto) {
+        if (!address.isBasic) {
             val currentUser = userUtil.fetchCurrentUser()
             val userAddress = addressRepository.findAllByUser(currentUser!!)
             val latelySize = userAddress
@@ -67,11 +68,11 @@ class AddressServiceImpl(
                     address.detailAddress,
                     currentUser!!,
                     address.isBasic
-                    )
-            if(existsAddress) {
+                )
+            if (existsAddress) {
                 return
             } else {
-                if(latelySize >= 5) {
+                if (latelySize >= 5) {
                     val orderByCreatedAtAsc =
                         addressRepository.findAllByUserAndTypeBasicOrderByCreatedAtDesc(currentUser, false)
                     addressRepository.delete(orderByCreatedAtAsc[4])
@@ -79,11 +80,12 @@ class AddressServiceImpl(
                     addressRepository.save(addressEntity)
                     return
                 }
-                if(defaultAddress.zipCode == address.zipCode && defaultAddress.roadName == address.roadName && defaultAddress.landNumber == address.landNumber && defaultAddress.detailAddress == address.detailAddress) {
+                if (defaultAddress.zipCode == address.zipCode && defaultAddress.roadName == address.roadName && defaultAddress.landNumber == address.landNumber && defaultAddress.detailAddress == address.detailAddress) {
                     throw ExistsDefaultAddressException()
                 }
                 val addressEntity = addressConverter.toEntity(address, currentUser)
                 addressRepository.save(addressEntity)
             }
         }
+    }
 }
