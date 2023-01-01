@@ -7,4 +7,6 @@ interface ProfileService {
     fun myProfileInfo(): MyProfileResponse
 
     fun getPrivacyInfo(): PrivateResponse
+
+    fun deleteStamp()
 }

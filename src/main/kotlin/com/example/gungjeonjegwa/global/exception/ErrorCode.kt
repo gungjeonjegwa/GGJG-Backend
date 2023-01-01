@@ -8,6 +8,7 @@ enum class ErrorCode(
     OVER_COUNT("장바구니에서 요구한 빵 개수 카운트 수가 초과하였습니다.", 400),
     PAYMENT_FAILED("미결제 사용자가 구매 요청을 보냈습니다.", 400),
     MAXIMUM_LATELY("최근 배송지 갯수를 초과하였습니다.", 400),
+    STAMP_NOT_TENPICES("스탬프 갯수가 10개가 충족하지 않습니다.", 400),
     UNAUTHORIZED("권한 없음", 401),
     EXPIRED_TOKEN("토큰 만료", 401),
     INVALID_TOKEN("토큰 변질", 401),

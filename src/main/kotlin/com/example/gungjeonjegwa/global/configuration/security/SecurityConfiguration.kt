@@ -38,6 +38,7 @@ class SecurityConfiguration(
             .antMatchers("/users/emailcheck").permitAll()
             .antMatchers( "/bread/**").permitAll()
             .antMatchers("/bread/likeitem/**").permitAll()
+            .antMatchers("/banner/**").permitAll()
             .antMatchers("/basket/**").authenticated()
             .antMatchers("/order/**").authenticated()
             .antMatchers("/coupon/**").authenticated()

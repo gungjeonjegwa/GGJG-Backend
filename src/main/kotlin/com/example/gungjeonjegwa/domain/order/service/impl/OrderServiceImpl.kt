@@ -249,10 +249,10 @@ class OrderServiceImpl(
                 text = " 외 ${sizes}개"
             }
             for(payOrders in orders.payOrder) {
-                if(payOrders.discountPrice != null) {
-                    price += payOrders.discountPrice!!
-                } else {
+                if(payOrders.discountPrice == null) {
                     price += payOrders.price
+                } else {
+                    price += payOrders.discountPrice!!
                 }
             }
             list.add(

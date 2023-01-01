@@ -21,4 +21,9 @@ class ProfileController(
     fun myPrivateInfo(): PrivateResponse {
         return profileService.getPrivacyInfo()
     }
+
+    @GetMapping("/giftstamp")
+    fun giftstamp() {
+        return profileService.deleteStamp()
+    }
 }

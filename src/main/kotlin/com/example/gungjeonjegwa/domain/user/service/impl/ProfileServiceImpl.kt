@@ -7,6 +7,7 @@ import com.example.gungjeonjegwa.domain.user.data.dto.AddressDto
 import com.example.gungjeonjegwa.domain.user.data.entity.Address
 import com.example.gungjeonjegwa.domain.user.data.response.MyProfileResponse
 import com.example.gungjeonjegwa.domain.user.data.response.PrivateResponse
+import com.example.gungjeonjegwa.domain.user.exception.StampNotTenPicesException
 import com.example.gungjeonjegwa.domain.user.repository.AddressRepository
 import com.example.gungjeonjegwa.domain.user.repository.StampRepository
 import com.example.gungjeonjegwa.domain.user.service.ProfileService
@@ -88,5 +89,14 @@ class ProfileServiceImpl(
             phone = phoneNumber,
             address = address[0]
         )
+    }
+
+    override fun deleteStamp() {
+        val currentUser = userUtil.fetchCurrentUser()
+        val stampsSize = stampRepository.findAllByUser(currentUser!!)
+        if(stampsSize.size < 10) {
+            throw StampNotTenPicesException()
+        }
+        stampRepository.deleteAll(stampsSize)
     }
 }
