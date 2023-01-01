@@ -10,6 +10,7 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
 
 @Entity
 class MyCoupon(
@@ -18,6 +19,8 @@ class MyCoupon(
     val id: Long,
 
     var isUsed: Boolean = false,
+
+    @OneToMany(mappedBy = "")
 
     @ManyToOne
     @JoinColumn(name = "coupon_id")

@@ -7,5 +7,5 @@ interface CouponService {
 
     fun createCoupon()
 
-    fun getCouponByUser(): MutableList<CouponDto>
+    fun getCouponByUser(breadId: String): MutableList<CouponDto>
 }
