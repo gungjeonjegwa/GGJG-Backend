@@ -78,9 +78,9 @@ class OrderServiceImpl(
                 }
                 if(it.couponId != null) {
                     val myCoupons = myCouponRepository.findAllByUser(currentUser)
-                    myCoupons.forEach { myCoupon ->
-                        if(myCoupon.id == it.couponId) {
-                            myCoupon.isUsed = true
+                    for(coupon in myCoupons) {
+                        if(it.couponId!! == coupon.id) {
+                            coupon.isUsed = true
                         }
                     }
                 }
@@ -153,10 +153,13 @@ class OrderServiceImpl(
                 }
                 if(it.couponId != null) {
                     val myCoupons = myCouponRepository.findAllByUser(currentUser)
-                        .filter { myCoupon -> myCoupon.coupon.id == it.couponId.toString() }
-                    myCoupons[0].isUsed = true
-                }
+                    for(coupon in myCoupons) {
+                        if(it.couponId!! == coupon.id) {
+                            coupon.isUsed = true
+                        }
+                    }
 
+                }
                 if(it.unit == null) {
                     val payOrder = PayOrder(
                         id = 0,
