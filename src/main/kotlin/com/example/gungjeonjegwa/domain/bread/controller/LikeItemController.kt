@@ -1,7 +1,9 @@
 package com.example.gungjeonjegwa.domain.bread.controller
 
+import com.example.gungjeonjegwa.domain.bread.data.dto.BreadLikeDto
 import com.example.gungjeonjegwa.domain.bread.data.dto.LikeItemActivityResponse
 import com.example.gungjeonjegwa.domain.bread.service.LikeItemService
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -15,5 +17,10 @@ class LikeItemController(
     @PostMapping("/{breadId}")
     fun activityLikeItem(@PathVariable("breadId") breadId: Long): LikeItemActivityResponse {
         return likeItemService.activityLikeItem(breadId)
+    }
+
+    @GetMapping
+    fun findLikeItem(): MutableList<BreadLikeDto> {
+        return likeItemService.findLikeItem()
     }
 }

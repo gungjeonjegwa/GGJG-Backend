@@ -1,5 +1,6 @@
 package com.example.gungjeonjegwa.domain.bread.service.impl
 
+import com.example.gungjeonjegwa.domain.bread.data.dto.BreadLikeDto
 import com.example.gungjeonjegwa.domain.bread.data.dto.LikeItemActivityResponse
 import com.example.gungjeonjegwa.domain.bread.data.entity.LikeItem
 import com.example.gungjeonjegwa.domain.bread.exception.BreadNotFoundException
@@ -27,5 +28,24 @@ class LikeItemServiceImpl(
         val likeItem = LikeItem(0, bread, currentUser!!)
         likeItemRepository.save(likeItem)
         return LikeItemActivityResponse(true)
+    }
+
+    override fun findLikeItem(): MutableList<BreadLikeDto> {
+        val currentUser = userUtil.fetchCurrentUser()
+        val likeItemList: MutableList<BreadLikeDto> = mutableListOf()
+        val likeItems = likeItemRepository.findAllByUser(currentUser!!)
+        likeItems.forEach { likeItem ->
+            likeItemList.add(BreadLikeDto(
+                id = likeItem.bread.id,
+                title = likeItem.bread.title,
+                price = likeItem.bread.price,
+                category = likeItem.bread.category,
+                isSoldOut = likeItem.bread.isSoldOut,
+                previewUrl = likeItem.bread.previewUrl,
+                sellDeliveryType = likeItem.bread.sellDeliveryType,
+                isLikeItem = true
+            ))
+        }
+        return likeItemList
     }
 }
