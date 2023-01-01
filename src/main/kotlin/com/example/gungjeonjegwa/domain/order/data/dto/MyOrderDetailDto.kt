@@ -11,8 +11,6 @@ class MyOrderDetailDto(
 
     val previewUrl: String,
 
-    val extraMoney: Long?,
-
     val price: Long,
 
     val count: Long

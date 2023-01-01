@@ -229,16 +229,32 @@ class OrderServiceImpl(
     override fun findMyOrderList(): MutableList<MyOrderList>{ // 500 에러 for 문 에러
         val currentUser = userUtil.fetchCurrentUser()
         val list: MutableList<MyOrderList> = mutableListOf()
-        for((index, value) in currentUser!!.orders.withIndex()) {
-            if(value.payOrder.isEmpty()) continue
+        var price: Long = 0
+        var text: String = ""
+        for(orders in currentUser!!.orders) {
+            if(orders.payOrder.isEmpty()) continue
+            if(orders.payOrder.size <= 1) {
+                text = ""
+            }
+            else if(orders.payOrder.size >= 2) {
+                val sizes: Int = orders.payOrder.size - 1
+                text = " 외 ${sizes}개"
+            }
+            for(payOrders in orders.payOrder) {
+                if(payOrders.discountPrice != null) {
+                    price += payOrders.discountPrice!!
+                } else {
+                    price += payOrders.price
+                }
+            }
             list.add(
                 MyOrderList(
-                    orderId = value.id,
-                    activityType = value.activity,
-                    title = value.payOrder[0].bread.title,
-                    price = value.payOrder[0].bread.price,
-                    previewUrl = value.payOrder[0].bread.previewUrl,
-                    createdDate = value.createdAt
+                    orderId = orders.id,
+                    activityType = orders.activity,
+                    title = orders.payOrder[0].bread.title + text,
+                    price = price,
+                    previewUrl = orders.payOrder[0].bread.previewUrl,
+                    createdDate = orders.createdAt
                 ))
         }
         return list;
@@ -255,7 +271,6 @@ class OrderServiceImpl(
                 unit = it.breadSize?.unit,
                 size = it.breadSize?.size,
                 previewUrl = it.bread.previewUrl,
-                extraMoney = it.breadSize?.extramoney,
                 price = it.price,
                 count = it.count
             ))
