@@ -240,6 +240,7 @@ class OrderServiceImpl(
         var price: Long = 0
         var text: String = ""
         for(orders in currentUser!!.orders) {
+            price = 0
             if(orders.payOrder.isEmpty()) continue
             if(orders.payOrder.size <= 1) {
                 text = ""
