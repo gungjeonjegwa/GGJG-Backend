@@ -279,6 +279,7 @@ class OrderServiceImpl(
                 unit = it.breadSize?.unit,
                 size = it.breadSize?.size,
                 previewUrl = it.bread.previewUrl,
+                discountPrice = it.discountPrice,
                 price = it.price,
                 count = it.count
             ))
