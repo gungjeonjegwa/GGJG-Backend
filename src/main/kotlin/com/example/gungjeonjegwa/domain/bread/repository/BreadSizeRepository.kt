@@ -8,6 +8,6 @@ interface BreadSizeRepository : JpaRepository<BreadSize, Long> {
     fun findAllByDetailBread(id: BreadDetail): MutableList<BreadSize>
     fun findBySizeAndExtramoneyAndUnitAndDetailBread(size: String, extramoney: Long, unit: String, detailBread: BreadDetail): BreadSize?
 
-    fun findByDetailBreadAndUnit(detailBread: BreadDetail, unit: String?): BreadSize?
+    fun findByDetailBreadAndUnit(detailBread: BreadDetail, unit: String?): BreadSize
     fun existsByDetailBread(detailBread: BreadDetail): Boolean
 }

@@ -1,6 +1,9 @@
 package com.example.gungjeonjegwa.domain.order.service.impl
 
+import com.example.gungjeonjegwa.domain.basket.data.entity.Basket
 import com.example.gungjeonjegwa.domain.basket.repository.BasketRepository
+import com.example.gungjeonjegwa.domain.basket.service.BasketServiceImpl
+import com.example.gungjeonjegwa.domain.bread.data.entity.BreadSize
 import com.example.gungjeonjegwa.domain.bread.exception.BreadNotFoundException
 import com.example.gungjeonjegwa.domain.bread.repository.BreadRepository
 import com.example.gungjeonjegwa.domain.bread.repository.BreadSizeRepository
@@ -20,7 +23,9 @@ import com.example.gungjeonjegwa.domain.order.repository.PayOrderRepository
 import com.example.gungjeonjegwa.domain.order.service.OrderService
 import com.example.gungjeonjegwa.domain.user.data.dto.AddressDto
 import com.example.gungjeonjegwa.domain.user.data.entity.Address
+import com.example.gungjeonjegwa.domain.user.exception.LatelyAddressException
 import com.example.gungjeonjegwa.domain.user.repository.AddressRepository
+import com.example.gungjeonjegwa.domain.user.service.AddressService
 import com.example.gungjeonjegwa.global.util.UserUtil
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -44,38 +49,33 @@ class OrderServiceImpl(
     override fun createOrderList(request: CreateOrderBuyRequest) {
         val currentUser = userUtil.fetchCurrentUser()
         if(!request.address.isBasic) { // 기본 배송지가 아니라면
-            val address = Address(
-                0,
-                request.address.zipCode,
-                request.address.roadName,
-                request.address.landNumber,
-                request.address.detailAddress,
-                request.address.isBasic,
-                currentUser!!
-            )
-            val existsAddress: Boolean = addressRepository.existsByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUserAndTypeBasic(request.address.zipCode,
-                request.address.roadName,
-                request.address.landNumber,
-                request.address.detailAddress,
-                currentUser!!,
-                request.address.isBasic)
-            if(!existsAddress) {
-                addressRepository.save(address)
-            }
             val order = orderRepository.findById(request.orderId).orElseThrow { OrderIdNotFoundException() }
             if(!request.isPayment) {
                 orderRepository.delete(order)
                 throw PaymentFaildException()
             }
-            order.address = address
-            orderRepository.save(order)
+            val address = addressRepository.findByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUserAndTypeBasic(
+                request.address.zipCode,
+                request.address.roadName,
+                request.address.landNumber,
+                request.address.detailAddress,
+                currentUser!!,
+                request.address.isBasic
+            )
+            if(!(address?.zipCode == request.address.zipCode && address.roadName == request.address.roadName &&
+                        address?.landNumber == request.address.landNumber && address.detailAddress == request.address.detailAddress && address.typeBasic == request.address.isBasic)) {
+                throw LatelyAddressException()
+            }
+            order.exchangeAddress(address)
             request.list.forEach{
                 val bread = breadRepository.findById(it.breadId).orElseThrow { BreadNotFoundException() }
-                val breadSize = breadSizeRepository.findByDetailBreadAndUnit(bread.breadDetail, it.unit)
                 bread.count -= it.count
                 if(bread.count <= 0) {
                     bread.isSoldOut = true
                 }
+                myCouponRepository.findAllByUser(currentUser)
+                    .filter { myCoupon -> myCoupon.coupon.id == it.couponId.toString()}
+                val breadSize = breadSizeRepository.findByDetailBreadAndUnit(bread.breadDetail, it.unit)
                 val payOrder = PayOrder(
                     id = 0,
                     count = it.count,
@@ -86,6 +86,7 @@ class OrderServiceImpl(
                     breadSize = breadSize,
                 )
                 payOrderRepository.save(payOrder)
+
                 val existsBasket = basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser, breadSize)
                 if(existsBasket) {
                     val basket =

@@ -66,6 +66,7 @@ class BasketServiceImpl(
 
     override fun createBasket(basket: List<BasketCreateRequest>) {
         val currentUser = userUtil.fetchCurrentUser()
+
         basket.forEach{basket ->
             run {
                 val bread = breadRepository.findAllById(basket.breadId)

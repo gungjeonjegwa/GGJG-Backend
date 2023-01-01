@@ -3,9 +3,7 @@ package com.example.gungjeonjegwa.domain.user.service.impl
 import com.example.gungjeonjegwa.domain.order.exception.AddressNotFoundException
 import com.example.gungjeonjegwa.domain.user.data.dto.AddressDto
 import com.example.gungjeonjegwa.domain.user.data.dto.AddressLatelyDto
-import com.example.gungjeonjegwa.domain.user.data.entity.Address
-import com.example.gungjeonjegwa.domain.user.exception.AlreadyLatelyAddressException
-import com.example.gungjeonjegwa.domain.user.exception.MaximumLatelyException
+import com.example.gungjeonjegwa.domain.user.exception.ExistsDefaultAddressException
 import com.example.gungjeonjegwa.domain.user.repository.AddressRepository
 import com.example.gungjeonjegwa.domain.user.service.AddressService
 import com.example.gungjeonjegwa.domain.user.util.AddressConverter
@@ -54,32 +52,38 @@ class AddressServiceImpl(
 
     @Transactional
     override fun latelyAddress(address: AddressLatelyDto) {
-        val currentUser = userUtil.fetchCurrentUser()
-        val latelySize = addressRepository.findAllByUser(currentUser!!)
-            .filter { !it.typeBasic }
-            .size
-        val existsAddress =
-            addressRepository.existsByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUserAndTypeBasic(
-                address.zipCode,
-                address.roadName,
-                address.landNumber,
-                address.detailAddress,
-                currentUser!!,
-                false
-            )
-        if(existsAddress) {
-            return
-        } else {
-            if(latelySize >= 5) {
-                val orderByCreatedAtAsc =
-                    addressRepository.findAllByUserAndTypeBasicOrderByCreatedAtDesc(currentUser, false)
-                addressRepository.delete(orderByCreatedAtAsc[4])
+            val currentUser = userUtil.fetchCurrentUser()
+            val userAddress = addressRepository.findAllByUser(currentUser!!)
+            val latelySize = userAddress
+                .filter { !it.typeBasic }
+                .size
+            val defaultAddress = userAddress
+                .filter { it.typeBasic }[0]
+            val existsAddress =
+                addressRepository.existsByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUserAndTypeBasic(
+                    address.zipCode,
+                    address.roadName,
+                    address.landNumber,
+                    address.detailAddress,
+                    currentUser!!,
+                    address.isBasic
+                    )
+            if(existsAddress) {
+                return
+            } else {
+                if(latelySize >= 5) {
+                    val orderByCreatedAtAsc =
+                        addressRepository.findAllByUserAndTypeBasicOrderByCreatedAtDesc(currentUser, false)
+                    addressRepository.delete(orderByCreatedAtAsc[4])
+                    val addressEntity = addressConverter.toEntity(address, currentUser)
+                    addressRepository.save(addressEntity)
+                    return
+                }
+                if(defaultAddress.zipCode == address.zipCode && defaultAddress.roadName == address.roadName && defaultAddress.landNumber == address.landNumber && defaultAddress.detailAddress == address.detailAddress) {
+                    throw ExistsDefaultAddressException()
+                }
                 val addressEntity = addressConverter.toEntity(address, currentUser)
                 addressRepository.save(addressEntity)
-                return
             }
-            val addressEntity = addressConverter.toEntity(address, currentUser)
-            addressRepository.save(addressEntity)
         }
-    }
 }

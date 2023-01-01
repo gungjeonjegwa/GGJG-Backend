@@ -16,5 +16,7 @@ interface AddressRepository : JpaRepository<Address, Long> {
 
     fun findByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUserAndTypeBasic(zipCode: Long, roadName: String, landNumber: String, detailAddress: String?, user: User, typebasic: Boolean): Address?
 
+    fun findByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUser(zipCode: Long, roadName: String, landNumber: String, detailAddress: String?, user: User): Address?
+
     fun findAllByUserAndTypeBasicOrderByCreatedAtDesc(user: User, typebasic: Boolean): MutableList<Address>
 }

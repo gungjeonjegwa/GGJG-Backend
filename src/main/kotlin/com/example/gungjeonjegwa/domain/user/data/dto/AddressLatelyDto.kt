@@ -8,5 +8,7 @@ class AddressLatelyDto(
     val landNumber: String,
 
     val detailAddress: String?,
+
+    val isBasic: Boolean
 ) {
 }

@@ -27,4 +27,7 @@ class Orders(
     @JoinColumn(name = "address_id")
     var address: Address?,
 ) : BaseTimeEntity() {
+    fun exchangeAddress(address: Address) {
+        this.address = address
+    }
 }
