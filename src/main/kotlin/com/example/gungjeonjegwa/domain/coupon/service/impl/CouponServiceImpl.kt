@@ -64,7 +64,13 @@ class CouponServiceImpl(
     }
 
     override fun createCoupon() {
-        couponRepository.save(Coupon("1111222233334444", "3천원", DisCountType.NORMAL, 3000, true, LocalDateTime.now()))
+        couponRepository.save(Coupon(
+            id = "1111222233334444",
+            name = "3천원",
+            disCountType = DisCountType.NORMAL,
+            couponPrice = 3000,
+            isEnabledCoupon = true,
+            finishDate = LocalDateTime.now()))
         val list: MutableList<String> = mutableListOf()
     }
 }
