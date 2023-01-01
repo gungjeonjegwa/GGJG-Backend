@@ -13,7 +13,6 @@ class Stamp(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     val user: User

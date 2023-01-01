@@ -2,7 +2,11 @@ package com.example.gungjeonjegwa.domain.user.service.impl
 
 import com.example.gungjeonjegwa.domain.coupon.repository.MyCouponRepository
 import com.example.gungjeonjegwa.domain.order.repository.OrderRepository
+import com.example.gungjeonjegwa.domain.user.data.dto.AddressDto
+import com.example.gungjeonjegwa.domain.user.data.entity.Address
 import com.example.gungjeonjegwa.domain.user.data.response.MyProfileResponse
+import com.example.gungjeonjegwa.domain.user.data.response.PrivateResponse
+import com.example.gungjeonjegwa.domain.user.repository.AddressRepository
 import com.example.gungjeonjegwa.domain.user.repository.StampRepository
 import com.example.gungjeonjegwa.domain.user.service.ProfileService
 import com.example.gungjeonjegwa.global.util.UserUtil
@@ -13,6 +17,7 @@ class ProfileServiceImpl(
     private val orderRepository: OrderRepository,
     private val myProfileRepository: MyCouponRepository,
     private val stampRepository: StampRepository,
+    private val addressRepository: AddressRepository,
     private val userUtil: UserUtil
 ) : ProfileService {
     override fun myProfileInfo(): MyProfileResponse {
@@ -45,6 +50,37 @@ class ProfileServiceImpl(
             returnCount = returnMoney,
             couponCount = couponSize.toLong(),
             stampCount = stampCount.toLong()
+        )
+    }
+
+    override fun getPrivacyInfo(): PrivateResponse {
+        val currentUser = userUtil.fetchCurrentUser()
+        var phoneNumber: String? = ""
+        if(currentUser!!.phone == null) {
+            phoneNumber = null
+        } else {
+            phoneNumber = currentUser!!.phone?.replaceFirst("(^[0-9]{4})([0-9]{4})([0-9]{4})$", "$1-$2-$3");
+        }
+        val address: MutableList<AddressDto?> = mutableListOf()
+        val addressList = addressRepository.findAllByUser(currentUser).forEach {
+            if(it.typeBasic) {
+                address.add(AddressDto(
+                    zipCode = it.zipCode,
+                    roadName = it.roadName,
+                    landNumber = it.landNumber,
+                    detailAddress = it.detailAddress,
+                    isBasic = true
+                ))
+            } else {
+                address.add(null)
+            }
+        }
+        return PrivateResponse(
+            name = currentUser!!.name,
+            id = currentUser!!.id,
+            email = currentUser!!.email,
+            phone = phoneNumber,
+            address = address[0]
         )
     }
 }
