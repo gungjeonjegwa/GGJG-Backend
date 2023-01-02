@@ -14,10 +14,8 @@ import java.util.stream.Collectors
 
 @Service
 class BreadElasticSearchImpl(
-    private val breadSearchRepository: BreadSearchRepository,
     private val breadConverter: BreadConverter,
     private val breadRepository: BreadRepository,
-    private val userSearchRepository: BreadSearchRepository
 ) : BreadElasticSearch {
     override fun relationSearchByTitle(title: String): List<BreadDto> {
         // userSearchRepository.findByBasicProfile_NameContains(name) 가능relationSearchByTitle
@@ -32,12 +30,5 @@ class BreadElasticSearchImpl(
             .stream()
             .map { bread: Bread -> breadConverter.toSearchDto(bread) }
             .collect(Collectors.toList())
-    }
-
-    @Transactional
-    override fun defaultSampleData() {
-        val breadList: MutableList<Bread> = breadRepository.findAll()
-            breadSearchRepository.save(breadList[0])
-
     }
 }
