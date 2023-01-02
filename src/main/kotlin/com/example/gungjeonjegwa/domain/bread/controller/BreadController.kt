@@ -48,9 +48,4 @@ class BreadController(
     fun relationSearch(@RequestParam("title") title: String): List<BreadSearchDto> {
         return breadElasticSearch.searchByTitle(title)
     }
-
-    @PostMapping("/searchData")
-    fun defaultSearchDate() {
-        return breadElasticSearch.defaultSampleData()
-    }
 }
