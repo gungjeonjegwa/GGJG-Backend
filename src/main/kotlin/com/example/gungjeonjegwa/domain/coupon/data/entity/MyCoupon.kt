@@ -20,8 +20,6 @@ class MyCoupon(
 
     var isUsed: Boolean = false,
 
-    @OneToMany(mappedBy = "")
-
     @ManyToOne
     @JoinColumn(name = "coupon_id")
     val coupon: Coupon,

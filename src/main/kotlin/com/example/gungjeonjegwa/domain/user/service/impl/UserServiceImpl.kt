@@ -1,5 +1,9 @@
 package com.example.gungjeonjegwa.domain.user.service.impl
 
+import com.example.gungjeonjegwa.domain.coupon.data.entity.Coupon
+import com.example.gungjeonjegwa.domain.coupon.data.entity.MyCoupon
+import com.example.gungjeonjegwa.domain.coupon.repository.CouponRepository
+import com.example.gungjeonjegwa.domain.coupon.repository.MyCouponRepository
 import com.example.gungjeonjegwa.domain.user.data.entity.User
 import com.example.gungjeonjegwa.domain.user.data.request.SignInRequest
 import com.example.gungjeonjegwa.domain.user.data.request.SignUpRequest
@@ -25,6 +29,8 @@ class UserServiceImpl(
     val userConverter: UserConverter,
     val passwordEncoder: PasswordEncoder,
     val tokenProvider: TokenProvider,
+    val myCouponRepository: MyCouponRepository,
+    val couponRepository: CouponRepository,
     val userUtil: UserUtil
 ) : UserService {
     @Transactional
@@ -33,9 +39,16 @@ class UserServiceImpl(
         if(isUser) {
             throw UserNotFoundException()
         }
+        val coupon = couponRepository.findById("1456431298793332").get()
         return userConverter.toDto(request)!!
             .let { userConverter.toEntity(it, passwordEncoder.encode(it.password)) }
             .let { userRepository.save(it) }
+            .let { myCouponRepository.save(MyCoupon(
+                id = 0,
+                isUsed = false,
+                user = it,
+                coupon = coupon
+            )) }
     }
 
     @Transactional
