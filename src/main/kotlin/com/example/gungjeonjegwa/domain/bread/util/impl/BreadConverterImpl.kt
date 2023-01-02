@@ -3,6 +3,7 @@ package com.example.gungjeonjegwa.domain.bread.util.impl
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDetailDto
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDto
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadLikeDto
+import com.example.gungjeonjegwa.domain.bread.data.dto.BreadSearchDto
 import com.example.gungjeonjegwa.domain.bread.data.entity.Bread
 import com.example.gungjeonjegwa.domain.bread.data.entity.BreadDetail
 import com.example.gungjeonjegwa.domain.bread.util.BreadConverter
@@ -45,5 +46,9 @@ class BreadConverterImpl : BreadConverter {
         previewUrl = entity.previewUrl,
         sellDeliveryType = entity.sellDeliveryType,
         isLikeItem = isLike
+    )
+
+    override fun toSearchDto(entity: Bread): BreadSearchDto = BreadSearchDto(
+        title = entity.title
     )
 }

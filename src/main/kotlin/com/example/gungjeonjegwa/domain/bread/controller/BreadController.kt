@@ -3,6 +3,7 @@ package com.example.gungjeonjegwa.domain.bread.controller
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDetailQueryDto
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDto
 import com.example.gungjeonjegwa.domain.bread.data.dto.BreadQueryDto
+import com.example.gungjeonjegwa.domain.bread.data.dto.BreadSearchDto
 import com.example.gungjeonjegwa.domain.bread.data.enum.Category
 import com.example.gungjeonjegwa.domain.bread.service.BreadElasticSearch
 import com.example.gungjeonjegwa.domain.bread.service.BreadService
@@ -38,8 +39,18 @@ class BreadController(
         return breadService.findPostByIndex(breadId)
     }
 
-    @GetMapping("/search")
+    @GetMapping("/relationsearch")
     fun search(@RequestParam("title") title: String): List<BreadDto>{
+        return breadElasticSearch.relationSearchByTitle(title)
+    }
+
+    @GetMapping("/search")
+    fun relationSearch(@RequestParam("title") title: String): List<BreadSearchDto> {
         return breadElasticSearch.searchByTitle(title)
+    }
+
+    @PostMapping("/searchData")
+    fun defaultSearchDate() {
+        return breadElasticSearch.defaultSampleData()
     }
 }

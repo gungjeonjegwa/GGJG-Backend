@@ -11,4 +11,6 @@ interface BreadRepository : JpaRepository<Bread, Long> {
     fun findBy(pagination: PageRequest): Page<Bread>
 
     fun findAllByCategory(category: Category, pagination: PageRequest): Page<Bread>
+
+    fun findByTitleContaining(title: String): List<Bread>
 }
