@@ -45,7 +45,7 @@ class BreadController(
     }
 
     @GetMapping("/search")
-    fun relationSearch(@RequestParam("title") title: String): List<BreadSearchDto> {
+    fun relationSearch(@RequestParam("title") title: String): MutableList<BreadSearchDto> {
         return breadElasticSearch.searchByTitle(title)
     }
 }

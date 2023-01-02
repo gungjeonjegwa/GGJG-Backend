@@ -25,10 +25,23 @@ class BreadElasticSearchImpl(
             .collect(Collectors.toList())
     }
 
-    override fun searchByTitle(title: String): List<BreadSearchDto> {
-        return breadRepository.findByTitleContaining(title)
-            .stream()
-            .map { bread: Bread -> breadConverter.toSearchDto(bread) }
-            .collect(Collectors.toList())
+    override fun searchByTitle(title: String): MutableList<BreadSearchDto> {
+        val containingBread = breadRepository.findByTitleContaining(title)
+        val searchBreadList: MutableSet<String> = mutableSetOf()
+        val breadSearchDto: MutableList<BreadSearchDto> = mutableListOf()
+        for(containData in containingBread) {
+            val array = containData.title.split(" ")
+            for(searchDate in array) {
+                searchBreadList.add(searchDate)
+            }
+        }
+        for(breadSearch in searchBreadList) {
+            breadSearchDto.add(BreadSearchDto(breadSearch))
+        }
+        return breadSearchDto
+
+//            .stream()
+//            .map { bread: Bread -> breadConverter.toSearchDto(bread) }
+//            .collect(Collectors.toList())
     }
 }
