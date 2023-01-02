@@ -22,9 +22,9 @@ class BreadDetailDto(
 
     val previewUrl: String, // 미리보기 이미지
 
-    val precaution: String, // 주의사항
+    val precaution: String?, // 주의사항
 
-    val deliveryNotice: String, // 배송사항 당일배송불가 사항 작성
+    val deliveryNotice: String?, // 배송사항 당일배송불가 사항 작성
 
     val allergy: String, // 알레르기
 
