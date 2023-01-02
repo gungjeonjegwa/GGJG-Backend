@@ -1,10 +1,5 @@
 package com.example.gungjeonjegwa.domain.bread.data.dto
 
-import com.example.gungjeonjegwa.domain.bread.data.entity.Bread
-import com.example.gungjeonjegwa.domain.bread.data.entity.BreadImage
-import com.example.gungjeonjegwa.domain.bread.data.entity.BreadSize
-import java.time.LocalDateTime
-
 class BreadDetailDto(
     val id: Long,
 
@@ -14,7 +9,7 @@ class BreadDetailDto(
 
     val deliveryPrice: Long,
 
-    val size: Long?,
+    val size: String?,
 
     val stroage: String, // 보관방법
 
