@@ -46,7 +46,8 @@ class ProfileServiceImpl(
             }
 
         }
-        val couponSize = myProfileRepository.findAllByUser(currentUser!!).size
+        val couponSize = myProfileRepository.findAllByUser(currentUser!!)
+            .filter { !it.isUsed }.size
         val stampCount = stampRepository.findAllByUser(currentUser!!).size
         return MyProfileResponse(
             name = currentUser!!.name,
