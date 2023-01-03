@@ -1,9 +1,6 @@
 package com.example.gungjeonjegwa.domain.bread.controller
 
-import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDetailQueryDto
-import com.example.gungjeonjegwa.domain.bread.data.dto.BreadDto
-import com.example.gungjeonjegwa.domain.bread.data.dto.BreadQueryDto
-import com.example.gungjeonjegwa.domain.bread.data.dto.BreadSearchDto
+import com.example.gungjeonjegwa.domain.bread.data.dto.*
 import com.example.gungjeonjegwa.domain.bread.data.enum.Category
 import com.example.gungjeonjegwa.domain.bread.service.BreadElasticSearch
 import com.example.gungjeonjegwa.domain.bread.service.BreadService
@@ -40,7 +37,7 @@ class BreadController(
     }
 
     @GetMapping("/relationsearch")
-    fun search(@RequestParam("title") title: String): List<BreadDto>{
+    fun search(@RequestParam("title") title: String): MutableList<BreadLikeDto>{
         return breadElasticSearch.relationSearchByTitle(title)
     }
 
