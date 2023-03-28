@@ -18,7 +18,7 @@ jwt:
   refreshSecret: ${JWT_REFRESH_SECRET}
 elasticsearch:
   host: ${ELASTICSEARCH_HOST}
-  port: 31043
+  port: ${ELASTICSEARCH_PORT}
 
 logging:
   level:
