@@ -67,26 +67,31 @@ class ProfileServiceImpl(
         if(currentUser!!.phone == null) {
             phoneNumber = null
         } else {
-            phoneNumber = currentUser!!.phone?.replaceFirst("(^[0-9]{4})([0-9]{4})([0-9]{4})$", "$1-$2-$3");
+            phoneNumber = currentUser.phone?.replaceFirst("(^[0-9]{4})([0-9]{4})([0-9]{4})$", "$1-$2-$3");
         }
         val address: MutableList<AddressDto?> = mutableListOf()
-        val addressList = addressRepository.findAllByUser(currentUser).forEach {
-            if(it.typeBasic) {
-                address.add(AddressDto(
-                    zipCode = it.zipCode,
-                    roadName = it.roadName,
-                    landNumber = it.landNumber,
-                    detailAddress = it.detailAddress,
-                    isBasic = true
-                ))
-            } else {
-                address.add(null)
+        val addressList = addressRepository.findAllByUser(currentUser)
+        if(addressList.isEmpty())
+            address.add(null)
+        else
+            addressList.forEach {
+                if (it.typeBasic) {
+                    println("2" + it.id)
+                    address.add(
+                        AddressDto(
+                            zipCode = it.zipCode,
+                            roadName = it.roadName,
+                            landNumber = it.landNumber,
+                            detailAddress = it.detailAddress,
+                            isBasic = true
+                        )
+                    )
+                }
             }
-        }
         return PrivateResponse(
-            name = currentUser!!.name,
-            id = currentUser!!.id,
-            email = currentUser!!.email,
+            name = currentUser.name,
+            id = currentUser.id,
+            email = currentUser.email,
             phone = phoneNumber,
             address = address[0]
         )
