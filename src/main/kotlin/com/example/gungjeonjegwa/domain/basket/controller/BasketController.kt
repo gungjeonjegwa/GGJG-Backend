@@ -12,7 +12,7 @@ class BasketController(
     private val basketService: BasketService
 ) {
     @GetMapping
-    fun findBasket(): List<BasketDto> {
+    fun findByBasket(): List<BasketDto> {
         return basketService.findBasketByUser()
     }
 

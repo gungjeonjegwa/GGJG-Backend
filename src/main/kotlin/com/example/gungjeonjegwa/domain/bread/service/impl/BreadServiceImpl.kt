@@ -40,6 +40,7 @@ class BreadServiceImpl(
             .map { breadConverter.toDto(it) }
         return breadQueryConverter.toQueryDto(addLikeItemActivity(bread, likeItems), bread.isLast)
     }
+
     @Transactional(readOnly = true)
     override fun findAllPostByCategory(pagination: PageRequest, category: Category): BreadQueryDto {
         val user = userUtil.fetchCurrentUser()
@@ -97,7 +98,7 @@ class BreadServiceImpl(
             )
     }
 
-    private fun addLikeItemActivity(bread: Page<BreadDto>, likeItem: MutableList<LikeItem>): MutableList<BreadLikeDto> {
+    private fun addLikeItemActivity(bread: Page<BreadDto>, likeItem: MutableList<LikeItem>): List<BreadLikeDto> {
         val list: MutableList<BreadLikeDto> = mutableListOf()
         var isEnabled: Boolean = false
         for (b in bread) {
@@ -113,6 +114,6 @@ class BreadServiceImpl(
                 list.add(breadConverter.toDto(b, false))
             }
         }
-        return list
+        return list.shuffled()
     }
 }

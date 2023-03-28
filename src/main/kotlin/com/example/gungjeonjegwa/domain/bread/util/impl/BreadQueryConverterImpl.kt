@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class BreadQueryConverterImpl : BreadQueryConverter {
-    override fun toQueryDto(entity: MutableList<BreadLikeDto>, last: Boolean): BreadQueryDto = BreadQueryDto(
+    override fun toQueryDto(entity: List<BreadLikeDto>, last: Boolean): BreadQueryDto = BreadQueryDto(
         list = entity,
         last = last
     )
