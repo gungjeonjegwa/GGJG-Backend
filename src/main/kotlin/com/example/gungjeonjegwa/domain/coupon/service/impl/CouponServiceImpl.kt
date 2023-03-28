@@ -52,18 +52,18 @@ class CouponServiceImpl(
             val currentUser = userUtil.fetchCurrentUser()
             var myCouponDtoList: MutableList<CouponDto> = mutableListOf()
             val myCouponList = myCouponRepository.findAllByUser(currentUser!!)
-            for(coupon in myCouponList) {
-                if(coupon.isUsed) continue
-                if(LocalDateTime.now().isAfter(coupon.coupon.finishDate)) {
+            for(myCoupon in myCouponList) {
+                if(myCoupon.isUsed) continue
+                if(LocalDateTime.now().isAfter(myCoupon.coupon.finishDate)) {
                     continue
                 } // 쿠폰 사용한 날짜가 만료기간보다 많을때,
                 val couponDto = CouponDto(
-                    myCouponId = coupon.id,
-                    name = coupon.coupon.name,
-                    createdAt = coupon.createdAt,
-                    finishedAt = coupon.coupon.finishDate,
-                    disCountType = coupon.coupon.disCountType,
-                    price = coupon.coupon.couponPrice
+                    myCouponId = myCoupon.id,
+                    name = myCoupon.coupon.name,
+                    createdAt = myCoupon.createdAt,
+                    finishedAt = myCoupon.coupon.finishDate,
+                    disCountType = myCoupon.coupon.disCountType,
+                    price = myCoupon.coupon.couponPrice
                 )
                 myCouponDtoList.add(couponDto)
             }
