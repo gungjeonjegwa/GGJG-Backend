@@ -13,6 +13,9 @@ import com.example.gungjeonjegwa.domain.user.repository.StampRepository
 import com.example.gungjeonjegwa.domain.user.service.ProfileService
 import com.example.gungjeonjegwa.global.util.UserUtil
 import org.springframework.stereotype.Service
+import java.time.Clock
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 @Service
 class ProfileServiceImpl(
@@ -31,6 +34,8 @@ class ProfileServiceImpl(
         var cancel: Long = 0
         var returnMoney: Long = 0
         val orders = orderRepository.findAllByUser(currentUser!!)
+        val seoulZone = ZoneId.of("Asia/Seoul")
+        val seoulClock = Clock.system(seoulZone)
         orders.forEach { // WAITORDER, DELIVERYING, COMPLETEDELIVERY, WAITCANCEL, CANCEL, WAITRETURN, RETURN
             val existsPayOrder: Boolean = payOrderRepository.existsByOrders(it)
             if(existsPayOrder) {
@@ -47,7 +52,8 @@ class ProfileServiceImpl(
 
         }
         val couponSize = myProfileRepository.findAllByUser(currentUser)
-            .filter { !it.isUsed }.size
+            .filter { !it.isUsed }
+            .filter { !LocalDateTime.now(seoulClock).isAfter(it.coupon.finishDate) }.size
         val stampCount = stampRepository.findAllByUser(currentUser).size
         return MyProfileResponse(
             name = currentUser.name,
