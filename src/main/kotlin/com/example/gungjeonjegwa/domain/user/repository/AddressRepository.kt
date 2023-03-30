@@ -12,11 +12,11 @@ interface AddressRepository : JpaRepository<Address, Long> {
     fun findByUserAndTypeBasic(user: User, typebasic: Boolean): Address?
 
     fun existsByUserAndTypeBasic(user: User, typebasic: Boolean): Boolean
-    fun existsByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUserAndTypeBasic(zipCode: Long, roadName: String, landNumber: String, detailAddress: String?, user: User, typebasic: Boolean): Boolean
+    fun existsByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUser(zipCode: Long, roadName: String, landNumber: String, detailAddress: String?, user: User): Boolean
 
     fun findByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUserAndTypeBasic(zipCode: Long, roadName: String, landNumber: String, detailAddress: String?, user: User, typebasic: Boolean): Address?
 
-    fun findByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUser(zipCode: Long, roadName: String, landNumber: String, detailAddress: String?, user: User): Address?
+    fun findByZipCodeAndRoadNameAndLandNumberAndDetailAddressAndUser(zipCode: Long, roadName: String, landNumber: String, detailAddress: String?, user: User): Address
 
 //    fun findAllByUserAndOrderByCreatedAtDesc(user: User): MutableList<Address>
 }
