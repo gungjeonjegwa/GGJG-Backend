@@ -1,26 +1,23 @@
 package com.example.gungjeonjegwa.domain.user.controller
 
+import com.example.gungjeonjegwa.domain.user.data.request.DeviceRequest
 import com.example.gungjeonjegwa.domain.user.data.request.SignInRequest
 import com.example.gungjeonjegwa.domain.user.data.request.SignUpRequest
 import com.example.gungjeonjegwa.domain.user.data.response.DuplicatedResponse
 import com.example.gungjeonjegwa.domain.user.data.response.SignInResponse
 import com.example.gungjeonjegwa.domain.user.data.response.UserTokenResponseDto
+import com.example.gungjeonjegwa.domain.user.service.DeviceService
 import com.example.gungjeonjegwa.domain.user.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestHeader
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("/users")
 class UserController(
-    val userService: UserService
+    val userService: UserService,
+    val deviceService: DeviceService
 ) {
     @PostMapping("/signup")
     fun signUp(@Valid @RequestBody request: SignUpRequest): ResponseEntity<*> {
@@ -51,4 +48,9 @@ class UserController(
     fun checkEmail(@RequestParam email: String): DuplicatedResponse {
         return userService.checkEmail(email)
     }
+
+    @PostMapping("/device")
+    fun createDeviceToken(@RequestBody deviceTokenRequest: DeviceRequest): ResponseEntity<Void> =
+        deviceService.createDeviceToken(deviceTokenRequest.deviceToken)
+            .let { ResponseEntity.ok().build() }
 }

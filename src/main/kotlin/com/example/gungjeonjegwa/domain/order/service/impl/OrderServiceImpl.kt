@@ -204,20 +204,20 @@ class OrderServiceImpl(
 
     override fun selectBuyOrder(): OrderListDto {
         val currentUser = userUtil.fetchCurrentUser()
-        var addRessDto: AddressDto? = null
+        var addressDto: AddressDto? = null
         val addressList = addressRepository.findAllByUser(currentUser!!)
         addressList.forEach{
             if(it.typeBasic) {
-                addRessDto = AddressDto(
+                addressDto = AddressDto(
                     zipCode = it.zipCode,
                     roadName = it.roadName,
                     landNumber = it.landNumber,
                     detailAddress = it.detailAddress,
-                    isBasic = it.typeBasic
+                    isBasic = true
                 )
             }
         }
-        return OrderListDto(name = currentUser!!.name, phone = currentUser!!.phone, address = addRessDto)
+        return OrderListDto(name = currentUser.name, phone = currentUser.phone, address = addressDto)
     }
 
 

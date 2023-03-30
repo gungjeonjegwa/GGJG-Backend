@@ -18,4 +18,5 @@ interface UserService {
     fun checkId(id: String): DuplicatedResponse
 
     fun checkEmail(email: String): DuplicatedResponse
+
 }

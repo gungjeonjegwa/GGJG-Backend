@@ -22,11 +22,11 @@ class UserUtil(
         return fetchUserById(userId)
     }
 
-    fun fetchUserById(userId: String): User? {
+    fun fetchUserById(userId: String): User? =
         if(userId == "anonymousUser") {
-            return null
+            null
         } else {
-            return userRepository.findById(userId).orElseThrow { UserNotFoundException() }
+            userRepository.findById(userId).orElseThrow { UserNotFoundException() }
         }
-    }
+
 }

@@ -3,11 +3,13 @@ package com.example.gungjeonjegwa.domain.user.service.impl
 import com.example.gungjeonjegwa.domain.order.exception.AddressNotFoundException
 import com.example.gungjeonjegwa.domain.user.data.dto.AddressDto
 import com.example.gungjeonjegwa.domain.user.data.dto.AddressLatelyDto
+import com.example.gungjeonjegwa.domain.user.data.entity.Address
 import com.example.gungjeonjegwa.domain.user.exception.ExistsDefaultAddressException
 import com.example.gungjeonjegwa.domain.user.repository.AddressRepository
 import com.example.gungjeonjegwa.domain.user.service.AddressService
 import com.example.gungjeonjegwa.domain.user.util.AddressConverter
 import com.example.gungjeonjegwa.global.util.UserUtil
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -34,20 +36,55 @@ class AddressServiceImpl(
             val addressEntity = addressConverter.toEntity(address, currentUser)
             addressRepository.save(addressEntity)
         } else {
+            val addressOrderByCreatedAtAsc = addressRepository.findAllByUserOrderByCreatedAtDesc(currentUser)
+            val orderByCreatedAtAsc = addressOrderByCreatedAtAsc.filter { !it.typeBasic }
+            val latelySize = orderByCreatedAtAsc.size
+            
+            addressOrderByCreatedAtAsc
+                .filter { it.zipCode == address.zipCode }
+                .forEach {
+                    if(it.typeBasic) {
+                        return
+                    } else {
+                        val addressEntity = addressRepository.findByUserAndTypeBasic(currentUser, address.isBasic) ?: throw AddressNotFoundException()
+                        if(it.detailAddress != address.detailAddress) {
+                            val newAddressEntity = addressConverter.toEntity(address, currentUser)
+                            addressRepository.save(newAddressEntity)
+                        }
+                        if(it == addressEntity) {
+                            return
+                        }
+                        addressEntity.typeBasic = false
+                        it.typeBasic = true
+                        if(it.detailAddress != address.detailAddress) {
+                            val newAddressEntity = addressConverter.toEntity(address, currentUser)
+                            addressRepository.save(newAddressEntity)
+                        }
+                        if (latelySize >= 5)
+                            addressRepository.delete(orderByCreatedAtAsc[4])
+                        return
+                    }
+
+                }
             val addressEntity = addressRepository.findByUserAndTypeBasic(currentUser, address.isBasic) ?: throw AddressNotFoundException()
-            addressEntity.zipCode = address.zipCode
-            addressEntity.roadName = address.roadName
-            addressEntity.landNumber = address.landNumber
-            addressEntity.detailAddress = address.detailAddress
-            addressEntity.typeBasic = address.isBasic
+            addressEntity.typeBasic = false
+            if (latelySize >= 5)
+                addressRepository.delete(orderByCreatedAtAsc[4])
+
+            val newAddressEntity = addressConverter.toEntity(address, currentUser)
+            addressRepository.save(newAddressEntity)
         }
     }
 
     override fun getLatelyAddress(): List<AddressDto> {
         val currentUser = userUtil.fetchCurrentUser()
-        return addressRepository.findAllByUserOrderByCreatedAtDesc(currentUser!!)
-            .map { AddressDto(it.zipCode, it.roadName, it.landNumber, it.detailAddress, it.typeBasic) }
-            .filter { !it.isBasic }
+        return if (currentUser != null) {
+            addressRepository.findAllByUserOrderByCreatedAtDesc(currentUser)
+                .map { AddressDto(it.zipCode, it.roadName, it.landNumber, it.detailAddress, it.typeBasic) }
+                .filter { !it.isBasic }
+        } else {
+            listOf()
+        }
     }
 
     @Transactional
@@ -66,21 +103,26 @@ class AddressServiceImpl(
                     address.roadName,
                     address.landNumber,
                     address.detailAddress,
-                    currentUser!!,
+                    currentUser,
                     address.isBasic
                 )
             if (existsAddress) {
                 return
             } else {
                 if (latelySize >= 5) {
-                    val orderByCreatedAtAsc =
-                        addressRepository.findAllByUserAndTypeBasicOrderByCreatedAtDesc(currentUser, false)
+                    val orderByCreatedAtAsc = addressRepository.findAllByUserOrderByCreatedAtDesc(currentUser)
+                        .filter { !it.typeBasic }
                     addressRepository.delete(orderByCreatedAtAsc[4])
                     val addressEntity = addressConverter.toEntity(address, currentUser)
                     addressRepository.save(addressEntity)
                     return
                 }
-                if (defaultAddress.zipCode == address.zipCode && defaultAddress.roadName == address.roadName && defaultAddress.landNumber == address.landNumber && defaultAddress.detailAddress == address.detailAddress) {
+                if (
+                    defaultAddress.zipCode == address.zipCode
+                    && defaultAddress.roadName == address.roadName
+                    && defaultAddress.landNumber == address.landNumber
+                    && defaultAddress.detailAddress == address.detailAddress
+                ) {
                     throw ExistsDefaultAddressException()
                 }
                 val addressEntity = addressConverter.toEntity(address, currentUser)
