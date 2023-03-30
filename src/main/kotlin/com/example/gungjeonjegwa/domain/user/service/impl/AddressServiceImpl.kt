@@ -36,43 +36,31 @@ class AddressServiceImpl(
             val addressEntity = addressConverter.toEntity(address, currentUser)
             addressRepository.save(addressEntity)
         } else {
-            val addressOrderByCreatedAtAsc = addressRepository.findAllByUserOrderByCreatedAtDesc(currentUser)
+            val addressOrderByCreatedAtAsc = addressRepository.findAllByUserOrderByCreatedAtDesc(currentUser) // Address 총 조회
             val orderByCreatedAtAsc = addressOrderByCreatedAtAsc.filter { !it.typeBasic }
             val latelySize = orderByCreatedAtAsc.size
             
             addressOrderByCreatedAtAsc
-                .filter { it.zipCode == address.zipCode }
                 .forEach {
-                    if(it.typeBasic) {
-                        return
-                    } else {
-                        val addressEntity = addressRepository.findByUserAndTypeBasic(currentUser, address.isBasic) ?: throw AddressNotFoundException()
-                        if(it.detailAddress != address.detailAddress) {
-                            val newAddressEntity = addressConverter.toEntity(address, currentUser)
-                            addressRepository.save(newAddressEntity)
-                        }
-                        if(it == addressEntity) {
+                    if (it.zipCode == address.zipCode) {
+                        if (it.typeBasic) {
+                            if (it.detailAddress != address.detailAddress) {
+                                it.typeBasic = false
+                                val newAddressEntity = addressConverter.toEntity(address, currentUser)
+                                addressRepository.save(newAddressEntity)
+                                if (latelySize >= 5)
+                                    addressRepository.delete(orderByCreatedAtAsc[4])
+                            }
                             return
                         }
-                        addressEntity.typeBasic = false
-                        it.typeBasic = true
-                        if(it.detailAddress != address.detailAddress) {
-                            val newAddressEntity = addressConverter.toEntity(address, currentUser)
-                            addressRepository.save(newAddressEntity)
-                        }
-                        if (latelySize >= 5)
-                            addressRepository.delete(orderByCreatedAtAsc[4])
-                        return
                     }
-
                 }
-            val addressEntity = addressRepository.findByUserAndTypeBasic(currentUser, address.isBasic) ?: throw AddressNotFoundException()
-            addressEntity.typeBasic = false
-            if (latelySize >= 5)
-                addressRepository.delete(orderByCreatedAtAsc[4])
-
+            val addressTypeBasicEntity = addressRepository.findByUserAndTypeBasic(currentUser, true) ?: throw AddressNotFoundException()
+            addressTypeBasicEntity.typeBasic = false
             val newAddressEntity = addressConverter.toEntity(address, currentUser)
             addressRepository.save(newAddressEntity)
+            if (latelySize >= 5)
+                addressRepository.delete(orderByCreatedAtAsc[4])
         }
     }
 
