@@ -1,5 +1,8 @@
 package com.example.gungjeonjegwa.domain.user.service.impl
 
+import com.example.gungjeonjegwa.domain.coupon.data.entity.MyCoupon
+import com.example.gungjeonjegwa.domain.coupon.exception.CouponCodeNotFoundException
+import com.example.gungjeonjegwa.domain.coupon.repository.CouponRepository
 import com.example.gungjeonjegwa.domain.coupon.repository.MyCouponRepository
 import com.example.gungjeonjegwa.domain.order.repository.OrderRepository
 import com.example.gungjeonjegwa.domain.order.repository.PayOrderRepository
@@ -12,6 +15,7 @@ import com.example.gungjeonjegwa.domain.user.repository.AddressRepository
 import com.example.gungjeonjegwa.domain.user.repository.StampRepository
 import com.example.gungjeonjegwa.domain.user.service.ProfileService
 import com.example.gungjeonjegwa.global.util.UserUtil
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.time.Clock
 import java.time.LocalDateTime
@@ -24,7 +28,9 @@ class ProfileServiceImpl(
     private val payOrderRepository: PayOrderRepository,
     private val stampRepository: StampRepository,
     private val addressRepository: AddressRepository,
-    private val userUtil: UserUtil
+    private val userUtil: UserUtil,
+    private val myCouponRepository: MyCouponRepository,
+    private val couponRepository: CouponRepository
 ) : ProfileService {
     override fun myProfileInfo(): MyProfileResponse {
         val currentUser = userUtil.fetchCurrentUser()
@@ -109,6 +115,8 @@ class ProfileServiceImpl(
         if(stampsSize.size < 10) {
             throw StampNotTenPicesException()
         }
+        val coupon = couponRepository.findByIdOrNull("1111222233339999") ?: throw CouponCodeNotFoundException()
+        myCouponRepository.save(MyCoupon(0, false, coupon, currentUser))
         stampRepository.deleteAll(stampsSize)
     }
 }

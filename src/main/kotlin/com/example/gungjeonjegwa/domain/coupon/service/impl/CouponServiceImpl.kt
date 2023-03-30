@@ -113,21 +113,28 @@ class CouponServiceImpl(
             disCountType = DisCountType.PERCENT,
             couponPrice = 30,
             isEnabledCoupon = true,
-            finishDate = LocalDateTime.now())
+            finishDate = LocalDateTime.now().plusDays(30))
         val coupon1: Coupon = Coupon(
             id = "1111222233337777",
             name = "20%퍼센트 할인쿠폰 (케이크)",
             disCountType = DisCountType.PERCENT,
             couponPrice = 20,
             isEnabledCoupon = true,
-            finishDate = LocalDateTime.now())
+            finishDate = LocalDateTime.now().plusDays(30))
         val coupon2: Coupon = Coupon(
             id = "1111222233338888",
             name = "2000원 할인쿠폰 (케이크)",
             disCountType = DisCountType.NORMAL,
             couponPrice = 2000,
             isEnabledCoupon = true,
-            finishDate = LocalDateTime.now())
+            finishDate = LocalDateTime.now().plusDays(30))
+        val coupon3: Coupon = Coupon(
+            id = "1111222233339999",
+            name = "30% 할인쿠폰 (전체)",
+            disCountType = DisCountType.PERCENT,
+            couponPrice = 30,
+            isEnabledCoupon = true,
+            finishDate = LocalDateTime.now().plusDays(30))
         val couponType: CouponType = CouponType(
             id = 0,
             classType = ClassType.BREAD,
@@ -143,12 +150,18 @@ class CouponServiceImpl(
             classType = ClassType.CAKE,
             coupon = coupon2
         )
+        val couponType4: CouponType = CouponType(
+            id = 0,
+            classType = ClassType.ALL,
+            coupon = coupon3
+        )
         couponRepository.save(coupon)
         couponRepository.save(coupon1)
         couponRepository.save(coupon2)
+        couponRepository.save(coupon3)
         couponTypeRepository.save(couponType)
         couponTypeRepository.save(couponType2)
         couponTypeRepository.save(couponType3)
-        val list: MutableList<String> = mutableListOf()
+        couponTypeRepository.save(couponType4)
     }
 }
