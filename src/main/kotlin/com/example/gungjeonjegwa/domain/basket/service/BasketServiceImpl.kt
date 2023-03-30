@@ -71,26 +71,32 @@ class BasketServiceImpl(
             run {
                 val bread = breadRepository.findAllById(basket.breadId)
                 if (bread.category == Category.CAKE) {
-                    val sizes: BreadSize? =
-                        breadSizeRepository.findBySizeAndExtramoneyAndUnitAndDetailBread(
-                            basket.size!!,
-                            basket.extramoney!!,
-                            basket.unit!!,
-                            bread.breadDetail
-                        )
-                    val existsByBasket =
-                        basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser!!, sizes)
-                    if (existsByBasket == true) {
-                        throw ExistBasketException()
+                    if(breadSizeRepository.existsByDetailBread(bread.breadDetail)) {
+                        val sizes: BreadSize? =
+                            breadSizeRepository.findBySizeAndExtramoneyAndUnitAndDetailBread(
+                                basket.size!!,
+                                basket.extramoney!!,
+                                basket.unit!!,
+                                bread.breadDetail
+                            )
+                        val existsByBasket =
+                            basketRepository.existsByBreadAndUserAndBreadSize(bread, currentUser!!, sizes)
+                        if (existsByBasket)
+                            throw ExistBasketException()
+                    } else {
+                        val existsByBreadAndUser = basketRepository.existsByBreadAndUser(bread, currentUser!!)
+                        if(existsByBreadAndUser)
+                            throw ExistBasketException()
                     }
+
                 } else {
                     val breadAndUser = basketRepository.existsByBreadAndUser(bread, currentUser!!)
-                    if (breadAndUser == true) {
+                    if (breadAndUser) {
                         throw ExistBasketException()
                     }
                 }
                 val existsByDetailBread = breadSizeRepository.existsByDetailBread(bread.breadDetail)
-                if (existsByDetailBread == true) {
+                if (existsByDetailBread) {
                     if (basket.size == null || basket.unit == null || basket.extramoney == null) {
                         throw LessRequestDataException()
                     } else {

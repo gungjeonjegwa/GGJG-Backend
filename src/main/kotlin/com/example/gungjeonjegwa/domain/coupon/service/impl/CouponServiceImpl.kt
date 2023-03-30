@@ -49,12 +49,12 @@ class CouponServiceImpl(
         }
     }
 
-    override fun getCouponByUser(bread: String): MutableList<CouponDto> {
+    override fun getCouponByUser(bread: String): List<CouponDto> {
+        val seoulZone = ZoneId.of("Asia/Seoul")
+        val seoulClock = Clock.system(seoulZone)
         if(bread == "ALL") {
             val currentUser = userUtil.fetchCurrentUser()
             var myCouponDtoList: MutableList<CouponDto> = mutableListOf()
-            val seoulZone = ZoneId.of("Asia/Seoul")
-            val seoulClock = Clock.system(seoulZone)
             val myCouponList = myCouponRepository.findAllByUser(currentUser!!)
             for(myCoupon in myCouponList) {
                 if(myCoupon.isUsed) continue
@@ -88,7 +88,7 @@ class CouponServiceImpl(
             }
             for(coupon in myCouponClassTypeList) {
                 if(coupon.isUsed) continue
-                if(LocalDateTime.now().isAfter(coupon.coupon.finishDate)) {
+                if(LocalDateTime.now(seoulClock).isAfter(coupon.coupon.finishDate)) {
                     continue
                 } // 쿠폰 사용한 날짜가 만료기간보다 많을때,
                 val couponDto = CouponDto(

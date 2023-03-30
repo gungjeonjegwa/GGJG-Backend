@@ -15,7 +15,7 @@ class CouponController(
     private val couponService: CouponService
 ) {
     @GetMapping("/my")
-    fun getCouponByUser(@RequestParam(value = "breadId", required = false, defaultValue = "ALL") breadId: String): MutableList<CouponDto> {
+    fun getCouponByUser(@RequestParam(value = "breadId", required = false, defaultValue = "ALL") breadId: String): List<CouponDto> {
         return couponService.getCouponByUser(breadId)
     }
 
